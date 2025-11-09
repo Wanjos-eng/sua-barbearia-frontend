@@ -44,6 +44,9 @@ interface ActiveBarber {
   next: number;
 }
 
+// 58BEC3 CIANO
+// 151515 Preto Cinza | 050505 Preto | 292929 Cinza | DDDBCB Branco Bege | 5C5C5C Cinza pouco escuro
+// gray-980 Preto escuro | gray-950 Preto um tom acima
 // Componentes
 // Componente Item da Barra Lateral
 const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active }) => {
@@ -53,12 +56,12 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active }) 
       transition-colors duration-150
       ${
         active
-          ? 'bg-gray-800 text-white'
-          : 'hover:bg-gray-700 hover:text-white'
+          ? 'bg-[#292929] text-white'
+          : 'hover:bg-[#292929] hover:text-white'
       }
     `}
   >
-      <Icon className="w-5 h-5 mr-3"/>
+      <Icon className="w-5 h-5 mr-3 stroke-[#58BEC3]"/>
       <span>{label}</span>
   </button>)
 };
@@ -74,7 +77,7 @@ const Sidebar: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col w-full md:w-64 bg-gray-900 border-r border-gray-700 min-h-screen p-6">
+    <div className="flex flex-col w-full md:w-64 bg-[#151515] border-r border-[#292929] min-h-screen p-6">
       <h1 className = "text-2x1 font-bold text-white mb-10">
         {/* Aqui recebe-se o nome da barbearia que fez o login*/}
         Nome
@@ -107,14 +110,13 @@ const Sidebar: React.FC = () => {
         </div>
       </div>
     </div>
-
   )
 };
 
 const barbershopDashboard: React.FC = () => {
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-gray-950 text-white font-sans">
+    <div className="flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans">
       <Sidebar />
       {/*<MainContent />*/}
     </div>
@@ -122,4 +124,3 @@ const barbershopDashboard: React.FC = () => {
 }
 
 export default barbershopDashboard;
-//

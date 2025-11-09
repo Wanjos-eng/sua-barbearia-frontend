@@ -82,3 +82,16 @@
 [01:42:27.903] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
 [01:42:28.005] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/barbershop/dashboard/page"
 [01:42:42.189] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[02:40:17.352] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[02:40:17.352] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[02:52:55.496] Browser ERROR   ./app/barbershop/dashboard/page.tsx:72:47
+Parsing ecmascript source code failed
+  70 |   const navItems = [
+  71 |     {icon: LayoutGrid, label: 'Dashboard', active: true},
+> 72 |     {icon: Users, label: 'Barbeiros', color: #292929 },
+     |                                               ^^^^^^
+  73 |     {icon: Calendar, label: 'Agendamentos'},
+  74 |     {icon: DollarSign, label: 'Gestão Financeira'},
+  75 |     {icon: User, label: 'Clientes'},
+
+Expected ident
