@@ -49,7 +49,9 @@
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --color-yellow-400: #fac800;
+    --color-yellow-500: #edb200;
     --color-green-400: #05df72;
+    --color-green-500: #00c758;
     --color-cyan-100: #cefafe;
     --color-cyan-300: #53eafd;
     --color-cyan-500: #00b7d7;
@@ -60,6 +62,7 @@
     --color-blue-600: #155dfc;
     --color-blue-700: #1447e6;
     --color-blue-800: #193cb8;
+    --color-purple-500: #ac4bff;
     --color-gray-100: #f3f4f6;
     --color-gray-300: #d1d5dc;
     --color-gray-400: #99a1af;
@@ -104,7 +107,9 @@
   @supports (color: lab(0% 0 0)) {
     :root, :host {
       --color-yellow-400: lab(83.2664% 8.65132 106.895);
+      --color-yellow-500: lab(76.3898% 14.5258 98.4589);
       --color-green-400: lab(78.503% -64.9265 39.7492);
+      --color-green-500: lab(70.5521% -66.5147 45.8072);
       --color-cyan-100: lab(95.3146% -13.8285 -6.84733);
       --color-cyan-300: lab(85.3886% -36.7635 -21.5717);
       --color-cyan-500: lab(67.805% -35.3952 -30.2018);
@@ -115,6 +120,7 @@
       --color-blue-600: lab(44.0605% 29.0279 -86.0352);
       --color-blue-700: lab(36.9089% 35.0961 -85.6872);
       --color-blue-800: lab(30.2514% 27.7854 -70.2699);
+      --color-purple-500: lab(52.0183% 66.11 -78.2316);
       --color-gray-100: lab(96.1596% -.082314 -1.13575);
       --color-gray-300: lab(85.1236% -.612259 -3.7138);
       --color-gray-400: lab(65.9269% -.832707 -8.17474);
@@ -838,8 +844,20 @@
     background-color: var(--color-gray-950);
   }
 
+  .bg-green-500 {
+    background-color: var(--color-green-500);
+  }
+
+  .bg-purple-500 {
+    background-color: var(--color-purple-500);
+  }
+
   .bg-transparent {
     background-color: #0000;
+  }
+
+  .bg-yellow-500 {
+    background-color: var(--color-yellow-500);
   }
 
   .stroke-\[\#58BEC3\] {

@@ -194,6 +194,29 @@ const ActiveBarberItem: React.FC<ActiveBarber> = ({ initials, name, total, next 
     </div>
   </div>
 );
+
+// Dados Modelo (Simulação)
+
+const statsData = [
+  { icon: DollarSign, title: 'Receita', value: 'R$400,00', iconBgColor: 'bg-green-500' },
+  { icon: TrendingUp, title: 'Projeção (7d)', value: 'R$520,00', iconBgColor: 'bg-blue-500' },
+  { icon: Percent, title: 'Ticket Médio', value: 'R$60,00', iconBgColor: 'bg-purple-500' },
+  { icon: Calendar, title: 'Agendamentos', value: '7', iconBgColor: 'bg-yellow-500' },
+];
+
+const appointmentsData: Appointment[] = [
+  { time: '10:00', client: 'Carlos Pereira', barber: 'Nome Barbeiro', service: 'Corte', price: 'R$50,00', status: 'Pendente' },
+  { time: '11:00', client: 'Otávio Augusto', barber: 'Nome Barbeiro', service: 'Corte', price: 'R$50,00', status: 'Confirmado' },
+];
+
+const activeBarbersData: ActiveBarber[] = [
+  { initials: 'JS', name: 'João Silva', total: 100, next: 5 },
+  { initials: 'JS', name: 'João Silva', total: 150, next: 5 },
+  { initials: 'JS', name: 'João Silva', total: 100, next: 8 },
+];
+
+
+
 const barbershopDashboard: React.FC = () => {
 
   return (
