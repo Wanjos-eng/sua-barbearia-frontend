@@ -918,6 +918,10 @@
     text-align: left;
   }
 
+  .text-right {
+    text-align: right;
+  }
+
   .align-baseline {
     vertical-align: baseline;
   }

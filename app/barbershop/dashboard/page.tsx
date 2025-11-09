@@ -176,8 +176,24 @@ const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service,
   </div>
 );
 
-
-
+// Componente Item de Barbeiro Ativo
+const ActiveBarberItem: React.FC<ActiveBarber> = ({ initials, name, total, next }) => (
+  <div className="flex items-center justify-between py-3 border-b border-gray-700 last:border-b-0">
+    <div className="flex items-center space-x-4">
+      <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center font-bold text-white">
+        {initials}
+      </div>
+      <div>
+        <p className="text-sm font-semibold text-white">{name}</p>
+        <p className="text-xs text-gray-400">{total}</p>
+      </div>
+    </div>
+    <div className="text-right">
+      <p className="text-sm font-semibold text-white">{next}</p>
+      <p className="text-xs text-gray-400">Próx. 7d At.:</p>
+    </div>
+  </div>
+);
 const barbershopDashboard: React.FC = () => {
 
   return (
