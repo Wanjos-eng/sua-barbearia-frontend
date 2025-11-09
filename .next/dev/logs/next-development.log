@@ -95,3 +95,8 @@ Parsing ecmascript source code failed
   75 |     {icon: User, label: 'Clientes'},
 
 Expected ident
+[03:19:40.037] Browser ERROR   uncaughtError: Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+
+Check the render method of `StatsCard`.
+[03:36:03.026] Server  LOG      ✓ Compiled in 31ms
+[03:36:03.435] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

@@ -46,20 +46,20 @@ const SidebarItem = ({ icon: Icon, label, active })=>{
                 className: "w-5 h-5 mr-3 stroke-[#58BEC3]"
             }, void 0, false, {
                 fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                lineNumber: 64,
+                lineNumber: 65,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                 children: label
             }, void 0, false, {
                 fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                lineNumber: 65,
+                lineNumber: 66,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/app/barbershop/dashboard/page.tsx",
-        lineNumber: 53,
+        lineNumber: 54,
         columnNumber: 10
     }, ("TURBOPACK compile-time value", void 0));
 };
@@ -97,14 +97,14 @@ const Sidebar = ()=>{
                     "Nome",
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                         fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                        lineNumber: 84,
+                        lineNumber: 85,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     "Barbearia"
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                lineNumber: 81,
+                lineNumber: 82,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -118,22 +118,22 @@ const Sidebar = ()=>{
                                 active: item.active
                             }, void 0, false, {
                                 fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                                lineNumber: 92,
+                                lineNumber: 93,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0))
                         }, item.label, false, {
                             fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                            lineNumber: 91,
+                            lineNumber: 92,
                             columnNumber: 11
                         }, ("TURBOPACK compile-time value", void 0)))
                 }, void 0, false, {
                     fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                    lineNumber: 89,
+                    lineNumber: 90,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                lineNumber: 88,
+                lineNumber: 89,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -155,47 +155,95 @@ const Sidebar = ()=>{
                                 d: "M19 14l-7 7m0 0l-7-7m7 7V3"
                             }, void 0, false, {
                                 fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                                lineNumber: 107,
+                                lineNumber: 108,
                                 columnNumber: 15
                             }, ("TURBOPACK compile-time value", void 0))
                         }, void 0, false, {
                             fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                            lineNumber: 106,
+                            lineNumber: 107,
                             columnNumber: 13
                         }, ("TURBOPACK compile-time value", void 0))
                     }, void 0, false, {
                         fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                        lineNumber: 104,
+                        lineNumber: 105,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                    lineNumber: 103,
+                    lineNumber: 104,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/app/barbershop/dashboard/page.tsx",
-                lineNumber: 102,
+                lineNumber: 103,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/app/barbershop/dashboard/page.tsx",
-        lineNumber: 80,
+        lineNumber: 81,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };
+//Componente Cartão de Estatísticas
+const StatsCard = ({ icon: Icon, title, value, iconBgColor })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+        className: "bg-gray-800 p-5 rounded-1g flex items-center space-x-4",
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                className: `p-3 rounded-1g ${iconBgColor}`,
+                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(Icon, {
+                    className: "w-6 h-6 text-white"
+                }, void 0, false, {
+                    fileName: "[project]/app/barbershop/dashboard/page.tsx",
+                    lineNumber: 122,
+                    columnNumber: 9
+                }, ("TURBOPACK compile-time value", void 0))
+            }, void 0, false, {
+                fileName: "[project]/app/barbershop/dashboard/page.tsx",
+                lineNumber: 121,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0)),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                children: [
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-sm text-gray-400",
+                        children: title
+                    }, void 0, false, {
+                        fileName: "[project]/app/barbershop/dashboard/page.tsx",
+                        lineNumber: 125,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0)),
+                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                        className: "text-2x1 font-bold text-white",
+                        children: value
+                    }, void 0, false, {
+                        fileName: "[project]/app/barbershop/dashboard/page.tsx",
+                        lineNumber: 126,
+                        columnNumber: 9
+                    }, ("TURBOPACK compile-time value", void 0))
+                ]
+            }, void 0, true, {
+                fileName: "[project]/app/barbershop/dashboard/page.tsx",
+                lineNumber: 124,
+                columnNumber: 7
+            }, ("TURBOPACK compile-time value", void 0))
+        ]
+    }, void 0, true, {
+        fileName: "[project]/app/barbershop/dashboard/page.tsx",
+        lineNumber: 120,
+        columnNumber: 5
+    }, ("TURBOPACK compile-time value", void 0));
 const barbershopDashboard = ()=>{
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])(Sidebar, {}, void 0, false, {
             fileName: "[project]/app/barbershop/dashboard/page.tsx",
-            lineNumber: 120,
+            lineNumber: 137,
             columnNumber: 7
         }, ("TURBOPACK compile-time value", void 0))
     }, void 0, false, {
         fileName: "[project]/app/barbershop/dashboard/page.tsx",
-        lineNumber: 119,
+        lineNumber: 136,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };

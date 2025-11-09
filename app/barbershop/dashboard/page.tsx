@@ -13,6 +13,7 @@ import {
   RefreshCw,
   Layout
 } from 'lucide-react';
+import { Stats } from 'fs';
 
 // Tipos (Typescript)
 interface SidebarItemProps{
@@ -112,6 +113,22 @@ const Sidebar: React.FC = () => {
     </div>
   )
 };
+
+//Componente Cartão de Estatísticas
+
+const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, iconBgColor }) => (
+    <div className="bg-gray-800 p-5 rounded-1g flex items-center space-x-4">
+      <div className={`p-3 rounded-1g ${iconBgColor}`}>
+        <Icon className="w-6 h-6 text-white"/>
+      </div>
+      <div>
+        <p className="text-sm text-gray-400">{title}</p>
+        <p className="text-2x1 font-bold text-white">{value}</p>
+      </div>
+    </div>
+    
+);
+
 
 const barbershopDashboard: React.FC = () => {
 
