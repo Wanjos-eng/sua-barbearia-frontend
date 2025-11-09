@@ -75,7 +75,8 @@ export default function ProfileSelectionPage() {
 
           {/* Card 2: Barbearia (Atualizado) */}
           <Link 
-            href="/login/barbearia" 
+            //href="/login/barbearia" 
+            href="/barbearia/dashboard"
             className="group w-full md:w-auto"
             aria-label="Entrar como Barbearia"
           >
