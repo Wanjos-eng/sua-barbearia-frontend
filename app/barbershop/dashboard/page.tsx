@@ -215,14 +215,102 @@ const activeBarbersData: ActiveBarber[] = [
   { initials: 'JS', name: 'João Silva', total: 100, next: 8 },
 ];
 
+// Componente Conteúdo Principal
+const MainContent: React.FC = () => (
+  <div className="flex-1 bg-gray-950 p-6 md:p-10 min-h-screen">
+    <h1 className="text-3x1 font-bold text-white mb-6">Dashboard</h1>
 
+    {/* Grid de Estatísticas */} 
+    <div className="grid grid-cols-1 sm:grid-cols-2 x1:grid-cols-4 gap-6 mb-8">
+      {statsData.map((stat) => (
+        <StatsCard
+        key={stat.title}
+        icon={stat.icon}
+        title={stat.title}
+        value={stat.value}
+        iconBgColor={stat.iconBgColor} />
+      
+      ))}
+    </div>
 
+    {/* Layout Principal (Agendamentos e Barbeiros) */}
+    <div className="flex flex-col lg:flex-row gap-8">
+
+      {/* Coluna Esquerda: Próximos 7 Dias */}
+      <div className="flex-1 bg-gray-800 p-6 rounded-lg">
+        <div className="flex items-center space-x-3 mb-5">
+          <Calendar className="w-6 h-6 text-white"/>
+          <h2 className="text-x1 font-semibold text-white">Próximos 7 Dias</h2>
+        </div>
+
+        {/* Agendamentos */}
+        <div className="space-y-4">
+          <div>
+             {/* Colocar a data vindo direto do calendário automaticamente*/}
+            <p className="text-sm font-medium text-gray-400 mb-2">Dia 09/11 - Domingo</p>
+            {appointmentsData.map((app, index) => (
+              <AppointmentItem key={index} {...app} /> 
+            ))}
+          </div>
+          <div>
+            <p className="text-sm font-medium text-gray-400 mb-2">Dia 10/11 - Segunda</p>
+            {/* Simulando mais dados */}
+            <AppointmentItem 
+              time="10:00" 
+              client="Carlos Pereira" 
+              barber="Nome Barbeiro" 
+              service="Corte" 
+              price="R$50,00" 
+              status="Pendente" 
+            />
+            <AppointmentItem 
+              time="11:00" 
+              client="Otávio Augusto" 
+              barber="Nome Barbeiro" 
+              service="Corte" 
+              price="R$50,00" 
+              status="Confirmado" 
+            />
+          </div>
+        </div>
+      </div>
+
+      {/* Coluna Direita: Ações e Barbeiros Ativos */}
+      <div className="w-full lg:w-80">
+        <button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+          + Novo Agendamento
+        </button>
+
+        <div className="bg-gray-800 p-6 rounded-lg mt-8">
+          <h3 className="text-lg font-semibold text-white mb-4">Barbeiros Ativos</h3>
+          <div className="space-y-2">
+            {activeBarbersData.map((barber, index) => (
+              <ActiveBarberItem
+              key={index}
+              initials={barber.initials}
+              name={barber.name}
+              total={barber.total}
+              next={barber.next}
+              />
+            ))}
+          </div>
+        </div>
+
+        <button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition-colors mt-8">
+          Adicionar Barbeiro
+        </button>
+      </div>
+    </div>
+  </div>
+)
+
+//Componente App
 const barbershopDashboard: React.FC = () => {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans">
       <Sidebar />
-      {/*<MainContent />*/}
+      <MainContent />
     </div>
   )
 }
