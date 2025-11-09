@@ -51,3 +51,34 @@
 [01:21:14.183] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [01:25:06.767] Server  LOG      ✓ Compiled in 40ms
 [01:25:06.840] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:26:07.708] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:26:08.748] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:26:10.215] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:26:10.388] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:26:11.473] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:26:11.646] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:26:11.747] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:37:19.272] Server  LOG      ✓ Compiled in 59ms
+[01:37:19.558] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:43.475] Server  LOG      ✓ Compiled in 24ms
+[01:37:47.270] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:49.389] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:49.389] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[01:37:49.389] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[01:37:50.393] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:50.393] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[01:37:50.393] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[01:37:51.048] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:52.250] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[01:37:52.340] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[01:37:52.341] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[01:42:26.617] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:26.790] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:26.992] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:27.164] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:27.377] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:27.553] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:27.736] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:27.903] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:28.005] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/barbershop/dashboard/page"
+[01:42:42.189] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold

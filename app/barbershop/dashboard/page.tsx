@@ -111,4 +111,15 @@ const Sidebar: React.FC = () => {
   )
 };
 
-//export default function Dashboard
+const barbershopDashboard: React.FC = () => {
+
+  return (
+    <div className="flex flex-col md:flex-row min-h-screen bg-gray-950 text-white font-sans">
+      <Sidebar />
+      {/*<MainContent />*/}
+    </div>
+  )
+}
+
+export default barbershopDashboard;
+//
