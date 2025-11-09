@@ -129,6 +129,54 @@ const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, iconBgC
     
 );
 
+//Componente Item de Agendamento
+
+const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service, price, status }) => (
+  <div className="py-5 border-b border-gray-700 last:border-b-0">
+    <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+      {/* Informacoes Principais */}
+      <div className="flex items-center space-x-4 mb-4 md:mb-0">
+        <span className="text-x1 font-semibold text-white w-20">{time}</span>
+        <div className="flex-1">
+          <p className="text-lg font-semibold text-white">{client}</p>
+          <p className="text-sm text-gray-400">{barber}</p>
+
+        </div>
+        <div>
+          <p className="text-lg font-semibold text-white">{service}</p>
+          <p className="text-sm text-gray-400">{price}</p>
+        </div>
+      </div>
+
+      {/* Status e Ações */}
+      <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+        <div className="flex items-center space-x-2">
+          {status === 'Pendente' ? (
+            <Clock className="w-5 h-5 text-yellow-400"/>
+          ) : (
+            <Check className="w-5 h-5 text-green-400"/>
+          )}
+          <span className={`text-sm font-medium ${status === 'Pendente' ? 'text-yellow-400' : 'text-green-400'}`}>{status}</span>
+        </div>
+
+        <div className="flex items-center space-x-2">
+          {status === 'Pendente' && (
+            <button className="flex items-center justify-center text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md transition colors">
+              <Check className="w-4 h-4 mr-1"/>
+              Confirmar
+            </button>
+          )}
+          <button className="flex items-center justify-center text-sm bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md transition-colors">
+            <RefreshCw className="w-4 h-4 mr-1"/>
+            Recarregar
+          </button>
+        </div>
+      </div> 
+    </div>
+  </div>
+);
+
+
 
 const barbershopDashboard: React.FC = () => {
 

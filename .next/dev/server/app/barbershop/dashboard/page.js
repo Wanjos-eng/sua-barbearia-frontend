@@ -1,5 +1,5 @@
 var R=require("../../../chunks/ssr/[turbopack]_runtime.js")("server/app/barbershop/dashboard/page.js")
-R.c("server/chunks/ssr/node_modules_668ea970._.js")
+R.c("server/chunks/ssr/node_modules_6341a579._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__d7a29e2a._.js")
 R.c("server/chunks/ssr/node_modules_eb7ec0ea._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__e8a2741f._.js")
