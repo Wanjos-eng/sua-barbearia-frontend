@@ -26,7 +26,7 @@ interface StatsCardProps{
   icon: React.ElementType;
   title: string;
   value: string;
-  iconBgColor: string;
+  //iconBgColor: string;
 }
 
 interface Appointment{
@@ -116,14 +116,14 @@ const Sidebar: React.FC = () => {
 
 //Componente Cartão de Estatísticas
 
-const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, iconBgColor }) => (
-    <div className="bg-gray-800 p-5 rounded-1g flex items-center space-x-4">
-      <div className={`p-3 rounded-1g ${iconBgColor}`}>
-        <Icon className="w-6 h-6 text-white"/>
+const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value }) => (
+    <div className="bg-[#151515] p-5 rounded-lg flex items-center space-x-4">
+      <div className="p-3 rounded-lg bg-[#5C5C5C]">
+        <Icon className="w-6 h-6 text-[#DDDBCB]"/>
       </div>
       <div>
-        <p className="text-sm text-gray-400">{title}</p>
-        <p className="text-2x1 font-bold text-white">{value}</p>
+        <p className="text-sm text-[#5C5C5C]">{title}</p>
+        <p className="text-2x1 font-bold text-[#DDDBCB]">{value}</p>
       </div>
     </div>
     
@@ -132,19 +132,19 @@ const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, iconBgC
 //Componente Item de Agendamento
 
 const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service, price, status }) => (
-  <div className="py-5 border-b border-gray-700 last:border-b-0">
+  <div className="py- p-4 bg-[#0C0C0C] rounded-lg mh-4 my-3">
     <div className="flex flex-col md:flex-row md:items-center md:justify-between">
       {/* Informacoes Principais */}
       <div className="flex items-center space-x-4 mb-4 md:mb-0">
-        <span className="text-x1 font-semibold text-white w-20">{time}</span>
+        <span className="text-lg font-black text-[#DDDBCB] w-20">{time}</span>
         <div className="flex-1">
-          <p className="text-lg font-semibold text-white">{client}</p>
-          <p className="text-sm text-gray-400">{barber}</p>
+          <p className="text-lg font-semibold text-[#DDDBCB]">{client}</p>
+          <p className="text-sm text-[#5C5C5C]">{barber}</p>
 
         </div>
         <div>
-          <p className="text-lg font-semibold text-white">{service}</p>
-          <p className="text-sm text-gray-400">{price}</p>
+          <p className="text-lg font-semibold text-[#DDDBCB]">{service}</p>
+          <p className="text-sm text-[#5C5C5C]">{price}</p>
         </div>
       </div>
 
@@ -152,21 +152,21 @@ const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service,
       <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
         <div className="flex items-center space-x-2">
           {status === 'Pendente' ? (
-            <Clock className="w-5 h-5 text-yellow-400"/>
+            <Clock className="w-5 h-5 text-[#5C5C5C]"/>
           ) : (
-            <Check className="w-5 h-5 text-green-400"/>
+            <Check className="w-5 h-5 text-[#58BEC3]"/>
           )}
-          <span className={`text-sm font-medium ${status === 'Pendente' ? 'text-yellow-400' : 'text-green-400'}`}>{status}</span>
+          <span className={`text-sm font-medium ${status === 'Pendente' ? 'text-[#5C5C5C]' : 'text-[#58BEC3]'}`}>{status}</span>
         </div>
 
         <div className="flex items-center space-x-2">
           {status === 'Pendente' && (
-            <button className="flex items-center justify-center text-sm bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md transition colors">
+            <button className="flex items-center justify-center text-sm bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] px-3 py-2 rounded-md transition colors">
               <Check className="w-4 h-4 mr-1"/>
               Confirmar
             </button>
           )}
-          <button className="flex items-center justify-center text-sm bg-gray-600 hover:bg-gray-700 text-white px-3 py-2 rounded-md transition-colors">
+          <button className="flex items-center justify-center text-sm bg-[#5C5C5C] hover:bg-[#767676] text-white px-3 py-2 rounded-md transition-colors">
             <RefreshCw className="w-4 h-4 mr-1"/>
             Recarregar
           </button>
@@ -180,17 +180,18 @@ const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service,
 const ActiveBarberItem: React.FC<ActiveBarber> = ({ initials, name, total, next }) => (
   <div className="flex items-center justify-between py-3 border-b border-gray-700 last:border-b-0">
     <div className="flex items-center space-x-4">
-      <div className="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center font-bold text-white">
+      <div className="w-10 h-10 bg-[#5C5C5C] rounded-full flex items-center justify-center font-bold text-white">
         {initials}
       </div>
       <div>
-        <p className="text-sm font-semibold text-white">{name}</p>
-        <p className="text-xs text-gray-400">{total}</p>
+        <p className="text-lg font-bold text-[#DDDBCB]">{name}</p>
+        <p className="text-xs font-semibold text-[#5C5C5C]">Agendamentos:</p>
+        <p className="text-xs text-[#DDDBCB]">{total}</p>
       </div>
     </div>
     <div className="text-right">
-      <p className="text-sm font-semibold text-white">{next}</p>
-      <p className="text-xs text-gray-400">Próx. 7d At.:</p>
+      <p className="text-sm font-semibold text-[#DDDBCB]">{next}</p>
+      <p className="text-xs text-[#5C5C5C]">Próx. 7d At.:</p>
     </div>
   </div>
 );
@@ -217,18 +218,18 @@ const activeBarbersData: ActiveBarber[] = [
 
 // Componente Conteúdo Principal
 const MainContent: React.FC = () => (
-  <div className="flex-1 bg-gray-950 p-6 md:p-10 min-h-screen">
-    <h1 className="text-3x1 font-bold text-white mb-6">Dashboard</h1>
+  <div className="flex-1 bg-[#050505] p-6 md:p-10 min-h-screen">
+    <h1 className="text-3x1 font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
 
-    {/* Grid de Estatísticas */} 
+    {/* Grid de Estatísticas */}  
     <div className="grid grid-cols-1 sm:grid-cols-2 x1:grid-cols-4 gap-6 mb-8">
       {statsData.map((stat) => (
         <StatsCard
         key={stat.title}
         icon={stat.icon}
         title={stat.title}
-        value={stat.value}
-        iconBgColor={stat.iconBgColor} />
+        value={stat.value}/>
+        //iconBgColor={stat.iconBgColor} 
       
       ))}
     </div>
@@ -237,23 +238,23 @@ const MainContent: React.FC = () => (
     <div className="flex flex-col lg:flex-row gap-8">
 
       {/* Coluna Esquerda: Próximos 7 Dias */}
-      <div className="flex-1 bg-gray-800 p-6 rounded-lg">
+      <div className="flex-1 bg-[#151515] p-6 rounded-lg">
         <div className="flex items-center space-x-3 mb-5">
           <Calendar className="w-6 h-6 text-white"/>
-          <h2 className="text-x1 font-semibold text-white">Próximos 7 Dias</h2>
+          <h2 className="text-x1 font-semibold text-[#DDDBCB]">Próximos 7 Dias</h2>
         </div>
 
         {/* Agendamentos */}
         <div className="space-y-4">
           <div>
              {/* Colocar a data vindo direto do calendário automaticamente*/}
-            <p className="text-sm font-medium text-gray-400 mb-2">Dia 09/11 - Domingo</p>
+            <p className="text-sm border-b border-[#5C5C5C] pb-3 mb-4 font-medium text-[#5C5C5C] mb-2">Dia 09/11 - Domingo</p>
             {appointmentsData.map((app, index) => (
               <AppointmentItem key={index} {...app} /> 
             ))}
           </div>
           <div>
-            <p className="text-sm font-medium text-gray-400 mb-2">Dia 10/11 - Segunda</p>
+            <p className="text-sm border-b border-[#5C5C5C] pb-3 mb-4 font-medium text-[#5C5C5C] mb-2">Dia 10/11 - Segunda</p>
             {/* Simulando mais dados */}
             <AppointmentItem 
               time="10:00" 
@@ -277,12 +278,12 @@ const MainContent: React.FC = () => (
 
       {/* Coluna Direita: Ações e Barbeiros Ativos */}
       <div className="w-full lg:w-80">
-        <button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition-colors">
+        <button className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors">
           + Novo Agendamento
         </button>
 
-        <div className="bg-gray-800 p-6 rounded-lg mt-8">
-          <h3 className="text-lg font-semibold text-white mb-4">Barbeiros Ativos</h3>
+        <div className="bg-[#151515] p-6 rounded-lg mt-8">
+          <h3 className="text-lg font-semibold text-[#DDDBCB] mb-4">Barbeiros Ativos</h3>
           <div className="space-y-2">
             {activeBarbersData.map((barber, index) => (
               <ActiveBarberItem
@@ -296,7 +297,7 @@ const MainContent: React.FC = () => (
           </div>
         </div>
 
-        <button className="w-full bg-cyan-500 hover:bg-cyan-600 text-white font-bold py-3 px-4 rounded-lg transition-colors mt-8">
+        <button className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mt-8">
           Adicionar Barbeiro
         </button>
       </div>

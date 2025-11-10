@@ -1,102 +1,81 @@
-[00:00:03.566] Server  LOG      ✓ Ready in 3s
-[00:01:40.473] Server  LOG      ○ Compiling / ...
-[00:01:41.532] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:41.533] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:41.533] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:45.776] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:47.444] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:47.444] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:47.444] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:48.788] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:58.847] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:01:58.960] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:01:58.960] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:03:30.767] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:33.751] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:03:33.866] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:03:33.866] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:09:44.372] Browser WARN    Image with src "/_next/static/media/icone-logo-suabarbearia-Login.575a05ab.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:11:15.735] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:11:17.826] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:11:17.931] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:11:17.931] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:12:39.145] Browser WARN    Image with src "/_next/static/media/icone-logo-suabarbearia-Login.575a05ab.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:13:02.516] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:04.611] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:13:04.721] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:13:04.721] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:14:49.197] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:14:51.816] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:14:51.921] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:14:51.921] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:17:46.834] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:17:46.834] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:17:46.834] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:17:47.776] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:17:49.573] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:17:55.709] Server  LOG      ✓ Compiled in 31ms
-[00:17:55.753] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:17:57.619] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:17:57.619] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:17:57.619] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:17:58.270] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:18:00.865] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:18:00.865] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:18:00.865] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:34:20.581] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:40:14.347] Server  LOG      ✓ Compiled in 37ms
-[00:40:17.316] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:15:20.828] Server  LOG      ✓ Compiled in 60ms
-[01:21:13.315] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:21:14.183] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:25:06.767] Server  LOG      ✓ Compiled in 40ms
-[01:25:06.840] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:26:07.708] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:26:08.748] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:26:10.215] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:26:10.388] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:26:11.473] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:26:11.646] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:26:11.747] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:37:19.272] Server  LOG      ✓ Compiled in 59ms
-[01:37:19.558] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:37:43.475] Server  LOG      ✓ Compiled in 24ms
-[01:37:47.270] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:37:49.389] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:37:49.389] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[01:37:49.389] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[01:37:50.393] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:37:50.393] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[01:37:50.393] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[01:37:51.048] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:37:52.250] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[01:37:52.340] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[01:37:52.341] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[01:42:26.617] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:26.790] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:26.992] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:27.164] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:27.377] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:27.553] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:27.736] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:27.903] Server  ERROR    ⨯ Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:28.005] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/barbershop/dashboard/page"
-[01:42:42.189] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[02:40:17.352] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[02:40:17.352] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[02:52:55.496] Browser ERROR   ./app/barbershop/dashboard/page.tsx:72:47
+[00:00:01.792] Server  LOG      ✓ Ready in 1299ms
+[00:00:06.770] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:06.897] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:06.897] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:12:55.239] Browser ERROR   ./app/barbershop/dashboard/page.tsx:233:7
 Parsing ecmascript source code failed
-  70 |   const navItems = [
-  71 |     {icon: LayoutGrid, label: 'Dashboard', active: true},
-> 72 |     {icon: Users, label: 'Barbeiros', color: #292929 },
-     |                                               ^^^^^^
-  73 |     {icon: Calendar, label: 'Agendamentos'},
-  74 |     {icon: DollarSign, label: 'Gestão Financeira'},
-  75 |     {icon: User, label: 'Clientes'},
+  231 |         //iconBgColor={stat.iconBgColor} />
+  232 |       
+> 233 |       ))}
+      |       ^
+  234 |     </div>
+  235 |
+  236 |     {/* Layout Principal (Agendamentos e Barbeiros) */}
 
-Expected ident
-[03:19:40.037] Browser ERROR   uncaughtError: Error: Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) but got: undefined. You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.
+Expected '</', got ')'
+[00:14:03.324] Browser ERROR   ./app/barbershop/dashboard/page.tsx:233:7
+Parsing ecmascript source code failed
+  231 |         //iconBgColor={stat.iconBgColor} />
+  232 |       
+> 233 |       ))}
+      |       ^
+  234 |     </div>
+  235 |
+  236 |     {/* Layout Principal (Agendamentos e Barbeiros) */}
 
-Check the render method of `StatsCard`.
-[03:36:03.026] Server  LOG      ✓ Compiled in 31ms
-[03:36:03.435] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+Expected '</', got ')'
+[00:14:06.314] Browser ERROR   ./app/barbershop/dashboard/page.tsx:233:7
+Parsing ecmascript source code failed
+  231 |         //iconBgColor={stat.iconBgColor} />
+  232 |       
+> 233 |       ))}
+      |       ^
+  234 |     </div>
+  235 |
+  236 |     {/* Layout Principal (Agendamentos e Barbeiros) */}
+
+Expected '</', got ')'
+[00:37:13.324] Browser ERROR   ./app/barbershop/dashboard/page.tsx:181:85
+Parsing ecmascript source code failed
+  179 |
+  180 | // Componente Item de Barbeiro Ativo
+> 181 | const ActiveBarberItem: React.FC<ActiveBarber> = ({ initials, name, total, next }) => (
+      |                                                                                     ^
+  182 |   <div className="flex items-center justify-between py-3 border-b border-gray-700 last:border-b-0">
+  183 |     <div className="flex items-center space-x-4">
+  184 |       <div className="w-10 h-10 bg-[#5C5C5C] rounded-full flex items-center justify-center font-bold text-white">
+
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+[00:40:01.681] Browser ERROR   ./app/barbershop/dashboard/page.tsx:310:43
+Parsing ecmascript source code failed
+  308 |
+  309 | //Componente App
+> 310 | const barbershopDashboard: React.FC = () => {
+      |                                           ^
+  311 |
+  312 |   return (
+  313 |     <div className="flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans">
+
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+[00:40:06.057] Browser ERROR   ./app/barbershop/dashboard/page.tsx:310:43
+Parsing ecmascript source code failed
+  308 |
+  309 | //Componente App
+> 310 | const barbershopDashboard: React.FC = () => {
+      |                                           ^
+  311 |
+  312 |   return (
+  313 |     <div className="flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans">
+
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
+[00:40:08.535] Browser ERROR   ./app/barbershop/dashboard/page.tsx:310:43
+Parsing ecmascript source code failed
+  308 |
+  309 | //Componente App
+> 310 | const barbershopDashboard: React.FC = () => {
+      |                                           ^
+  311 |
+  312 |   return (
+  313 |     <div className="flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans">
+
+Unexpected token. Did you mean `{'>'}` or `&gt;`?
