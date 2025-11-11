@@ -32,3 +32,26 @@ const BarberPoleIcon = ({ className }: { className?: string }) => (
     <path d="m14 14-4 4" />
   </svg>
 );
+
+// Componente principal da página de login
+export default function LoginPage(){
+    const [activeTab, setActiveTab] = useState<'barbearia' | 'barbeiro'>('barbearia');
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+
+    // Função para lidar com o envio do formulário
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+        // Aqui adicionará a lógica de autenticação
+        console.log({
+            role: activeTab,
+            email,
+            password,
+        });
+
+    };
+
+    
+
+}
