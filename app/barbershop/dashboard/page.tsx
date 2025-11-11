@@ -79,7 +79,7 @@ const Sidebar: React.FC = () => {
 
   return (
     <div className="flex flex-col w-full md:w-64 bg-[#151515] border-r border-[#292929] min-h-screen p-6">
-      <h1 className = "text-2x1 font-bold text-white mb-10">
+      <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5">
         {/* Aqui recebe-se o nome da barbearia que fez o login*/}
         Nome
         <br />

@@ -392,6 +392,10 @@
     margin-block: calc(var(--spacing) * 3);
   }
 
+  .my-5 {
+    margin-block: calc(var(--spacing) * 5);
+  }
+
   .my-6 {
     margin-block: calc(var(--spacing) * 6);
   }
@@ -1026,6 +1030,10 @@
 
   .text-\[\#6EE6E2\] {
     color: #6ee6e2;
+  }
+
+  .text-\[\#7ADBE0\] {
+    color: #7adbe0;
   }
 
   .text-\[\#58BEC3\] {
