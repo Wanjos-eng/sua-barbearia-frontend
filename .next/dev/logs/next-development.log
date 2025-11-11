@@ -38,3 +38,25 @@
 [00:01:54.912] Server  ERROR    ⨯ Error: The default export is not a React Component in "/login/barbearia/page"
 [00:01:55.077] Server  ERROR    ⨯ Error: The default export is not a React Component in "/login/barbearia/page"
 [00:01:55.176] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/login/barbearia/page"
+[00:05:49.571] Browser ERROR   ./app/login/barbearia/page.tsx:1:17
+Ecmascript file had an error
+> 1 | import React, { useState } from 'react';
+    |                 ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:06:00.568] Browser ERROR   ./app/login/barbearia/page.tsx:1:17
+Ecmascript file had an error
+> 1 | import React, { useState } from 'react';
+    |                 ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
