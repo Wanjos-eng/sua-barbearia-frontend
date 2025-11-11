@@ -53,12 +53,12 @@ interface ActiveBarber {
 const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active }) => {
  return (<button
     className={`
-      flex items-center w-full px-4 py-3 text-sm font-medium rounded-lg
+      flex items-center w-full px-4 py-3 text-sm text-[#DDDBCB] font-medium rounded-lg
       transition-colors duration-150
       ${
         active
-          ? 'bg-[#292929] text-white'
-          : 'hover:bg-[#292929] hover:text-white'
+          ? 'bg-[#292929] text-[#DDDBCB]'
+          : 'hover:bg-[#292929] hover:text-[#DDDBCB]'
       }
     `}
   >
