@@ -131,23 +131,17 @@
   :root, :host {
     --font-sans: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    --color-yellow-400: #fac800;
     --color-yellow-500: #edb200;
-    --color-green-400: #05df72;
     --color-green-500: #00c758;
     --color-cyan-500: #00b7d7;
-    --color-cyan-600: #0092b5;
     --color-blue-500: #3080ff;
-    --color-blue-600: #155dfc;
     --color-blue-700: #1447e6;
     --color-blue-800: #193cb8;
     --color-purple-500: #ac4bff;
     --color-gray-300: #d1d5dc;
     --color-gray-400: #99a1af;
-    --color-gray-600: #4a5565;
     --color-gray-700: #364153;
     --color-gray-800: #1e2939;
-    --color-gray-950: #030712;
     --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
@@ -158,8 +152,12 @@
     --text-sm--line-height: calc(1.25 / .875);
     --text-lg: 1.125rem;
     --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
     --text-2xl: 1.5rem;
     --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
     --text-4xl: 2.25rem;
     --text-4xl--line-height: calc(2.5 / 2.25);
     --text-5xl: 3rem;
@@ -183,23 +181,17 @@
 
   @supports (color: lab(0% 0 0)) {
     :root, :host {
-      --color-yellow-400: lab(83.2664% 8.65132 106.895);
       --color-yellow-500: lab(76.3898% 14.5258 98.4589);
-      --color-green-400: lab(78.503% -64.9265 39.7492);
       --color-green-500: lab(70.5521% -66.5147 45.8072);
       --color-cyan-500: lab(67.805% -35.3952 -30.2018);
-      --color-cyan-600: lab(55.1767% -26.7496 -30.5138);
       --color-blue-500: lab(54.1736% 13.3368 -74.6839);
-      --color-blue-600: lab(44.0605% 29.0279 -86.0352);
       --color-blue-700: lab(36.9089% 35.0961 -85.6872);
       --color-blue-800: lab(30.2514% 27.7854 -70.2699);
       --color-purple-500: lab(52.0183% 66.11 -78.2316);
       --color-gray-300: lab(85.1236% -.612259 -3.7138);
       --color-gray-400: lab(65.9269% -.832707 -8.17474);
-      --color-gray-600: lab(35.6337% -1.58697 -10.8425);
       --color-gray-700: lab(27.1134% -.956401 -12.3224);
       --color-gray-800: lab(16.1051% -1.18239 -11.7533);
-      --color-gray-950: lab(1.90334% .278696 -5.48866);
     }
   }
 }
@@ -473,10 +465,6 @@
     order: 2;
   }
 
-  .m-3 {
-    margin: calc(var(--spacing) * 3);
-  }
-
   .mx-auto {
     margin-inline: auto;
   }
@@ -527,10 +515,6 @@
 
   .mb-6 {
     margin-bottom: calc(var(--spacing) * 6);
-  }
-
-  .mb-7 {
-    margin-bottom: calc(var(--spacing) * 7);
   }
 
   .mb-8 {
@@ -848,10 +832,6 @@
     border-color: #5c5c5c;
   }
 
-  .border-\[\#151515\] {
-    border-color: #151515;
-  }
-
   .border-\[\#292929\] {
     border-color: #292929;
   }
@@ -908,24 +888,12 @@
     background-color: var(--color-blue-500);
   }
 
-  .bg-blue-600 {
-    background-color: var(--color-blue-600);
-  }
-
   .bg-cyan-500 {
     background-color: var(--color-cyan-500);
   }
 
-  .bg-gray-600 {
-    background-color: var(--color-gray-600);
-  }
-
   .bg-gray-800 {
     background-color: var(--color-gray-800);
-  }
-
-  .bg-gray-950 {
-    background-color: var(--color-gray-950);
   }
 
   .bg-green-500 {
@@ -950,10 +918,6 @@
 
   .object-cover {
     object-fit: cover;
-  }
-
-  .p-2 {
-    padding: calc(var(--spacing) * 2);
   }
 
   .p-3 {
@@ -996,20 +960,12 @@
     padding-block: calc(var(--spacing) * 3);
   }
 
-  .py-5 {
-    padding-block: calc(var(--spacing) * 5);
-  }
-
   .py-8 {
     padding-block: calc(var(--spacing) * 8);
   }
 
   .pt-6 {
     padding-top: calc(var(--spacing) * 6);
-  }
-
-  .pb-2 {
-    padding-bottom: calc(var(--spacing) * 2);
   }
 
   .pb-3 {
@@ -1045,6 +1001,11 @@
     line-height: var(--tw-leading, var(--text-2xl--line-height));
   }
 
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+
   .text-4xl {
     font-size: var(--text-4xl);
     line-height: var(--tw-leading, var(--text-4xl--line-height));
@@ -1058,6 +1019,11 @@
   .text-sm {
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+
+  .text-xl {
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
   }
 
   .text-xs {
@@ -1130,10 +1096,6 @@
     white-space: pre-line;
   }
 
-  .text-\[\#0C0C0C\] {
-    color: #0c0c0c;
-  }
-
   .text-\[\#5C5C5C\] {
     color: #5c5c5c;
   }
@@ -1162,14 +1124,6 @@
     color: #ffb59c;
   }
 
-  .text-\[5C5C5C\] {
-    color: 5C5C5C;
-  }
-
-  .text-\[DDDBCB\] {
-    color: DDDBCB;
-  }
-
   .text-black {
     color: var(--color-black);
   }
@@ -1194,16 +1148,8 @@
     color: var(--color-gray-800);
   }
 
-  .text-green-400 {
-    color: var(--color-green-400);
-  }
-
   .text-white {
     color: var(--color-white);
-  }
-
-  .text-yellow-400 {
-    color: var(--color-yellow-400);
   }
 
   .uppercase {
@@ -1292,33 +1238,12 @@
     border-bottom-width: 0;
   }
 
-  .last\:border-b-2:last-child {
-    border-bottom-style: var(--tw-border-style);
-    border-bottom-width: 2px;
-  }
-
-  .last\:border-b-3:last-child {
-    border-bottom-style: var(--tw-border-style);
-    border-bottom-width: 3px;
-  }
-
-  .last\:border-b-4:last-child {
-    border-bottom-style: var(--tw-border-style);
-    border-bottom-width: 4px;
-  }
-
   @media (hover: hover) {
     .hover\:scale-105:hover {
       --tw-scale-x: 105%;
       --tw-scale-y: 105%;
       --tw-scale-z: 105%;
       scale: var(--tw-scale-x) var(--tw-scale-y);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-\[\#0C0C0C\]:hover {
-      background-color: #0c0c0c;
     }
   }
 
@@ -1331,18 +1256,6 @@
   @media (hover: hover) {
     .hover\:bg-\[\#7ADBE0\]:hover {
       background-color: #7adbe0;
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-\[\#58BEC3\]:hover {
-      background-color: #58bec3;
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-\[\#151515\]:hover {
-      background-color: #151515;
     }
   }
 
@@ -1361,18 +1274,6 @@
   @media (hover: hover) {
     .hover\:bg-blue-700:hover {
       background-color: var(--color-blue-700);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-cyan-600:hover {
-      background-color: var(--color-cyan-600);
-    }
-  }
-
-  @media (hover: hover) {
-    .hover\:bg-gray-700:hover {
-      background-color: var(--color-gray-700);
     }
   }
 

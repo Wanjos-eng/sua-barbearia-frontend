@@ -136,7 +136,7 @@ const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service,
     <div className="flex flex-col md:flex-row md:items-center md:justify-between">
       {/* Informacoes Principais */}
       <div className="flex items-center space-x-4 mb-4 md:mb-0">
-        <span className="text-lg font-black text-[#DDDBCB] w-20">{time}</span>
+        <span className="text-2xl font-black text-[#DDDBCB] w-20">{time}</span>
         <div className="flex-1">
           <p className="text-lg font-semibold text-[#DDDBCB]">{client}</p>
           <p className="text-sm text-[#5C5C5C]">{barber}</p>
