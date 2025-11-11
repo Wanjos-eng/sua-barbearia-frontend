@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { act, useState } from 'react';
 
 import {Mail, Lock} from 'lucide-react';
 
@@ -52,6 +52,41 @@ export default function LoginPage(){
 
     };
 
-    
+    return(
+        //Container principal da página
+        <div className="flex min-h-screen w-full items-center justify-center bg-black p-4">
+            {/* Card de Login */}
+            <div className="w-full max-w-md rounded-2x1 bg-[#151515] p-8 shadow-2x1">
+                {/* Cabeçalho com Logo e Título */}
+                <div className="mb-8 flex flex-col items-center">
+                    <BarberPoleIcon className="h-16 w-16 text-[#B4654A]"/>
+                    <h1 className="mt-4 text-4x1 font-bold text-[#DDDBCB]">Login</h1>
+                </div>
+
+                {/* Seletor de Tabs (Barbearia / Barbeiro) */}
+                <div className="mb-8 flex rounded-lg bg-gray-800 p-1">
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('barbearia')}
+                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${
+                            activeTab === 'barbearia'
+                                ? 'bg-[#B4654A] text-white'
+                                : 'hover:text-gray-100 hover:bg-gray-700 text-gray-400'
+                        }`}
+                    >Barbearia</button>
+                    <button
+                        type="button"
+                        onClick={() => setActiveTab('barbeiro')}
+                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${
+                            activeTab === 'barbeiro'
+                                ? 'bg-[#B4654A] text-white shadow'
+                                : 'text-gray-400 hover:bg-gray-700 hover:text-gray-100'
+                        }`}>
+                            Barbeiro
+                        </button>
+                </div>
+            </div>
+        </div>
+    );
 
 }
