@@ -85,6 +85,46 @@ export default function LoginPage(){
                             Barbeiro
                         </button>
                 </div>
+
+                {/* Formulário de Login */}
+                <form onSubmit={handleSubmit}>
+                    <div className="space-y-6">
+
+                        {/* Campo de Email */}
+                        <div className="relative">
+                            <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                            aria-hidden="true"/>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Email"
+                                required
+                                className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 pl-10 text-white placeholder-gray-500 transition-all focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                            />
+                        </div>
+
+                        {/* Campo de Senha */}
+                        <div className="relative">
+                            <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                            aria-hidden="true"/>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                placeholder="Senha"
+                                required
+                                className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 pl-10 text-white placeholder-gray-500 transition-all focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                            />
+                        </div>
+                    </div>
+
+                    
+                </form>
             </div>
         </div>
     );

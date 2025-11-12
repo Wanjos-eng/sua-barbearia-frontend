@@ -138,6 +138,7 @@
     --color-blue-700: #1447e6;
     --color-blue-800: #193cb8;
     --color-purple-500: #ac4bff;
+    --color-gray-100: #f3f4f6;
     --color-gray-300: #d1d5dc;
     --color-gray-400: #99a1af;
     --color-gray-700: #364153;
@@ -146,6 +147,7 @@
     --color-white: #fff;
     --spacing: .25rem;
     --container-xs: 20rem;
+    --container-md: 28rem;
     --text-xs: .75rem;
     --text-xs--line-height: calc(1 / .75);
     --text-sm: .875rem;
@@ -184,6 +186,7 @@
       --color-blue-700: lab(36.9089% 35.0961 -85.6872);
       --color-blue-800: lab(30.2514% 27.7854 -70.2699);
       --color-purple-500: lab(52.0183% 66.11 -78.2316);
+      --color-gray-100: lab(96.1596% -.082314 -1.13575);
       --color-gray-300: lab(85.1236% -.612259 -3.7138);
       --color-gray-400: lab(65.9269% -.832707 -8.17474);
       --color-gray-700: lab(27.1134% -.956401 -12.3224);
@@ -477,6 +480,10 @@
     margin-block: calc(var(--spacing) * 6);
   }
 
+  .mt-4 {
+    margin-top: calc(var(--spacing) * 4);
+  }
+
   .mt-8 {
     margin-top: calc(var(--spacing) * 8);
   }
@@ -601,6 +608,10 @@
     min-height: 100vh;
   }
 
+  .w-1\/2 {
+    width: 50%;
+  }
+
   .w-4 {
     width: calc(var(--spacing) * 4);
   }
@@ -663,6 +674,10 @@
 
   .max-w-\[1029px\] {
     max-width: 1029px;
+  }
+
+  .max-w-md {
+    max-width: var(--container-md);
   }
 
   .max-w-xs {
@@ -920,6 +935,10 @@
     object-fit: cover;
   }
 
+  .p-1 {
+    padding: calc(var(--spacing) * 1);
+  }
+
   .p-3 {
     padding: calc(var(--spacing) * 3);
   }
@@ -954,6 +973,10 @@
 
   .py-2 {
     padding-block: calc(var(--spacing) * 2);
+  }
+
+  .py-2\.5 {
+    padding-block: calc(var(--spacing) * 2.5);
   }
 
   .py-3 {
@@ -1268,6 +1291,12 @@
   }
 
   @media (hover: hover) {
+    .hover\:bg-gray-700:hover {
+      background-color: var(--color-gray-700);
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:text-\[\#DDDBCB\]:hover {
       color: #dddbcb;
     }
@@ -1276,6 +1305,12 @@
   @media (hover: hover) {
     .hover\:text-blue-800:hover {
       color: var(--color-blue-800);
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:text-gray-100:hover {
+      color: var(--color-gray-100);
     }
   }
 
