@@ -506,6 +506,14 @@
     margin: calc(var(--spacing) * 1);
   }
 
+  .mx-1 {
+    margin-inline: calc(var(--spacing) * 1);
+  }
+
+  .mx-3 {
+    margin-inline: calc(var(--spacing) * 3);
+  }
+
   .mx-auto {
     margin-inline: auto;
   }
@@ -548,6 +556,10 @@
 
   .mr-1 {
     margin-right: calc(var(--spacing) * 1);
+  }
+
+  .mr-2 {
+    margin-right: calc(var(--spacing) * 2);
   }
 
   .mr-3 {
@@ -977,6 +989,10 @@
     background-color: var(--color-cyan-500);
   }
 
+  .bg-gray-100 {
+    background-color: var(--color-gray-100);
+  }
+
   .bg-gray-300 {
     background-color: var(--color-gray-300);
   }
@@ -1043,6 +1059,14 @@
 
   .p-8 {
     padding: calc(var(--spacing) * 8);
+  }
+
+  .p-10 {
+    padding: calc(var(--spacing) * 10);
+  }
+
+  .p-20 {
+    padding: calc(var(--spacing) * 20);
   }
 
   .px-3 {
@@ -1434,8 +1458,26 @@
   }
 
   @media (hover: hover) {
+    .hover\:text-\[\#5c5c5c\]:hover {
+      color: #5c5c5c;
+    }
+  }
+
+  @media (hover: hover) {
     .hover\:text-\[\#58BEC3\]:hover {
       color: #58bec3;
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:text-\[\#868686\]:hover {
+      color: #868686;
+    }
+  }
+
+  @media (hover: hover) {
+    .hover\:text-\[\#AAAAAA\]:hover {
+      color: #aaa;
     }
   }
 

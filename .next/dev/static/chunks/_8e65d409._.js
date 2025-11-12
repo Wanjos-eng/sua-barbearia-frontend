@@ -34,7 +34,7 @@ function LoginPage() {
     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         className: "flex min-h-screen w-full items-center justify-center bg-black p-4",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "w-full max-w-md rounded-2x1 bg-[#151515] p-8 shadow-2x1",
+            className: "w-full max-w-md rounded-lg bg-[#151515] p-8 shadow-2x1",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "mb-8 flex flex-col items-center",
@@ -52,12 +52,12 @@ function LoginPage() {
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "mb-8 flex rounded-lg bg-black p-1",
+                    className: "mb-6 flex rounded-lg bg-black p-1",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "button",
                             onClick: ()=>setActiveTab('barbearia'),
-                            className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbearia' ? 'bg-[#58BEC3] text-[#151515]' : 'hover:text-gray-100 hover:bg-[#292929] text-[#5c5c5c]'}`,
+                            className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbearia' ? 'bg-[#58BEC3] text-[#151515]' : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`,
                             children: "Barbearia"
                         }, void 0, false, {
                             fileName: "[project]/app/login/barbearia/page.tsx",
@@ -67,7 +67,7 @@ function LoginPage() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "button",
                             onClick: ()=>setActiveTab('barbeiro'),
-                            className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbeiro' ? 'bg-[#58BEC3] text-[#151515] shadow' : 'hover:text-gray-100 hover:bg-[#292929] text-[#5c5c5c]'}`,
+                            className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbeiro' ? 'bg-[#58BEC3] text-[#151515] shadow' : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`,
                             children: "Barbeiro"
                         }, void 0, false, {
                             fileName: "[project]/app/login/barbearia/page.tsx",

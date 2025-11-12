@@ -60,7 +60,7 @@ export default function LoginPage(){
         //Container principal da página
         <div className="flex min-h-screen w-full items-center justify-center bg-black p-4">
             {/* Card de Login */}
-            <div className="w-full max-w-md rounded-2x1 bg-[#151515] p-8 shadow-2x1">
+            <div className="w-full max-w-md rounded-lg bg-[#151515] p-8 shadow-2x1">
                 {/* Cabeçalho com Logo e Título */}
                 <div className="mb-8 flex flex-col items-center">
                     {/*<BarberPoleIcon className="h-16 w-16 text-[#B4654A]"/>*/}
@@ -68,14 +68,14 @@ export default function LoginPage(){
                 </div>
 
                 {/* Seletor de Tabs (Barbearia / Barbeiro) */}
-                <div className="mb-8 flex rounded-lg bg-black p-1">
+                <div className="mb-6 flex rounded-lg bg-black p-1">
                     <button
                         type="button"
                         onClick={() => setActiveTab('barbearia')}
                         className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${
                             activeTab === 'barbearia'
                                 ? 'bg-[#58BEC3] text-[#151515]'
-                                : 'hover:text-gray-100 hover:bg-[#292929] text-[#5c5c5c]'
+                                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
                         }`}
                     >Barbearia</button>
                     <button
@@ -84,7 +84,7 @@ export default function LoginPage(){
                         className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${
                             activeTab === 'barbeiro'
                                 ? 'bg-[#58BEC3] text-[#151515] shadow'
-                                : 'hover:text-gray-100 hover:bg-[#292929] text-[#5c5c5c]'
+                                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
                         }`}>
                             Barbeiro
                         </button>
