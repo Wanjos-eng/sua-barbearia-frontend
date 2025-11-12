@@ -6,6 +6,7 @@ import {Mail, Lock} from 'lucide-react';
 
 // Componente ícone customizado
 // Alterar para a logo do projeto
+/*
 const BarberPoleIcon = ({ className }: { className?: string }) => (
   <svg
     className={className}
@@ -34,6 +35,7 @@ const BarberPoleIcon = ({ className }: { className?: string }) => (
     <path d="m14 14-4 4" />
   </svg>
 );
+*/
 
 // Componente principal da página de login
 export default function LoginPage(){
@@ -61,7 +63,7 @@ export default function LoginPage(){
             <div className="w-full max-w-md rounded-2x1 bg-[#151515] p-8 shadow-2x1">
                 {/* Cabeçalho com Logo e Título */}
                 <div className="mb-8 flex flex-col items-center">
-                    <BarberPoleIcon className="h-16 w-16 text-[#B4654A]"/>
+                    {/*<BarberPoleIcon className="h-16 w-16 text-[#B4654A]"/>*/}
                     <h1 className="mt-4 text-4x1 font-bold text-[#DDDBCB]">Login</h1>
                 </div>
 

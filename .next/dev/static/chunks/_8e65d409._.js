@@ -15,118 +15,6 @@ var _s = __turbopack_context__.k.signature();
 "use client";
 ;
 ;
-// Componente ícone customizado
-// Alterar para a logo do projeto
-const BarberPoleIcon = ({ className })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
-        className: className,
-        width: "64",
-        height: "64",
-        viewBox: "0 0 24 24",
-        fill: "none",
-        stroke: "currentColor",
-        strokeWidth: "2",
-        strokeLinecap: "round",
-        strokeLinejoin: "round",
-        xmlns: "http://www.w3.org/2000/svg",
-        children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("title", {
-                children: "Logo Barbearia"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 22,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M12 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 23,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M12 22a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 24,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M10 4V2"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 25,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M14 4V2"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 26,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M10 22v-2"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 27,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M14 22v-2"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 28,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M10 6h4"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 29,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M10 10h4"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 30,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M10 14h4"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 31,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "M10 18h4"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 32,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "m14 6-4 4"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 33,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0)),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
-                d: "m14 14-4 4"
-            }, void 0, false, {
-                fileName: "[project]/app/login/barbearia/page.tsx",
-                lineNumber: 34,
-                columnNumber: 5
-            }, ("TURBOPACK compile-time value", void 0))
-        ]
-    }, void 0, true, {
-        fileName: "[project]/app/login/barbearia/page.tsx",
-        lineNumber: 10,
-        columnNumber: 3
-    }, ("TURBOPACK compile-time value", void 0));
-_c = BarberPoleIcon;
 function LoginPage() {
     _s();
     const [activeTab, setActiveTab] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('barbearia');
@@ -150,26 +38,17 @@ function LoginPage() {
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "mb-8 flex flex-col items-center",
-                    children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(BarberPoleIcon, {
-                            className: "h-16 w-16 text-[#B4654A]"
-                        }, void 0, false, {
-                            fileName: "[project]/app/login/barbearia/page.tsx",
-                            lineNumber: 64,
-                            columnNumber: 21
-                        }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                            className: "mt-4 text-4x1 font-bold text-[#DDDBCB]",
-                            children: "Login"
-                        }, void 0, false, {
-                            fileName: "[project]/app/login/barbearia/page.tsx",
-                            lineNumber: 65,
-                            columnNumber: 21
-                        }, this)
-                    ]
-                }, void 0, true, {
+                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                        className: "mt-4 text-4x1 font-bold text-[#DDDBCB]",
+                        children: "Login"
+                    }, void 0, false, {
+                        fileName: "[project]/app/login/barbearia/page.tsx",
+                        lineNumber: 67,
+                        columnNumber: 21
+                    }, this)
+                }, void 0, false, {
                     fileName: "[project]/app/login/barbearia/page.tsx",
-                    lineNumber: 63,
+                    lineNumber: 65,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -182,7 +61,7 @@ function LoginPage() {
                             children: "Barbearia"
                         }, void 0, false, {
                             fileName: "[project]/app/login/barbearia/page.tsx",
-                            lineNumber: 70,
+                            lineNumber: 72,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -192,13 +71,13 @@ function LoginPage() {
                             children: "Barbeiro"
                         }, void 0, false, {
                             fileName: "[project]/app/login/barbearia/page.tsx",
-                            lineNumber: 79,
+                            lineNumber: 81,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/login/barbearia/page.tsx",
-                    lineNumber: 69,
+                    lineNumber: 71,
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -215,7 +94,7 @@ function LoginPage() {
                                             "aria-hidden": "true"
                                         }, void 0, false, {
                                             fileName: "[project]/app/login/barbearia/page.tsx",
-                                            lineNumber: 97,
+                                            lineNumber: 99,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -229,13 +108,13 @@ function LoginPage() {
                                             className: "w-full rounded-lg border border-gray-700 bg-gray-800 p-3 pl-10 text-white placeholder-gray-500 transition-all focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
                                         }, void 0, false, {
                                             fileName: "[project]/app/login/barbearia/page.tsx",
-                                            lineNumber: 99,
+                                            lineNumber: 101,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/login/barbearia/page.tsx",
-                                    lineNumber: 96,
+                                    lineNumber: 98,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -246,7 +125,7 @@ function LoginPage() {
                                             "aria-hidden": "true"
                                         }, void 0, false, {
                                             fileName: "[project]/app/login/barbearia/page.tsx",
-                                            lineNumber: 113,
+                                            lineNumber: 115,
                                             columnNumber: 29
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
@@ -260,19 +139,19 @@ function LoginPage() {
                                             className: "w-full rounded-lg border border-gray-700 bg-gray-800 p-3 pl-10 text-white placeholder-gray-500 transition-all focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
                                         }, void 0, false, {
                                             fileName: "[project]/app/login/barbearia/page.tsx",
-                                            lineNumber: 115,
+                                            lineNumber: 117,
                                             columnNumber: 29
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/login/barbearia/page.tsx",
-                                    lineNumber: 112,
+                                    lineNumber: 114,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/login/barbearia/page.tsx",
-                            lineNumber: 93,
+                            lineNumber: 95,
                             columnNumber: 21
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -284,7 +163,7 @@ function LoginPage() {
                                     children: "Cadastrar"
                                 }, void 0, false, {
                                     fileName: "[project]/app/login/barbearia/page.tsx",
-                                    lineNumber: 130,
+                                    lineNumber: 132,
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -293,38 +172,37 @@ function LoginPage() {
                                     children: "Entrar"
                                 }, void 0, false, {
                                     fileName: "[project]/app/login/barbearia/page.tsx",
-                                    lineNumber: 136,
+                                    lineNumber: 138,
                                     columnNumber: 25
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/app/login/barbearia/page.tsx",
-                            lineNumber: 129,
+                            lineNumber: 131,
                             columnNumber: 21
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/app/login/barbearia/page.tsx",
-                    lineNumber: 92,
+                    lineNumber: 94,
                     columnNumber: 17
                 }, this)
             ]
         }, void 0, true, {
             fileName: "[project]/app/login/barbearia/page.tsx",
-            lineNumber: 61,
+            lineNumber: 63,
             columnNumber: 13
         }, this)
     }, void 0, false, {
         fileName: "[project]/app/login/barbearia/page.tsx",
-        lineNumber: 59,
+        lineNumber: 61,
         columnNumber: 9
     }, this));
 }
 _s(LoginPage, "MzfPh7UcwhbJ3L1CmvOQBkUsxDw=");
-_c1 = LoginPage;
-var _c, _c1;
-__turbopack_context__.k.register(_c, "BarberPoleIcon");
-__turbopack_context__.k.register(_c1, "LoginPage");
+_c = LoginPage;
+var _c;
+__turbopack_context__.k.register(_c, "LoginPage");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }
