@@ -151,3 +151,58 @@ Ecmascript file had an error
 You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
 
  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:09:34.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:09:34.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:10:12.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:10:12.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:17:27.516] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client

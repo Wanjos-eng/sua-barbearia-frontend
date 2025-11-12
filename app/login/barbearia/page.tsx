@@ -123,10 +123,23 @@ export default function LoginPage(){
                         </div>
                     </div>
 
-                    
+                    {/* Botões de Ação */}
+                    <div className="mt-10 flex items-center justify-between">
+                        <button
+                            type="button" // Botão de "Cadastrar" (tipo button para não enviar o form)
+                            className="text-sm font-medium text-teal-400 transition-colors hover:text-teal-300 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                                Cadastrar
+                        </button>
+
+                        <button
+                            type="submit" // Botão "Entrar" (tipo submit para enviar o form)
+                            className="rounded-lg bg-teal-500 px-8 py-3 text-sm font-semibold text-white transition-transform hover:scale-105 hover:bg-teal-600 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                        >
+                            Entrar
+                        </button>
+                    </div>
                 </form>
             </div>
         </div>
     );
-
 }
