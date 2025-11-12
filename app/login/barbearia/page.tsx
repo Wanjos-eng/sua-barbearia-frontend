@@ -64,18 +64,18 @@ export default function LoginPage(){
                 {/* Cabeçalho com Logo e Título */}
                 <div className="mb-8 flex flex-col items-center">
                     {/*<BarberPoleIcon className="h-16 w-16 text-[#B4654A]"/>*/}
-                    <h1 className="mt-4 text-4x1 font-bold text-[#DDDBCB]">Login</h1>
+                    <h1 className="mt-4 text-3xl font-bold text-[#DDDBCB]">Login</h1>
                 </div>
 
                 {/* Seletor de Tabs (Barbearia / Barbeiro) */}
-                <div className="mb-8 flex rounded-lg bg-gray-800 p-1">
+                <div className="mb-8 flex rounded-lg bg-black p-1">
                     <button
                         type="button"
                         onClick={() => setActiveTab('barbearia')}
                         className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${
                             activeTab === 'barbearia'
-                                ? 'bg-[#B4654A] text-white'
-                                : 'hover:text-gray-100 hover:bg-gray-700 text-gray-400'
+                                ? 'bg-[#58BEC3] text-[#151515]'
+                                : 'hover:text-gray-100 hover:bg-[#292929] text-[#5c5c5c]'
                         }`}
                     >Barbearia</button>
                     <button
@@ -83,8 +83,8 @@ export default function LoginPage(){
                         onClick={() => setActiveTab('barbeiro')}
                         className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${
                             activeTab === 'barbeiro'
-                                ? 'bg-[#B4654A] text-white shadow'
-                                : 'text-gray-400 hover:bg-gray-700 hover:text-gray-100'
+                                ? 'bg-[#58BEC3] text-[#151515] shadow'
+                                : 'hover:text-gray-100 hover:bg-[#292929] text-[#5c5c5c]'
                         }`}>
                             Barbeiro
                         </button>

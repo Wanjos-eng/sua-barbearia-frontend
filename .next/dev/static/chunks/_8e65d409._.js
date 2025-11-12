@@ -39,7 +39,7 @@ function LoginPage() {
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                     className: "mb-8 flex flex-col items-center",
                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                        className: "mt-4 text-4x1 font-bold text-[#DDDBCB]",
+                        className: "mt-4 text-3xl font-bold text-[#DDDBCB]",
                         children: "Login"
                     }, void 0, false, {
                         fileName: "[project]/app/login/barbearia/page.tsx",
@@ -52,12 +52,12 @@ function LoginPage() {
                     columnNumber: 17
                 }, this),
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    className: "mb-8 flex rounded-lg bg-gray-800 p-1",
+                    className: "mb-8 flex rounded-lg bg-black p-1",
                     children: [
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "button",
                             onClick: ()=>setActiveTab('barbearia'),
-                            className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbearia' ? 'bg-[#B4654A] text-white' : 'hover:text-gray-100 hover:bg-gray-700 text-gray-400'}`,
+                            className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbearia' ? 'bg-[#58BEC3] text-[#151515]' : 'hover:text-gray-100 hover:bg-[#292929] text-[#5c5c5c]'}`,
                             children: "Barbearia"
                         }, void 0, false, {
                             fileName: "[project]/app/login/barbearia/page.tsx",
@@ -67,7 +67,7 @@ function LoginPage() {
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "button",
                             onClick: ()=>setActiveTab('barbeiro'),
-                            className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbeiro' ? 'bg-[#B4654A] text-white shadow' : 'text-gray-400 hover:bg-gray-700 hover:text-gray-100'}`,
+                            className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbeiro' ? 'bg-[#58BEC3] text-[#151515] shadow' : 'hover:text-gray-100 hover:bg-[#292929] text-[#5c5c5c]'}`,
                             children: "Barbeiro"
                         }, void 0, false, {
                             fileName: "[project]/app/login/barbearia/page.tsx",

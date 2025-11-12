@@ -53,6 +53,7 @@
     --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --color-yellow-500: #edb200;
     --color-green-500: #00c758;
+    --color-teal-200: #96f7e4;
     --color-teal-300: #46ecd5;
     --color-teal-400: #00d3bd;
     --color-teal-500: #00baa7;
@@ -80,8 +81,12 @@
     --text-sm--line-height: calc(1.25 / .875);
     --text-lg: 1.125rem;
     --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
     --text-2xl: 1.5rem;
     --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
     --text-4xl: 2.25rem;
     --text-4xl--line-height: calc(2.5 / 2.25);
     --text-5xl: 3rem;
@@ -107,6 +112,7 @@
     :root, :host {
       --color-yellow-500: lab(76.3898% 14.5258 98.4589);
       --color-green-500: lab(70.5521% -66.5147 45.8072);
+      --color-teal-200: lab(90.7612% -33.1343 -.542295);
       --color-teal-300: lab(84.8977% -48.1517 -1.3321);
       --color-teal-400: lab(76.0109% -53.3483 -2.27907);
       --color-teal-500: lab(67.3859% -49.0983 -2.63511);
@@ -870,6 +876,10 @@
     background-color: var(--color-cyan-500);
   }
 
+  .bg-gray-300 {
+    background-color: var(--color-gray-300);
+  }
+
   .bg-gray-800 {
     background-color: var(--color-gray-800);
   }
@@ -880,6 +890,10 @@
 
   .bg-purple-500 {
     background-color: var(--color-purple-500);
+  }
+
+  .bg-teal-200 {
+    background-color: var(--color-teal-200);
   }
 
   .bg-teal-500 {
@@ -995,9 +1009,19 @@
     line-height: var(--tw-leading, var(--text-2xl--line-height));
   }
 
+  .text-3xl {
+    font-size: var(--text-3xl);
+    line-height: var(--tw-leading, var(--text-3xl--line-height));
+  }
+
   .text-4xl {
     font-size: var(--text-4xl);
     line-height: var(--tw-leading, var(--text-4xl--line-height));
+  }
+
+  .text-5xl {
+    font-size: var(--text-5xl);
+    line-height: var(--tw-leading, var(--text-5xl--line-height));
   }
 
   .text-lg {
@@ -1008,6 +1032,11 @@
   .text-sm {
     font-size: var(--text-sm);
     line-height: var(--tw-leading, var(--text-sm--line-height));
+  }
+
+  .text-xl {
+    font-size: var(--text-xl);
+    line-height: var(--tw-leading, var(--text-xl--line-height));
   }
 
   .text-xs {
@@ -1080,7 +1109,7 @@
     white-space: pre-line;
   }
 
-  .text-\[\#5C5C5C\] {
+  .text-\[\#5C5C5C\], .text-\[\#5c5c5c\] {
     color: #5c5c5c;
   }
 
