@@ -96,7 +96,7 @@ export default function LoginPage(){
 
                         {/* Campo de Email */}
                         <div className="relative">
-                            <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                            <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
                             aria-hidden="true"/>
                             <input
                                 type="email"
@@ -106,13 +106,13 @@ export default function LoginPage(){
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Email"
                                 required
-                                className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 pl-10 text-white placeholder-gray-500 transition-all focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-white placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
                             />
                         </div>
 
                         {/* Campo de Senha */}
                         <div className="relative">
-                            <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+                            <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
                             aria-hidden="true"/>
                             <input
                                 type="password"
@@ -122,7 +122,7 @@ export default function LoginPage(){
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Senha"
                                 required
-                                className="w-full rounded-lg border border-gray-700 bg-gray-800 p-3 pl-10 text-white placeholder-gray-500 transition-all focus:border-teal-500 focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-white placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
                             />
                         </div>
                     </div>
