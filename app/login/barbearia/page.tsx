@@ -1,3 +1,5 @@
+"use client";
+
 import React, { act, useState } from 'react';
 
 import {Mail, Lock} from 'lucide-react';

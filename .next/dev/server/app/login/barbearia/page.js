@@ -1,6 +1,6 @@
 var R=require("../../../chunks/ssr/[turbopack]_runtime.js")("server/app/login/barbearia/page.js")
 R.c("server/chunks/ssr/node_modules_next_dist_8da85dc2._.js")
-R.c("server/chunks/ssr/[root-of-the-server]__71a898e0._.js")
+R.c("server/chunks/ssr/[root-of-the-server]__82a2b48d._.js")
 R.c("server/chunks/ssr/node_modules_eb7ec0ea._.js")
 R.c("server/chunks/ssr/[root-of-the-server]__e8a2741f._.js")
 R.c("server/chunks/ssr/app_b9b1292a._.js")
