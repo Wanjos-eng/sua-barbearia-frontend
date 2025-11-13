@@ -1,5 +1,8 @@
 {
   "app": {
+    "[project]/app/cadastro/barbearia/page": [
+      "static/media/013cdec7b2705c72-s.p.fa9836b9.woff2"
+    ],
     "[project]/app/login/barbearia/page": [
       "static/media/013cdec7b2705c72-s.p.fa9836b9.woff2"
     ],
