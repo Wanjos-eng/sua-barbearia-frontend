@@ -16,6 +16,15 @@ interface FormData{
 // Definindo o tipo de usuário
 type UserType = 'barbearia' | 'barbeiro';
 
+/**
+ * Componente de ícone para o input, para evitar repetição
+ */
+const InputIcon = ({ children }: { children: React.ReactNode }) => (
+  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+    {children}
+  </span>
+);
+
 // Componente principal da aplicação
 export default function RegisterBarbPage(){
     // Estado para controlar o tipo de usuario
@@ -88,6 +97,97 @@ export default function RegisterBarbPage(){
                         Barbeiro
                     </button>
                 </div>
+
+                {/* Formulário */}
+                <form className="space-y-4" onSubmit={handleSubmit}>
+
+                    {/*Campo Nome*/}
+                    <div className="relative">
+                        <InputIcon><User size={18} /></InputIcon>
+                        <input
+                            type="text"
+                            name="nome"
+                            placeholder="Nome"
+                            value={formData.nome}
+                            onChange={handleInputChange}
+                            className={inputBaseStyle}
+                            required 
+                        />
+                    </div>
+
+                    {/* Campo Email */}
+                    <div className="relative">
+                        <InputIcon><Mail size={18} /></InputIcon>
+                        <input
+                        type="email"
+                        name="email"
+                        placeholder="Email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className={inputBaseStyle}
+                        required
+                        />
+                    </div>
+                    
+                    {/* Campo Telefone */}
+                    <div className="relative">
+                        <InputIcon><Phone size={18} /></InputIcon>
+                        <input
+                        type="tel"
+                        name="telefone"
+                        placeholder="Telefone"
+                        value={formData.telefone}
+                        onChange={handleInputChange}
+                        className={inputBaseStyle}
+                        required
+                        />
+                    </div>
+                    
+                    {/* Campo Endereço (Condicional) */}
+                    {userType === 'barbearia' && (
+                        <div className="relative">
+                        <InputIcon><MapPin size={18} /></InputIcon>
+                        <input
+                            type="text"
+                            name="endereco"
+                            placeholder="Endereço"
+                            value={formData.endereco}
+                            onChange={handleInputChange}
+                            className={inputBaseStyle}
+                            required // Só é obrigatório se for barbearia
+                        />
+                        </div>
+                    )}
+
+                    {/* Campo Senha */}
+                    <div className="relative">
+                        <InputIcon><Lock size={18} /></InputIcon>
+                        <input
+                        type="password"
+                        name="senha"
+                        placeholder="Senha"
+                        value={formData.senha}
+                        onChange={handleInputChange}
+                        className={inputBaseStyle}
+                        required
+                        />
+                    </div>
+                    
+                    {/* Campo Confirmar Senha */}
+                    <div className="relative">
+                        <InputIcon><Lock size={18} /></InputIcon>
+                        <input
+                        type="password"
+                        name="confirmarSenha"
+                        placeholder="Confirmar senha"
+                        value={formData.confirmarSenha}
+                        onChange={handleInputChange}
+                        className={inputBaseStyle}
+                        required
+                        />
+                    </div>
+
+                </form>
             </div>
         </main>
     )
