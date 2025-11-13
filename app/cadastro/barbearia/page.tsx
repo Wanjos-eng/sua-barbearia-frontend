@@ -38,6 +38,15 @@ export default function RegisterBarbPage(){
 
     }
 
+    // handler para submeter o formulário
+    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        // Aqui adiciona-se a lógica de envio
+        console.log('Dados do formulário: ', formData);
+        console.log('Tipo de usuário: ', userType);
+        // Adicionar lógida de validação
+    }
+
     // Estilos comuns para os inputs
     const inputBaseStyle = "w-full bg-gray-800 border border-cyan-600 rounded-lg py-3 pl-10 pr-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300";
 
