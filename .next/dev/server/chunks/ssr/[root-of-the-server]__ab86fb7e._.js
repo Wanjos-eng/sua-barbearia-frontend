@@ -26,7 +26,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 /**
  * Componente de ícone para o input, para evitar repetição
  */ const InputIcon = ({ children })=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
-        className: "absolute left-3 top-1/2 -translate-y-1/2 text-gray-400",
+        className: "absolute left-3 top-1/2 -translate-y-1/2 text-[#DDDBCB]",
         children: children
     }, void 0, false, {
         fileName: "[project]/app/cadastro/barbearia/page.tsx",
@@ -62,7 +62,7 @@ function RegisterBarbPage() {
     // Adicionar lógida de validação
     };
     // Estilos comuns para os inputs
-    const inputBaseStyle = "w-full bg-gray-800 border border-cyan-600 rounded-lg py-3 pl-10 pr-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300";
+    const inputBaseStyle = "w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] duration-300";
     return(// Container Principal
     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
         className: "min-h-screen w-full bg-black flex items-center justify-center p-4 font-sans",

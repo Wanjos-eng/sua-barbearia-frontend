@@ -20,7 +20,7 @@ type UserType = 'barbearia' | 'barbeiro';
  * Componente de ícone para o input, para evitar repetição
  */
 const InputIcon = ({ children }: { children: React.ReactNode }) => (
-  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+  <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#DDDBCB]">
     {children}
   </span>
 );
@@ -57,7 +57,7 @@ export default function RegisterBarbPage(){
     }
 
     // Estilos comuns para os inputs
-    const inputBaseStyle = "w-full bg-gray-800 border border-cyan-600 rounded-lg py-3 pl-10 pr-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300";
+    const inputBaseStyle = "w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] duration-300";
 
     return (
         // Container Principal
