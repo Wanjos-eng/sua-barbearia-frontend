@@ -187,6 +187,13 @@ export default function RegisterBarbPage(){
                         />
                     </div>
 
+                    {/* Botão de Registro */}
+                    <button
+                        type="submit"
+                        className="w-full bg-cyan-500 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 mt-6"
+                    >
+                        Registrar
+                    </button>
                 </form>
             </div>
         </main>
