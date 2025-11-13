@@ -64,10 +64,10 @@ function RegisterBarbPage() {
     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
         className: "min-h-screen w-full bg-black flex items-center justify-center p-4 font-sans",
         children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-            className: "w-full max-w-md bg-gray-900 rounded-2x1 shadow-2x1 shadow-cyan-900/20 p-6 md:p-8",
+            className: "w-full max-w-md bg-[#151515] rounded-lg shadow-2x1 p-8 md:p-8",
             children: [
                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-                    className: "text-2x1 md:text-3x1 font-bold text-[#DDDBCB] text-center mb-6",
+                    className: "text-3xl md:text-3x1 font-bold text-[#DDDBCB] text-center mb-6",
                     children: "Registre-se"
                 }, void 0, false, {
                     fileName: "[project]/app/cadastro/barbearia/page.tsx",
@@ -323,7 +323,7 @@ function RegisterBarbPage() {
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "submit",
-                            className: "w-full bg-cyan-500 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 mt-6",
+                            className: "w-full bg-[#58BEC3] text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] mt-6",
                             children: "Registrar"
                         }, void 0, false, {
                             fileName: "[project]/app/cadastro/barbearia/page.tsx",

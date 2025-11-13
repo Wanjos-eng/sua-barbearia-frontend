@@ -63,10 +63,10 @@ export default function RegisterBarbPage(){
         // Container Principal
         <main className="min-h-screen w-full bg-black flex items-center justify-center p-4 font-sans">
             {/* Card do formulário: responsivo, largura máxima no desktop */}
-            <div className="w-full max-w-md bg-gray-900 rounded-2x1 shadow-2x1 shadow-cyan-900/20 p-6 md:p-8">
+            <div className="w-full max-w-md bg-[#151515] rounded-lg shadow-2x1 p-8 md:p-8">
             
                 {/* Título do formulário */}
-                <h1 className="text-2x1 md:text-3x1 font-bold text-[#DDDBCB] text-center mb-6">
+                <h1 className="text-3xl md:text-3x1 font-bold text-[#DDDBCB] text-center mb-6">
                     Registre-se
                 </h1>
 
@@ -190,7 +190,7 @@ export default function RegisterBarbPage(){
                     {/* Botão de Registro */}
                     <button
                         type="submit"
-                        className="w-full bg-cyan-500 text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:ring-offset-2 focus:ring-offset-gray-900 mt-6"
+                        className="w-full bg-[#58BEC3] text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] mt-6"
                     >
                         Registrar
                     </button>
