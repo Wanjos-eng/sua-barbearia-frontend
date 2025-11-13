@@ -41,5 +41,17 @@ export default function RegisterBarbPage(){
     // Estilos comuns para os inputs
     const inputBaseStyle = "w-full bg-gray-800 border border-cyan-600 rounded-lg py-3 pl-10 pr-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-cyan-400 focus:border-transparent transition-all duration-300";
 
-
+    return (
+        // Container Principal
+        <main className="min-h-screen w-full bg-black flex items-center justify-center p-4 font-sans">
+            {/* Card do formulário: responsivo, largura máxima no desktop */}
+            <div className="w-full max-w-md bg-gray-900 rounded-2x1 shadow-2x1 shadow-cyan-900/20 p-6 md:p-8">
+            
+                {/* Título do formulário */}
+                <h1 className="text-2x1 md:text-3x1 font-bold text-[#DDDBCB] text-center mb-6">
+                    Registre-se
+                </h1>
+            </div>
+        </main>
+    )
 }
