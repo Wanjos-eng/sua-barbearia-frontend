@@ -71,13 +71,13 @@ export default function RegisterBarbPage(){
                 </h1>
 
                 {/* Seletor de Tipo de Usuário (Tabs) */}
-                <div className="flex bg-gray-800 rounded-lg p-1 mb-6">
+                <div className="mb-6 flex rounded-lg bg-black p-1">
                     <button
                         type="button"
                         onClick={() => setUserType('barbearia')}
-                        className={`w-1/2 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-300
+                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors duration-300
                             ${userType === 'barbearia'
-                                ? 'bg-cyan-500 text-gray-900 shadow-md'
+                                ? 'bg-[#58BEC3] text-[#151515]'
                                 : 'text-gray-400 hover:text-white'
                             }
                         `}
@@ -89,8 +89,8 @@ export default function RegisterBarbPage(){
                         onClick={() => setUserType('barbeiro')}
                         className={`w-1/2 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-300
                             ${userType === 'barbeiro'
-                                ? 'bg-cyan-500 text-gray-900 shadow-md'
-                                : 'text-gray-400 hover:text-white'
+                                ? 'bg-[#58BEC3] text-[#151515]'
+                                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
                             }
                         `}
                     >
