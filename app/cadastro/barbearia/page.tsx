@@ -78,7 +78,7 @@ export default function RegisterBarbPage(){
                         className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors duration-300
                             ${userType === 'barbearia'
                                 ? 'bg-[#58BEC3] text-[#151515]'
-                                : 'text-gray-400 hover:text-white'
+                                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
                             }
                         `}
                     >
@@ -190,7 +190,7 @@ export default function RegisterBarbPage(){
                     {/* Botão de Registro */}
                     <button
                         type="submit"
-                        className="w-full bg-[#58BEC3] text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] mt-6"
+                        className="w-full bg-[#58BEC3] text-[#151515] font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] mt-6"
                     >
                         Registrar
                     </button>

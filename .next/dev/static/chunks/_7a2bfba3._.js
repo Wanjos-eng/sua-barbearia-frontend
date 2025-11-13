@@ -81,7 +81,7 @@ function RegisterBarbPage() {
                             type: "button",
                             onClick: ()=>setUserType('barbearia'),
                             className: `w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors duration-300
-                            ${userType === 'barbearia' ? 'bg-[#58BEC3] text-[#151515]' : 'text-gray-400 hover:text-white'}
+                            ${userType === 'barbearia' ? 'bg-[#58BEC3] text-[#151515]' : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}
                         `,
                             children: "Barbearia"
                         }, void 0, false, {
@@ -323,7 +323,7 @@ function RegisterBarbPage() {
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                             type: "submit",
-                            className: "w-full bg-[#58BEC3] text-gray-900 font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] mt-6",
+                            className: "w-full bg-[#58BEC3] text-[#151515] font-semibold py-3 px-4 rounded-lg transition-colors duration-300 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] mt-6",
                             children: "Registrar"
                         }, void 0, false, {
                             fileName: "[project]/app/cadastro/barbearia/page.tsx",
