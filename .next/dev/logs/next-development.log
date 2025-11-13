@@ -1,4 +1,321 @@
-[00:00:02.689] Server  LOG      ✓ Ready in 2s
-[00:00:05.765] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
-[00:00:05.898] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
-[00:00:05.898] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:03.353] Server  LOG      ✓ Ready in 2.4s
+[00:00:06.383] Server  LOG      ○ Compiling / ...
+[00:00:07.355] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:07.496] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:07.496] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:10.591] Server  ERROR    ⨯ ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+
+[00:00:10.722] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:00:11.373] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:00:11.373] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:00:11.738] Server  ERROR    ⨯ ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+
+[00:00:11.762] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:00:11.775] Server  ERROR    ⨯ ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+
+[00:00:11.907] Browser ERROR   uncaughtError: Error: ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+
+
+
+
+[00:00:12.082] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:00:12.082] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:00:27.221] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:09:29.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:09:34.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:09:34.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:10:12.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:10:12.514] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:17:27.516] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:18:43.688] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:19:20.456] Browser ERROR   ./app/login/barbearia/page.tsx:1:22
+Ecmascript file had an error
+> 1 | import React, { act, useState } from 'react';
+    |                      ^^^^^^^^
+  2 |
+  3 | import {Mail, Lock} from 'lucide-react';
+  4 |
+
+You're importing a component that needs `useState`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+
+ Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+[00:21:21.842] Server  LOG      ✓ Compiled in 65ms
+[00:21:22.180] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:23:28.736] Server  LOG      ✓ Compiled in 27ms
+[00:25:01.449] Server  LOG      ✓ Compiled in 37ms
+[00:25:05.298] Server  LOG      ✓ Compiled in 42ms
+[00:25:09.762] Server  LOG      ✓ Compiled in 27ms
+[00:25:23.107] Server  LOG      ✓ Compiled in 41ms
+[00:25:26.130] Server  LOG      ✓ Compiled in 36ms
+[00:25:28.918] Server  LOG      ✓ Compiled in 31ms
+[00:25:40.166] Server  LOG      ✓ Compiled in 42ms
+[00:25:49.041] Server  LOG      ✓ Compiled in 24ms
+[00:26:01.808] Server  LOG      ✓ Compiled in 24ms
+[00:26:15.162] Server  LOG      ✓ Compiled in 34ms
+[00:26:37.219] Server  LOG      ✓ Compiled in 33ms
+[00:26:43.645] Server  LOG      ✓ Compiled in 24ms
+[00:27:16.354] Server  LOG      ✓ Compiled in 29ms
+[00:27:25.688] Server  LOG      ✓ Compiled in 28ms
+[00:27:45.264] Server  LOG      ✓ Compiled in 41ms
+[00:27:50.281] Server  LOG      ✓ Compiled in 23ms
+[00:27:54.519] Server  LOG      ✓ Compiled in 26ms
+[00:28:14.276] Server  LOG      ✓ Compiled in 24ms
+[00:28:47.394] Server  LOG      ✓ Compiled in 25ms
+[00:28:52.095] Server  LOG      ✓ Compiled in 41ms
+[00:29:05.932] Server  LOG      ✓ Compiled in 24ms
+[00:30:49.634] Server  LOG      ✓ Compiled in 27ms
+[00:30:57.806] Server  LOG      ✓ Compiled in 23ms
+[00:31:03.494] Server  LOG      ✓ Compiled in 28ms
+[00:31:06.623] Server  LOG      ✓ Compiled in 32ms
+[00:31:16.830] Server  LOG      ✓ Compiled in 25ms
+[00:31:20.260] Server  LOG      ✓ Compiled in 35ms
+[00:31:24.238] Server  LOG      ✓ Compiled in 43ms
+[00:31:28.357] Server  LOG      ✓ Compiled in 27ms
+[00:31:30.434] Server  LOG      ✓ Compiled in 21ms
+[00:31:33.991] Server  LOG      ✓ Compiled in 25ms
+[00:31:36.584] Server  LOG      ✓ Compiled in 26ms
+[00:31:38.379] Server  LOG      ✓ Compiled in 22ms
+[00:32:21.816] Server  LOG      ✓ Compiled in 36ms
+[00:32:35.191] Server  LOG      ✓ Compiled in 26ms
+[00:32:41.832] Server  LOG      ✓ Compiled in 45ms
+[00:33:19.168] Server  LOG      ✓ Compiled in 51ms
+[00:33:34.658] Server  LOG      ✓ Compiled in 28ms
+[00:33:42.826] Server  LOG      ✓ Compiled in 25ms
+[00:33:52.329] Server  LOG      ✓ Compiled in 41ms
+[00:33:59.546] Server  LOG      ✓ Compiled in 22ms
+[00:35:47.251] Server  LOG      ✓ Compiled in 32ms
+[00:36:22.557] Server  LOG      ✓ Compiled in 33ms
+[00:36:30.113] Server  LOG      ✓ Compiled in 42ms
+[00:36:54.504] Server  LOG      ✓ Compiled in 37ms
+[00:37:02.598] Server  LOG      ✓ Compiled in 24ms
+[00:37:11.700] Server  LOG      ✓ Compiled in 36ms
+[00:37:18.549] Server  LOG      ✓ Compiled in 37ms
+[00:37:28.225] Server  LOG      ✓ Compiled in 37ms
+[00:37:36.124] Server  LOG      ✓ Compiled in 25ms
+[00:37:42.081] Server  LOG      ✓ Compiled in 36ms
+[00:37:47.838] Server  LOG      ✓ Compiled in 30ms
+[00:37:52.579] Server  LOG      ✓ Compiled in 22ms
+[00:37:55.528] Server  LOG      ✓ Compiled in 34ms
+[00:38:15.722] Server  LOG      ✓ Compiled in 26ms
+[00:38:26.540] Server  LOG      ✓ Compiled in 23ms
+[00:38:56.845] Server  LOG      ✓ Compiled in 42ms
+[00:39:25.193] Server  LOG      ✓ Compiled in 43ms
+[00:39:47.613] Server  LOG      ✓ Compiled in 68ms
+[00:41:26.707] Server  LOG      ✓ Compiled in 26ms
+[00:41:42.855] Server  LOG      ✓ Compiled in 29ms
+[00:42:19.080] Server  LOG      ✓ Compiled in 25ms
+[00:42:32.985] Server  LOG      ✓ Compiled in 24ms
+[00:42:40.052] Server  LOG      ✓ Compiled in 23ms
+[00:42:50.035] Server  LOG      ✓ Compiled in 38ms
+[00:42:56.178] Server  LOG      ✓ Compiled in 46ms
+[00:43:01.589] Server  LOG      ✓ Compiled in 26ms
+[00:43:28.476] Server  LOG      ✓ Compiled in 22ms
+[00:43:34.045] Server  LOG      ✓ Compiled in 23ms
+[00:43:37.537] Server  LOG      ✓ Compiled in 35ms
+[00:43:43.432] Server  LOG      ✓ Compiled in 40ms
+[00:45:17.559] Server  LOG      ✓ Compiled in 38ms
+[00:45:20.476] Server  LOG      ✓ Compiled in 24ms
+[00:45:23.492] Server  LOG      ✓ Compiled in 41ms
+[00:45:26.392] Server  LOG      ✓ Compiled in 44ms
+[00:45:30.476] Server  LOG      ✓ Compiled in 40ms
+[00:45:45.318] Server  LOG      ✓ Compiled in 22ms
+[00:46:33.985] Server  LOG      ✓ Compiled in 51ms
+[00:46:38.601] Server  LOG      ✓ Compiled in 37ms
+[00:46:54.071] Server  LOG      ✓ Compiled in 28ms
+[00:47:02.045] Server  LOG      ✓ Compiled in 36ms
+[00:47:05.882] Server  LOG      ✓ Compiled in 23ms
+[00:47:10.921] Server  LOG      ✓ Compiled in 22ms
+[00:47:50.814] Server  LOG      ✓ Compiled in 39ms
+[00:48:21.529] Server  LOG      ✓ Compiled in 43ms
+[00:48:31.770] Server  LOG      ✓ Compiled in 40ms
+[00:48:47.480] Server  LOG      ✓ Compiled in 23ms
+[00:48:55.453] Server  LOG      ✓ Compiled in 23ms

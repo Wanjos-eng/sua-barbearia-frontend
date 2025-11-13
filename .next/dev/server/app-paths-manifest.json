@@ -1,4 +1,4 @@
 {
-  "/barbershop/dashboard/page": "app/barbershop/dashboard/page.js",
+  "/login/barbearia/page": "app/login/barbearia/page.js",
   "/page": "app/page.js"
 }
