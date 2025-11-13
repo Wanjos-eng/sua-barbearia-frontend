@@ -19,7 +19,7 @@ type UserType = 'barbearia' | 'barbeiro';
 // Componente principal da aplicação
 export default function RegisterBarbPage(){
     // Estado para controlar o tipo de usuario
-    const [UserType, setUserType] = useState<UserType>('barbearia');
+    const [userType, setUserType] = useState<UserType>('barbearia');
 
     // Estado para controlar os dados do formulário
     const [formData, setFormData] = useState<FormData>({
@@ -51,6 +51,34 @@ export default function RegisterBarbPage(){
                 <h1 className="text-2x1 md:text-3x1 font-bold text-[#DDDBCB] text-center mb-6">
                     Registre-se
                 </h1>
+
+                {/* Seletor de Tipo de Usuário (Tabs) */}
+                <div className="flex bg-gray-800 rounded-lg p-1 mb-6">
+                    <button
+                        type="button"
+                        onClick={() => setUserType('barbearia')}
+                        className={`w-1/2 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-300
+                            ${userType === 'barbearia'
+                                ? 'bg-cyan-500 text-gray-900 shadow-md'
+                                : 'text-gray-400 hover:text-white'
+                            }
+                        `}
+                    >
+                        Barbearia
+                    </button>
+                    <button
+                        type="button"
+                        onClick={() => setUserType('barbeiro')}
+                        className={`w-1/2 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-300
+                            ${userType === 'barbeiro'
+                                ? 'bg-cyan-500 text-gray-900 shadow-md'
+                                : 'text-gray-400 hover:text-white'
+                            }
+                        `}
+                    >
+                        Barbeiro
+                    </button>
+                </div>
             </div>
         </main>
     )
