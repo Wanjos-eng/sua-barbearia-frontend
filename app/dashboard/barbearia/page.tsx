@@ -357,6 +357,11 @@ const DashboardContent: React.FC = () => (
   </>
 )
 
+// Componente Card do Barbeiro
+const BarbeirosContent: React.FC<{barber: Barber}> = ({barber}) => (
+  
+);
+
 //Componente App
 const App: React.FC = () => {
 
