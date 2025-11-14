@@ -12,6 +12,8 @@ import {
   Check,
   RefreshCw,
   Mail,
+  Edit,
+  UserX,
   Layout,
   Phone
 } from 'lucide-react';
@@ -413,6 +415,14 @@ const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
         <button className="flex-1 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-semibold py-2 px-3 rounded-lg text-sm flex items-center justify-center space-x-1">
           <Calendar className="w-4 h-4"/>
           <span>Agenda</span>
+        </button>
+
+        <button className="p-2 bg-[#5C5C5C] hover:bg-[#767676] rounded-lg text-[#DDDBCB]">
+          <Edit className="w-4 h-4"/>
+        </button>
+
+        <button className="p-2 bg-[#5C5C5C] hover:bg-[#767676] rounded-lg text-[#DDDBCB]">
+          <UserX className="w-4 h-4"/>
         </button>
       </div>
     </div>
