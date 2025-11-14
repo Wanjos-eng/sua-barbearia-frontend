@@ -427,6 +427,22 @@ const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
     </div>
 );
 
+// Componente Tela de Barbeiros
+const BarbeirosContent: React.FC = () => {
+  const [barbeiros, setBarbeiros] = React.useState(barbeirosData);
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const filteredBarbeiros = barbeirosData
+    .filter(barber => barber.status === (activeTab === 'Ativos' ? 'Ativo' : 'Desativo'))
+    .filter(barber => barber.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+    
+  return (
+  );
+
+
+}
+
 //Componente App
 const App: React.FC = () => {
 
