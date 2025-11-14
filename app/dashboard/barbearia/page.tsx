@@ -45,6 +45,19 @@ interface ActiveBarber {
   next: number;
 }
 
+interface Barber{
+  id: string;
+  initials: string;
+  name: string;
+  ativo: boolean;
+  email: string;
+  phone: string;
+  cpf: string; // ou CPF, como na imagem
+  appointments: number;
+  next7d: number;
+  status: 'Ativo' | 'Desativo';
+}
+
 // 58BEC3 CIANO
 // 151515 Preto Cinza | 050505 Preto | 292929 Cinza | DDDBCB Branco Bege | 5C5C5C Cinza pouco escuro
 // gray-980 Preto escuro | gray-950 Preto um tom acima
@@ -214,6 +227,45 @@ const activeBarbersData: ActiveBarber[] = [
   { initials: 'JS', name: 'João Silva', total: 100, next: 5 },
   { initials: 'JS', name: 'João Silva', total: 150, next: 5 },
   { initials: 'JS', name: 'João Silva', total: 100, next: 8 },
+];
+
+const barbeirosData: Barber[] = [
+  { 
+    id: '1', 
+    initials: 'JS', 
+    name: 'João Silva', 
+    ativo: true, 
+    email: 'joao.silva@barbearia.com', 
+    phone: '(11) 98888-7777', 
+    cpf: '123.456.789-09', 
+    appointments: 150, 
+    next7d: 5,
+    status: 'Ativo'
+  },
+  { 
+    id: '2', 
+    initials: 'JS', 
+    name: 'João Silva', 
+    ativo: true, 
+    email: 'joao.silva@barbearia.com', 
+    phone: '(11) 98888-7777', 
+    cpf: '123.456.789-09', 
+    appointments: 150, 
+    next7d: 5,
+    status: 'Ativo'
+  },
+  { 
+    id: '3', 
+    initials: 'JS', 
+    name: 'João Silva', 
+    ativo: true, 
+    email: 'joao.silva@barbearia.com', 
+    phone: '(11) 98888-7777', 
+    cpf: '123.456.789-09', 
+    appointments: 150, 
+    next7d: 5,
+    status: 'Ativo'
+  },
 ];
 
 // Componente Conteúdo Principal
