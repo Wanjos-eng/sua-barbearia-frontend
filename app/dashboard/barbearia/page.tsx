@@ -12,7 +12,8 @@ import {
   Check,
   RefreshCw,
   Mail,
-  Layout
+  Layout,
+  Phone
 } from 'lucide-react';
 import { Stats } from 'fs';
 
@@ -361,7 +362,7 @@ const DashboardContent: React.FC = () => (
 // Componente Card do Barbeiro
 const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
     <div className="bg-[#151515] p-5 rounded-lg flex flex-col">
-      
+
       {/* Header do Card */}
       <div className="flex items-center space-x-4 mb-4">
         <div className="w-16 h-16 bg-[#050505] rounded-full flex items-center justify-center font-bold text-[#DDDBCB] text-2xl flex-shrink-0">
@@ -379,14 +380,24 @@ const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
           <p className="text-sm text-[#5C5C5C]">
             <Mail className="w-3 h-3 flex-shrink-0"/>
             <span>{barber.email}</span>
-
           </p>
         </div>
       </div>
-
-     </div>
-
     
+      {/* Informações de Contato */}
+      <div className="space-y-1 mb-4">
+        <p className="text-sm text-[#5C5C5C] flex items-center space-x-2">
+          <Phone className="w-3 h-3 flex-shrink-0"/>
+          <span>{barber.phone}</span>
+        </p>
+        <p className="text-sm text-[#5C5C5C] flex items-center space-x-2">
+          <Phone className="w-3 h-3 flex-shrink-0"/>
+          <span>{barber.cpf}</span>
+        </p>
+      </div>
+
+      
+    </div>
 );
 
 //Componente App
