@@ -407,6 +407,14 @@ const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
           <p className="text-xs text-[#5C5C5C]">Prox. 7d:</p>
         </div>
       </div>
+
+      {/* Ações */}
+      <div className="flex items=center space-x-2 mt-auto">
+        <button className="flex-1 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-semibold py-2 px-3 rounded-lg text-sm flex items-center justify-center space-x-1">
+          <Calendar className="w-4 h-4"/>
+          <span>Agenda</span>
+        </button>
+      </div>
     </div>
 );
 
