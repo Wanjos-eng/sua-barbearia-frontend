@@ -358,8 +358,13 @@ const DashboardContent: React.FC = () => (
 )
 
 // Componente Card do Barbeiro
-const BarbeirosContent: React.FC<{barber: Barber}> = ({barber}) => (
-  
+const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
+  <div className="bg-[#151515] p-5 rounded-lg flex flex-col">
+
+
+  </div>
+
+    
 );
 
 //Componente App
