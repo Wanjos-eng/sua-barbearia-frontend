@@ -11,6 +11,7 @@ import {
   Clock,
   Check,
   RefreshCw,
+  Mail,
   Layout
 } from 'lucide-react';
 import { Stats } from 'fs';
@@ -359,10 +360,31 @@ const DashboardContent: React.FC = () => (
 
 // Componente Card do Barbeiro
 const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
-  <div className="bg-[#151515] p-5 rounded-lg flex flex-col">
+    <div className="bg-[#151515] p-5 rounded-lg flex flex-col">
+      
+      {/* Header do Card */}
+      <div className="flex items-center space-x-4 mb-4">
+        <div className="w-16 h-16 bg-[#050505] rounded-full flex items-center justify-center font-bold text-[#DDDBCB] text-2xl flex-shrink-0">
+          {barber.initials}
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center space-x-2">
+            <h3 className="text-x1 font-semibold text-[#DDDBCB]">{barber.name}</h3>
+            {barber.ativo && (
+              <span className="bg-[#58BEC3] text-[#151515] text-xs font-bold px-2 py-0.5 rounded-full ">
+                Ativo
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-[#5C5C5C]">
+            <Mail className="w-3 h-3 flex-shrink-0"/>
+            <span>{barber.email}</span>
 
+          </p>
+        </div>
+      </div>
 
-  </div>
+     </div>
 
     
 );
