@@ -14,7 +14,6 @@ import {
   Mail,
   Edit,
   UserX,
-  Layout,
   Phone
 } from 'lucide-react';
 import { Stats } from 'fs';
