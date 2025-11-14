@@ -14,7 +14,8 @@ import {
   Mail,
   Edit,
   UserX,
-  Phone
+  Phone,
+  Plus
 } from 'lucide-react';
 import { Stats } from 'fs';
 
@@ -436,8 +437,19 @@ const BarbeirosContent: React.FC = () => {
     .filter(barber => barber.status === (activeTab === 'Ativos' ? 'Ativo' : 'Desativo'))
     .filter(barber => barber.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-    
+
   return (
+    <>
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h1 className="text-3xl font-bold text-[#DDDBCB]">Barbeiros</h1>
+        <button className="flex items-center justify-center space-x-2 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-5 rounded-lg transition-colors">
+          <Plus className="w-5 h-5"/>
+          <span>Novo Barbeiro</span>
+        </button>
+      </div>
+    
+    </>
   );
 
 
