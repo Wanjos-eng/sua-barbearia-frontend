@@ -396,7 +396,17 @@ const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
         </p>
       </div>
 
-      
+      {/* Estatísticas */}
+      <div className="flex items-center justify-between text-center mb-5">
+        <div>
+          <p className="text-2xl font-bold text-[#DDDBCB]">{barber.appointments} </p>
+          <p className="text-xs text-[#5C5C5C]">Agendamentos </p>
+        </div>
+        <div>
+          <p className="text-2xl font-bold text-[#DDDBCB]">{barber.next7d} </p>
+          <p className="text-xs text-[#5C5C5C]">Prox. 7d:</p>
+        </div>
+      </div>
     </div>
 );
 
