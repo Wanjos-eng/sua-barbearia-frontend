@@ -218,7 +218,7 @@ const activeBarbersData: ActiveBarber[] = [
 
 // Componente Conteúdo Principal
 const DashboardContent: React.FC = () => (
-  <div className="flex-1 bg-[#050505] p-6 md:p-10 min-h-screen">
+  <>
     <h1 className="text-3x1 font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
 
     {/* Grid de Estatísticas */}  
@@ -302,7 +302,7 @@ const DashboardContent: React.FC = () => (
         </button>
       </div>
     </div>
-  </div>
+  </>
 )
 
 //Componente App
