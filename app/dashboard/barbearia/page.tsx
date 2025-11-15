@@ -1,3 +1,4 @@
+'use client';
 // app/barbershop/dashboard/page.tsx
 import React from 'react';
 import {
@@ -11,7 +12,12 @@ import {
   Clock,
   Check,
   RefreshCw,
-  Layout
+  Mail,
+  Edit,
+  UserX,
+  Phone,
+  Plus,
+  Search
 } from 'lucide-react';
 import { Stats } from 'fs';
 
@@ -20,6 +26,7 @@ interface SidebarItemProps{
   icon: React.ElementType;
   label: string;
   active?: boolean;
+  onClick: () => void;
 }
 
 interface StatsCardProps{
@@ -45,13 +52,27 @@ interface ActiveBarber {
   next: number;
 }
 
+interface Barber{
+  id: string;
+  initials: string;
+  name: string;
+  ativo: boolean;
+  email: string;
+  phone: string;
+  cpf: string; // ou CPF, como na imagem
+  appointments: number;
+  next7d: number;
+  status: 'Ativo' | 'Desativo';
+}
+
 // 58BEC3 CIANO
 // 151515 Preto Cinza | 050505 Preto | 292929 Cinza | DDDBCB Branco Bege | 5C5C5C Cinza pouco escuro
 // gray-980 Preto escuro | gray-950 Preto um tom acima
 // Componentes
 // Componente Item da Barra Lateral
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active, onClick }) => {
  return (<button
+    onClick={onClick}
     className={`
       flex items-center w-full px-4 py-3 text-sm text-[#DDDBCB] font-medium rounded-lg
       transition-colors duration-150
@@ -68,9 +89,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active }) 
 };
 
 //Componente Barra Lateral
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) => void }> = ({ currentPage, setCurrentPage }) => {
   const navItems = [
-    {icon: LayoutGrid, label: 'Dashboard', active: true},
+    {icon: LayoutGrid, label: 'Dashboard'},
     {icon: Users, label: 'Barbeiros' },
     {icon: Calendar, label: 'Agendamentos'},
     {icon: DollarSign, label: 'Gestão Financeira'},
@@ -93,7 +114,8 @@ const Sidebar: React.FC = () => {
             <SidebarItem
               icon={item.icon}
               label={item.label}
-              active={item.active}
+              active={item.label === currentPage}
+              onClick={() => setCurrentPage(item.label)}
             />
           </li>
         ))}
@@ -216,9 +238,48 @@ const activeBarbersData: ActiveBarber[] = [
   { initials: 'JS', name: 'João Silva', total: 100, next: 8 },
 ];
 
+const barbeirosData: Barber[] = [
+  { 
+    id: '1', 
+    initials: 'JS', 
+    name: 'João Silva', 
+    ativo: true, 
+    email: 'joao.silva@barbearia.com', 
+    phone: '(11) 98888-7777', 
+    cpf: '123.456.789-09', 
+    appointments: 150, 
+    next7d: 5,
+    status: 'Ativo'
+  },
+  { 
+    id: '2', 
+    initials: 'JS', 
+    name: 'João Silva', 
+    ativo: true, 
+    email: 'joao.silva@barbearia.com', 
+    phone: '(11) 98888-7777', 
+    cpf: '123.456.789-09', 
+    appointments: 150, 
+    next7d: 5,
+    status: 'Ativo'
+  },
+  { 
+    id: '3', 
+    initials: 'JS', 
+    name: 'João Silva', 
+    ativo: true, 
+    email: 'joao.silva@barbearia.com', 
+    phone: '(11) 98888-7777', 
+    cpf: '123.456.789-09', 
+    appointments: 150, 
+    next7d: 5,
+    status: 'Ativo'
+  },
+];
+
 // Componente Conteúdo Principal
-const MainContent: React.FC = () => (
-  <div className="flex-1 bg-[#050505] p-6 md:p-10 min-h-screen">
+const DashboardContent: React.FC = () => (
+  <>
     <h1 className="text-3x1 font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
 
     {/* Grid de Estatísticas */}  
@@ -302,18 +363,163 @@ const MainContent: React.FC = () => (
         </button>
       </div>
     </div>
-  </div>
+  </>
 )
 
+// Componente Card do Barbeiro
+const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
+    <div className="bg-[#151515] p-5 rounded-lg flex flex-col">
+
+      {/* Header do Card */}
+      <div className="flex items-center space-x-4 mb-4">
+        <div className="w-16 h-16 bg-[#050505] rounded-full flex items-center justify-center font-bold text-[#DDDBCB] text-2xl flex-shrink-0">
+          {barber.initials}
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center space-x-2">
+            <h3 className="text-xl font-semibold text-[#DDDBCB]">{barber.name}</h3>
+            {barber.ativo && (
+              <span className="bg-[#58BEC3] text-[#151515] text-xs font-bold px-2 py-0.5 rounded-full ">
+                Ativo
+              </span>
+            )}
+          </div>
+          <p className="text-sm text-[#5C5C5C]">
+            <Mail className="w-3 h-3 flex-shrink-0"/>
+            <span>{barber.email}</span>
+          </p>
+        </div>
+      </div>
+    
+      {/* Informações de Contato */}
+      <div className="space-y-1 mb-4">
+        <p className="text-sm text-[#5C5C5C] flex items-center space-x-2">
+          <Phone className="w-3 h-3 flex-shrink-0"/>
+          <span>{barber.phone}</span>
+        </p>
+        <p className="text-sm text-[#5C5C5C] flex items-center space-x-2">
+          <Phone className="w-3 h-3 flex-shrink-0"/>
+          <span>{barber.cpf}</span>
+        </p>
+      </div>
+
+      {/* Estatísticas */}
+      <div className="flex items-center justify-between text-center mb-5">
+        <div>
+          <p className="text-2xl font-bold text-[#DDDBCB]">{barber.appointments} </p>
+          <p className="text-xs text-[#5C5C5C]">Agendamentos </p>
+        </div>
+        <div>
+          <p className="text-2xl font-bold text-[#DDDBCB]">{barber.next7d} </p>
+          <p className="text-xs text-[#5C5C5C]">Prox. 7d:</p>
+        </div>
+      </div>
+
+      {/* Ações */}
+      <div className="flex items=center space-x-2 mt-auto">
+        <button className="flex-1 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-semibold py-2 px-3 rounded-lg text-sm flex items-center justify-center space-x-1">
+          <Calendar className="w-4 h-4"/>
+          <span>Agenda</span>
+        </button>
+
+        <button className="p-2 bg-[#5C5C5C] hover:bg-[#767676] rounded-lg text-[#DDDBCB]">
+          <Edit className="w-4 h-4"/>
+        </button>
+
+        <button className="p-2 bg-[#5C5C5C] hover:bg-[#767676] rounded-lg text-[#DDDBCB]">
+          <UserX className="w-4 h-4"/>
+        </button>
+      </div>
+    </div>
+);
+
+// Componente Tela de Barbeiros
+const BarbeirosContent: React.FC = () => {
+  const [activeTab, setActiveTab] = React.useState('Ativos');
+  const [searchQuery, setSearchQuery] = React.useState('');
+
+  const filteredBarbeiros = barbeirosData
+    .filter(barber => barber.status === (activeTab === 'Ativos' ? 'Ativo' : 'Desativo'))
+    .filter(barber => barber.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+
+  return (
+    <>
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h1 className="text-3xl font-bold text-[#DDDBCB]">Barbeiros</h1>
+        <button className="flex items-center justify-center space-x-2 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-5 rounded-lg transition-colors">
+          <Plus className="w-5 h-5"/>
+          <span>Novo Barbeiro</span>
+        </button>
+      </div>
+
+      {/* Filtros e Busca */}
+      <div className="flex flex-col md:flex-row md:items-center justify-left gap-4 mb-6 bg-[#151515] p-2 rounded-lg">
+        <div className="flex items-center bg-black p-1 rounded-lg">
+          <button 
+            onClick={() => setActiveTab('Ativos')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-medium ${
+              activeTab === 'Ativos'
+                ? 'bg-[#58BEC3] text-[#151515] shadow'
+                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`}
+            >Ativos </button>
+
+          <button 
+            onClick={() => setActiveTab('Desativos')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-medium ${
+              activeTab === 'Desativos'
+                ? 'bg-[#58BEC3] text-[#151515] shadow'
+                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`}
+          >Desativos </button>
+        </div>
+
+        <div className="relative flex-1 md:max-w-xs">
+          <input
+            type="text"
+            placeholder="Buscar barbeiro pelo nome..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#151515] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
+          />
+          <Search className="w-5 h-5 text-[#DDDBCB] absolute left-3 top-1/2 -translate-y-1/2"/>
+        </div>
+      </div>
+
+      {/* Grid de Barbeiros */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 x1:grid-cols-4 gap-6">
+        {filteredBarbeiros.map(barber => (
+          <BarbeirosCard key={barber.id} barber={barber} />
+        ))}
+      </div>
+    </>
+  );
+
+
+}
+
 //Componente App
-const barbershopDashboard: React.FC = () => {
+const App: React.FC = () => {
+
+  // Estado para controlar a página atual
+  const [currentPage, setCurrentPage] = React.useState('Dashboard');
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans">
-      <Sidebar />
-      <MainContent />
+      {/* A Sidebar agora recebe o estado da página e a função para alterá-lo */}
+      <div>
+        <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
+      </div>
+      
+      <main className="flex-1 p-6 md-p10 min-h-screen overflow-y-auto">
+        {currentPage === 'Dashboard' && <DashboardContent />}
+        {currentPage === 'Barbeiros' && <BarbeirosContent />}
+         {/* Adicione outras páginas aqui, por ex:
+        {currentPage === 'Agendamentos' && <AgendamentosContent />}
+        */}
+      </main>
     </div>
   )
 }
 
-export default barbershopDashboard;
+export default App;

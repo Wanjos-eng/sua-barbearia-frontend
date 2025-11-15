@@ -1,3 +1,79 @@
+[00:00:02.480] Server  LOG      ✓ Ready in 1948ms
+[00:00:06.268] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:06.395] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:06.395] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:20.473] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:25.311] Server  ERROR    ⨯ TypeError: useState only works in Client Components. Add the "use client" directive at the top of the file to use it. Read more: https://nextjs.org/docs/messages/react-client-hook-in-server-component
+[00:00:25.430] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:25.430] Browser ERROR   uncaughtError: TypeError: useState only works in Client Components. Add the "use client" directive at the top of the file to use it. Read more: https://nextjs.org/docs/messages/react-client-hook-in-server-component
+[00:00:51.074] Server  LOG      ✓ Compiled in 69ms
+[00:00:51.327] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:04:25.014] Server  LOG      ✓ Compiled in 29ms
+[00:04:34.524] Server  LOG      ✓ Compiled in 28ms
+[00:04:41.352] Server  LOG      ✓ Compiled in 23ms
+[00:04:48.589] Server  LOG      ✓ Compiled in 23ms
+[00:04:57.163] Server  LOG      ✓ Compiled in 21ms
+[00:05:03.594] Server  LOG      ✓ Compiled in 25ms
+[00:05:18.435] Server  LOG      ✓ Compiled in 23ms
+[00:05:26.362] Server  LOG      ✓ Compiled in 27ms
+[00:06:19.365] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:19.504] Browser WARN    Image with src "/_next/static/media/icone-logo-suabarbearia-Login.575a05ab.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:06:25.143] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:24.810] Server  LOG      ✓ Compiled in 29ms
+[00:07:49.508] Server  LOG      ✓ Compiled in 28ms
+[00:08:03.887] Server  LOG      ✓ Compiled in 27ms
+[00:08:08.410] Server  LOG      ✓ Compiled in 23ms
+[00:08:13.607] Server  LOG      ✓ Compiled in 24ms
+[00:08:15.928] Server  LOG      ✓ Compiled in 42ms
+[00:08:20.185] Server  LOG      ✓ Compiled in 43ms
+[00:08:23.347] Server  LOG      ✓ Compiled in 47ms
+[00:08:45.667] Server  LOG      ✓ Compiled in 27ms
+[00:09:36.970] Server  LOG      ✓ Compiled in 22ms
+[00:09:39.059] Server  LOG      ✓ Compiled in 24ms
+[00:09:56.783] Server  LOG      ✓ Compiled in 29ms
+[00:10:06.475] Server  LOG      ✓ Compiled in 24ms
+[00:10:09.937] Server  LOG      ✓ Compiled in 28ms
+[00:10:30.568] Server  LOG      ✓ Compiled in 29ms
+[00:10:36.050] Server  LOG      ✓ Compiled in 28ms
+[00:10:43.678] Server  LOG      ✓ Compiled in 26ms
+[00:11:25.472] Server  LOG      ✓ Compiled in 30ms
+[00:11:35.335] Server  LOG      ✓ Compiled in 28ms
+[00:12:20.990] Server  LOG      ✓ Compiled in 28ms
+[00:12:29.777] Server  LOG      ✓ Compiled in 44ms
+[00:12:33.802] Server  LOG      ✓ Compiled in 27ms
+[00:12:37.831] Server  LOG      ✓ Compiled in 40ms
+[00:12:41.655] Server  LOG      ✓ Compiled in 26ms
+[00:12:46.530] Server  LOG      ✓ Compiled in 25ms
+[00:12:56.606] Server  LOG      ✓ Compiled in 26ms
+[00:16:18.741] Server  LOG      ✓ Compiled in 26ms
+[00:20:46.041] Server  LOG      ✓ Compiled in 28ms
+[00:20:56.747] Server  LOG      ✓ Compiled in 24ms
+[00:21:03.237] Server  LOG      ✓ Compiled in 29ms
+[00:21:10.563] Server  LOG      ✓ Compiled in 23ms
+[00:21:18.876] Server  LOG      ✓ Compiled in 26ms
+[00:23:59.024] Server  LOG      ✓ Compiled in 57ms
+[00:25:35.168] Server  LOG      ✓ Compiled in 27ms
+[00:26:00.866] Server  LOG      ✓ Compiled in 28ms
+[00:26:05.082] Server  LOG      ✓ Compiled in 26ms
+[00:26:51.351] Server  LOG      ✓ Compiled in 38ms
+[00:26:59.424] Server  LOG      ✓ Compiled in 25ms
+[00:27:07.015] Server  LOG      ✓ Compiled in 48ms
+[00:27:09.864] Server  LOG      ✓ Compiled in 37ms
+[00:27:17.669] Server  LOG      ✓ Compiled in 31ms
+[00:27:21.362] Server  LOG      ✓ Compiled in 32ms
+[00:27:29.553] Server  LOG      ✓ Compiled in 26ms
+[00:27:52.315] Server  LOG      ✓ Compiled in 24ms
+[00:27:56.368] Server  LOG      ✓ Compiled in 29ms
+[00:28:00.667] Server  LOG      ✓ Compiled in 23ms
+[00:28:03.426] Server  LOG      ✓ Compiled in 47ms
+[00:28:06.913] Server  LOG      ✓ Compiled in 30ms
+[00:28:10.077] Server  LOG      ✓ Compiled in 25ms
+[00:28:17.650] Server  LOG      ✓ Compiled in 22ms
+[00:28:20.675] Server  LOG      ✓ Compiled in 25ms
+[00:29:30.473] Server  LOG      ✓ Compiled in 26ms
+[00:29:38.906] Server  LOG      ✓ Compiled in 27ms
+[00:29:44.325] Server  LOG      ✓ Compiled in 26ms
+[00:29:53.433] Server  LOG      ✓ Compiled in 29ms
 [00:00:02.177] Server  LOG      ✓ Ready in 1356ms
 [00:00:12.139] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:00:12.264] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
