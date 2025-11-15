@@ -475,6 +475,13 @@ const BarbeirosContent: React.FC = () => {
           <Search className="w-5 h-5 text-[#DDDBCB] absolute left-3 top-1/2 -translate-y-1/2"/>
         </div>
       </div>
+
+      {/* Grid de Barbeiros */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 x1:grid-cols-4 gap-6">
+        {filteredBarbeiros.map(barber => (
+          <BarbeirosCard key={barber.id} barber={barber} />
+        ))}
+      </div>
     </>
   );
 
