@@ -1,3 +1,4 @@
+'use client';
 // app/barbershop/dashboard/page.tsx
 import React from 'react';
 import {
