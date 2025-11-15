@@ -1104,14 +1104,14 @@ const BarbeirosContent = ()=>{
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                className: "flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6",
+                className: "flex flex-col md:flex-row md:items-center justify-left gap-4 mb-6 bg-[#151515] p-2 rounded-lg",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "flex items-center space-x-2",
+                        className: "flex items-center bg-black p-1 rounded-lg",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
                                 onClick: ()=>setActiveTab('Ativos'),
-                                className: `px-4 py-2 rounded-lg text-sm font-medium ${activeTab === 'Ativos' ? 'bg-[#58BEC3] text-[#151515]' : 'bg-[#151515] text-[#DDDBCB]'}`,
+                                className: `px-4 py-2.5 rounded-lg text-sm font-medium ${activeTab === 'Ativos' ? 'bg-[#58BEC3] text-[#151515] shadow' : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`,
                                 children: "Ativos "
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
@@ -1119,12 +1119,12 @@ const BarbeirosContent = ()=>{
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                onClick: ()=>setActiveTab('Ativos'),
-                                className: `px-4 py-2 rounded-lg text-sm font-medium ${activeTab === 'Desativos' ? 'bg-[#58BEC3] text-[#151515]' : 'bg-[#151515] text-[#DDDBCB]'}`,
+                                onClick: ()=>setActiveTab('Desativos'),
+                                className: `px-4 py-2.5 rounded-lg text-sm font-medium ${activeTab === 'Desativos' ? 'bg-[#58BEC3] text-[#151515] shadow' : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`,
                                 children: "Desativos "
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                lineNumber: 465,
+                                lineNumber: 468,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
@@ -1144,20 +1144,20 @@ const BarbeirosContent = ()=>{
                                 className: "w-full bg-[#151515] text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                lineNumber: 472,
+                                lineNumber: 478,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
                                 className: "w-5 h-5 text-[#DDDBCB] absolute left-3 top-1/2 -translate-y-1/2"
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                lineNumber: 479,
+                                lineNumber: 485,
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                        lineNumber: 471,
+                        lineNumber: 477,
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
@@ -1172,12 +1172,12 @@ const BarbeirosContent = ()=>{
                         barber: barber
                     }, barber.id, false, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                        lineNumber: 486,
+                        lineNumber: 492,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0)))
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                lineNumber: 484,
+                lineNumber: 490,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
@@ -1196,12 +1196,12 @@ const App = ()=>{
                     setCurrentPage: setCurrentPage
                 }, void 0, false, {
                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                    lineNumber: 505,
+                    lineNumber: 511,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                lineNumber: 504,
+                lineNumber: 510,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -1209,24 +1209,24 @@ const App = ()=>{
                 children: [
                     currentPage === 'Dashboard' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(DashboardContent, {}, void 0, false, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                        lineNumber: 509,
+                        lineNumber: 515,
                         columnNumber: 41
                     }, ("TURBOPACK compile-time value", void 0)),
                     currentPage === 'Barbeiros' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(BarbeirosContent, {}, void 0, false, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                        lineNumber: 510,
+                        lineNumber: 516,
                         columnNumber: 41
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                lineNumber: 508,
+                lineNumber: 514,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-        lineNumber: 502,
+        lineNumber: 508,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };

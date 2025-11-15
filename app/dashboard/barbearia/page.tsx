@@ -455,16 +455,22 @@ const BarbeirosContent: React.FC = () => {
       </div>
 
       {/* Filtros e Busca */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-        <div className="flex items-center space-x-2">
+      <div className="flex flex-col md:flex-row md:items-center justify-left gap-4 mb-6 bg-[#151515] p-2 rounded-lg">
+        <div className="flex items-center bg-black p-1 rounded-lg">
           <button 
             onClick={() => setActiveTab('Ativos')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${activeTab === 'Ativos' ? 'bg-[#58BEC3] text-[#151515]' : 'bg-[#151515] text-[#DDDBCB]'}`}
+            className={`px-4 py-2.5 rounded-lg text-sm font-medium ${
+              activeTab === 'Ativos'
+                ? 'bg-[#58BEC3] text-[#151515] shadow'
+                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`}
             >Ativos </button>
 
           <button 
-            onClick={() => setActiveTab('Ativos')}
-            className={`px-4 py-2 rounded-lg text-sm font-medium ${activeTab === 'Desativos' ? 'bg-[#58BEC3] text-[#151515]' : 'bg-[#151515] text-[#DDDBCB]'}`}
+            onClick={() => setActiveTab('Desativos')}
+            className={`px-4 py-2.5 rounded-lg text-sm font-medium ${
+              activeTab === 'Desativos'
+                ? 'bg-[#58BEC3] text-[#151515] shadow'
+                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`}
           >Desativos </button>
         </div>
 
