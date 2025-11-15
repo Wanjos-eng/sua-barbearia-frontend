@@ -377,7 +377,7 @@ const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
         </div>
         <div className="flex-1">
           <div className="flex items-center space-x-2">
-            <h3 className="text-x1 font-semibold text-[#DDDBCB]">{barber.name}</h3>
+            <h3 className="text-xl font-semibold text-[#DDDBCB]">{barber.name}</h3>
             {barber.ativo && (
               <span className="bg-[#58BEC3] text-[#151515] text-xs font-bold px-2 py-0.5 rounded-full ">
                 Ativo
