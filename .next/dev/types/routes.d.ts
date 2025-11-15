@@ -12,6 +12,7 @@ type Routes = AppRoutes | PageRoutes | LayoutRoutes | RedirectRoutes | RewriteRo
 interface ParamMap {
   "/": {}
   "/barbershop/dashboard": {}
+  "/cadastro/barbearia": {}
   "/cadastro/cliente": {}
   "/client/dashboard": {}
   "/dashboard/barbearia": {}

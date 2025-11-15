@@ -74,3 +74,27 @@
 [00:29:38.906] Server  LOG      ✓ Compiled in 27ms
 [00:29:44.325] Server  LOG      ✓ Compiled in 26ms
 [00:29:53.433] Server  LOG      ✓ Compiled in 29ms
+[00:00:02.177] Server  LOG      ✓ Ready in 1356ms
+[00:00:12.139] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:00:12.264] Browser WARN    Image with src "http://localhost:3000/logo-texto-sua-barbearia.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:12.264] Browser WARN    Image with src "http://localhost:3000/logo-icone-barberpole.svg" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:00:42.882] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:17.696] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:08:28.414] Server  LOG      ✓ Compiled in 33ms
+[00:08:49.314] Server  LOG      ✓ Compiled in 30ms
+[00:09:52.495] Server  LOG      ✓ Compiled in 39ms
+[00:12:08.747] Server  LOG      ✓ Compiled in 30ms
+[00:12:43.788] Server  LOG      ✓ Compiled in 23ms
+[00:12:50.366] Server  LOG      ✓ Compiled in 30ms
+[00:13:27.778] Server  LOG      ✓ Compiled in 25ms
+[00:14:06.124] Server  LOG      ✓ Compiled in 35ms
+[00:14:25.408] Server  LOG      ✓ Compiled in 23ms
+[00:14:30.793] Server  LOG      ✓ Compiled in 22ms
+[00:16:47.745] Server  LOG      ✓ Compiled in 26ms
+[00:16:55.819] Server  LOG      ✓ Compiled in 33ms
+[00:18:16.143] Server  LOG      ✓ Compiled in 21ms
+[00:19:22.967] Server  LOG      ✓ Compiled in 24ms
+[00:19:50.727] Server  LOG      ✓ Compiled in 24ms
+[00:20:02.843] Server  LOG      ✓ Compiled in 24ms
+[00:22:05.101] Server  LOG      ✓ Compiled in 27ms
+[00:22:48.592] Server  LOG      ✓ Compiled in 25ms
