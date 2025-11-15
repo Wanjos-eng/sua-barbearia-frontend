@@ -1144,7 +1144,7 @@ const BarbeirosContent = ()=>{
                                 placeholder: "Buscar barbeiro pelo nome...",
                                 value: searchQuery,
                                 onChange: (e)=>setSearchQuery(e.target.value),
-                                className: "w-full bg-[#151515] text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
+                                className: "w-full bg-[#151515] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
                                 lineNumber: 478,
