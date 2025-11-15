@@ -25,6 +25,7 @@ interface SidebarItemProps{
   icon: React.ElementType;
   label: string;
   active?: boolean;
+  onClick: () => void;
 }
 
 interface StatsCardProps{
@@ -68,8 +69,9 @@ interface Barber{
 // gray-980 Preto escuro | gray-950 Preto um tom acima
 // Componentes
 // Componente Item da Barra Lateral
-const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active }) => {
+const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active, onClick }) => {
  return (<button
+    onClick={onClick}
     className={`
       flex items-center w-full px-4 py-3 text-sm text-[#DDDBCB] font-medium rounded-lg
       transition-colors duration-150
@@ -86,9 +88,9 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active }) 
 };
 
 //Componente Barra Lateral
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) => void }> = ({ currentPage, setCurrentPage }) => {
   const navItems = [
-    {icon: LayoutGrid, label: 'Dashboard', active: true},
+    {icon: LayoutGrid, label: 'Dashboard'},
     {icon: Users, label: 'Barbeiros' },
     {icon: Calendar, label: 'Agendamentos'},
     {icon: DollarSign, label: 'Gestão Financeira'},
@@ -111,7 +113,8 @@ const Sidebar: React.FC = () => {
             <SidebarItem
               icon={item.icon}
               label={item.label}
-              active={item.active}
+              active={item.label === currentPage}
+              onClick={() => setCurrentPage(item.label)}
             />
           </li>
         ))}
