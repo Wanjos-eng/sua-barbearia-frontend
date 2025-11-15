@@ -15,7 +15,8 @@ import {
   Edit,
   UserX,
   Phone,
-  Plus
+  Plus,
+  Search
 } from 'lucide-react';
 import { Stats } from 'fs';
 
@@ -461,6 +462,17 @@ const BarbeirosContent: React.FC = () => {
             onClick={() => setActiveTab('Ativos')}
             className={`px-4 py-2 rounded-lg text-sm font-medium ${activeTab === 'Desativos' ? 'bg-[#58BEC3] text-[#151515]' : 'bg-[#151515] text-[#DDDBCB]'}`}
           >Desativos </button>
+        </div>
+
+        <div className="relative flex-1 md:max-w-xs">
+          <input
+            type="text"
+            placeholder="Buscar barbeiro pelo nome..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#151515] text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
+          />
+          <Search className="w-5 h-5 text-[#DDDBCB] absolute left-3 top-1/2 -translate-y-1/2"/>
         </div>
       </div>
     </>
