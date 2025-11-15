@@ -430,7 +430,7 @@ const BarbeirosCard: React.FC<{barber: Barber}> = ({barber}) => (
 
 // Componente Tela de Barbeiros
 const BarbeirosContent: React.FC = () => {
-  const [barbeiros, setBarbeiros] = React.useState(barbeirosData);
+  const [activeTab, setActiveTab] = React.useState('Ativos');
   const [searchQuery, setSearchQuery] = React.useState('');
 
   const filteredBarbeiros = barbeirosData
