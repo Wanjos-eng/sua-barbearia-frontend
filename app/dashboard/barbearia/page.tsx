@@ -448,7 +448,21 @@ const BarbeirosContent: React.FC = () => {
           <span>Novo Barbeiro</span>
         </button>
       </div>
-    
+
+      {/* Filtros e Busca */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+        <div className="flex items-center space-x-2">
+          <button 
+            onClick={() => setActiveTab('Ativos')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${activeTab === 'Ativos' ? 'bg-[#58BEC3] text-[#151515]' : 'bg-[#151515] text-[#DDDBCB]'}`}
+            >Ativos </button>
+
+          <button 
+            onClick={() => setActiveTab('Ativos')}
+            className={`px-4 py-2 rounded-lg text-sm font-medium ${activeTab === 'Desativos' ? 'bg-[#58BEC3] text-[#151515]' : 'bg-[#151515] text-[#DDDBCB]'}`}
+          >Desativos </button>
+        </div>
+      </div>
     </>
   );
 
