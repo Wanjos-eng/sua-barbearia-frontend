@@ -262,3 +262,6 @@
 [00:08:58.396] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:10:44.465] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:10:44.588] Browser WARN    Image with src "/_next/static/media/icone-logo-suabarbearia-Login.575a05ab.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:13:19.316] Browser WARN    Image with src "/_next/static/media/icone-logo-suabarbearia-Login.575a05ab.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio.
+[00:13:28.776] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:39.663] Server  LOG      ✓ Compiled in 28ms
