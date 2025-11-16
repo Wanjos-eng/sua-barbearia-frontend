@@ -512,6 +512,25 @@ const BarbeirosContent: React.FC = () => {
 
 }
 
+// Componente Tela de Agendamentos
+// Componente Agendamento Status Bridge - Exibir status do agendamento para a tabela principal
+const AgendamentoStatusBridge: React.FC<{status: FullAppointmentStatus }> = ({status}) => {
+  const statusStyles: Record<FullAppointmentStatus, {icon: React.ElementType, color: string}> = {
+    'Concluído': {icon: Check, color: '#58BEC3'},
+    'Cancelado': {icon: UserX, color: '#5c5c5c'},
+    'Pendente': {icon: Clock, color: '#DDDBCB'},
+  };
+
+  const{icon: Icon, color} = statusStyles[status];
+
+  return(
+    <span className={`flex items-center gap-1.5 text-sm font-medium ${color}`}>
+      <Icon className="w-4 h-4"/>
+      {status}
+    </span>
+  );
+};
+
 //Componente App
 const App: React.FC = () => {
 
