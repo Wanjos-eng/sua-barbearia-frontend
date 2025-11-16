@@ -572,11 +572,68 @@ const AgendamentosContent: React.FC = () => {
           <ChevronDown className="w-5 h-5 text-[#050505] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"/>
         </div>
       </div>
+
+      {/* Tabela de Agendamentos */}
+      <div className="bg-[#151515] rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <div className="w-full min-w-[700px]">
+            {/* Cabeçalho */}
+            <thead className="bg-[#0c0c0c]">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Data/Hora</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Barbeiro</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Serviço</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Valor</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+
+            {/* Corpo */}
+            <tbody className="divide-y divide-[#0c0c0c]">
+              {filteredAppointments.length > 0 ? (
+                filteredAppointments.map((app) => (
+                  <tr       
+                    key={app.id}
+                    className="hover:bg-[#0c0c0c] transition-colors">
+                    
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.client}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.date}</span>
+                        <span className="block text-xs text-[#5c5c5c]">{app.time}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.barber}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.service}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.value}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <AgendamentoStatusBridge status={app.status}/>
+                      </td>
+                  </tr>
+                ))
+
+                ) : (
+                <tr>
+                  <td colSpan={6} className="text-center py-10 px-6 text-[#5C5C5C]">
+                    Nenhum agendamento encontrado.
+                  </td>
+                </tr>
+              )}
+
+            </tbody>
+          </div>
+        </div>
+      </div>
     </>
   )
-
 }
-
 
 //Componente App
 const App: React.FC = () => {
@@ -594,6 +651,7 @@ const App: React.FC = () => {
       <main className="flex-1 p-6 md-p10 min-h-screen overflow-y-auto">
         {currentPage === 'Dashboard' && <DashboardContent />}
         {currentPage === 'Barbeiros' && <BarbeirosContent />}
+        {currentPage === 'Agendamentos' && <AgendamentosContent />}
          {/* Adicione outras páginas aqui, por ex:
         {currentPage === 'Agendamentos' && <AgendamentosContent />}
         */}
