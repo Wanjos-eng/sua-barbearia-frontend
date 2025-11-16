@@ -528,6 +528,29 @@ const AgendamentoStatusBridge: React.FC<{status: AppointmentStatus }> = ({status
   );
 };
 
+// Componente AgendamentosContent (Página Principal de Agendamentos)
+const AgendamentosContent: React.FC = () => {
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [statusFilter, setStatusFilet] = React.useState('Todos');
+  
+  const filteredAppointments = appointmentsData
+    .filter(app => statusFilter === 'Todos' || app.status === statusFilter)
+    .filter(app => app.barber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                   app.client.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+  
+  return(
+    <>
+      {/* Header */}
+      <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Agendamentos</h1>
+    
+    </>
+
+  )
+
+}
+
+
 //Componente App
 const App: React.FC = () => {
 
