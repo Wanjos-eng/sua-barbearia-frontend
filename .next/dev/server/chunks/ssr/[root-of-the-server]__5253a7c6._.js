@@ -109,7 +109,7 @@ function LoginPage() {
                                             onChange: (e)=>setEmail(e.target.value),
                                             placeholder: "Email",
                                             required: true,
-                                            className: "w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-white placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                            className: "w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
                                         }, void 0, false, {
                                             fileName: "[project]/app/login/barbearia/page.tsx",
                                             lineNumber: 101,
@@ -140,7 +140,7 @@ function LoginPage() {
                                             onChange: (e)=>setPassword(e.target.value),
                                             placeholder: "Senha",
                                             required: true,
-                                            className: "w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-white placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                            className: "w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
                                         }, void 0, false, {
                                             fileName: "[project]/app/login/barbearia/page.tsx",
                                             lineNumber: 117,
