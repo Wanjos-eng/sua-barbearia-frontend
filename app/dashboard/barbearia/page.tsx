@@ -531,7 +531,7 @@ const AgendamentoStatusBridge: React.FC<{status: AppointmentStatus }> = ({status
 // Componente AgendamentosContent (Página Principal de Agendamentos)
 const AgendamentosContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
-  const [statusFilter, setStatusFilet] = React.useState('Todos');
+  const [statusFilter, setStatusFilter] = React.useState('Todos');
   
   const filteredAppointments = appointmentsData
     .filter(app => statusFilter === 'Todos' || app.status === statusFilter)
@@ -557,7 +557,20 @@ const AgendamentosContent: React.FC = () => {
           <Search className="w-5 h-5 text-[#050505] absolute left-3 top-1/2 -translate-y-1/2"/>
         </div>
 
-        
+        {/* Status Filter */}
+        <div className="relative w-full md:w-auto md:min-w-[200px]">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="2-full bg-[#050505] text-sm font-semibold text-[#DDDBCB] px-4 py-3 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-[#58BEC3] pr-10"
+            >
+              <option value="Todos">Todos</option>
+              <option value="Concluído">Concluído</option>
+              <option value="Pendente">Pendente</option>
+              <option value="Cancelado">Cancelado</option>
+          </select>
+          <ChevronDown className="w-5 h-5 text-[#050505] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"/>
+        </div>
       </div>
     </>
   )
