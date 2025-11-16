@@ -38,26 +38,18 @@ interface StatsCardProps{
 }
 
 interface Appointment{
+  id: string,
+  date: string,
   time: string,
   client: string;
   barber: string;
   service: string;
-  price: string;
-  status: 'Pendente' | 'Confirmado';
+  value: string;
+  status: AppointmentStatus;
 }
 
 // Tipos de Páginas de Agendamentos
-type FullAppointmentStatus = 'Concluído' | 'Cancelado' | 'Pendente';
-interface FullAppoiment{
-  id: string;
-  client: string;
-  date: string;
-  time: string;
-  barber: string;
-  service: string;
-  value: string;
-  status: FullAppointmentStatus;
-}
+type AppointmentStatus = 'Concluído' | 'Cancelado' | 'Pendente' | 'Confirmado';
 
 interface ActiveBarber {
   initials: string;
@@ -167,7 +159,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value }) => (
 
 //Componente Item de Agendamento
 
-const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service, price, status }) => (
+const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service, value, status }) => (
   <div className="py- p-4 bg-[#0C0C0C] rounded-lg mh-4 my-3">
     <div className="flex flex-col md:flex-row md:items-center md:justify-between">
       {/* Informacoes Principais */}
@@ -180,7 +172,7 @@ const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service,
         </div>
         <div>
           <p className="text-lg font-semibold text-[#DDDBCB]">{service}</p>
-          <p className="text-sm text-[#5C5C5C]">{price}</p>
+          <p className="text-sm text-[#5C5C5C]">{value}</p>
         </div>
       </div>
 
@@ -242,8 +234,8 @@ const statsData = [
 ];
 
 const appointmentsData: Appointment[] = [
-  { time: '10:00', client: 'Carlos Pereira', barber: 'Nome Barbeiro', service: 'Corte', price: 'R$50,00', status: 'Pendente' },
-  { time: '11:00', client: 'Otávio Augusto', barber: 'Nome Barbeiro', service: 'Corte', price: 'R$50,00', status: 'Confirmado' },
+  { id: 'd1', date: '09/11', time: '10:00', client: 'Carlos Pereira', barber: 'Nome Barbeiro', service: 'Corte', value: 'R$50,00', status: 'Pendente' },
+  { id: 'd2', date: '09/11', time: '11:00', client: 'Otávio Augusto', barber: 'Nome Barbeiro', service: 'Corte', value: 'R$50,00', status: 'Confirmado' },
 ];
 
 const activeBarbersData: ActiveBarber[] = [
@@ -332,19 +324,23 @@ const DashboardContent: React.FC = () => (
             <p className="text-sm border-b border-[#5C5C5C] pb-3 mb-4 font-medium text-[#5C5C5C] mb-2">Dia 10/11 - Segunda</p>
             {/* Simulando mais dados */}
             <AppointmentItem 
+              id="d1"
+              date="19/11"
               time="10:00" 
               client="Carlos Pereira" 
               barber="Nome Barbeiro" 
               service="Corte" 
-              price="R$50,00" 
+              value="R$50,00" 
               status="Pendente" 
             />
             <AppointmentItem 
+              id="d1"
+              date="19/11"
               time="11:00" 
               client="Otávio Augusto" 
               barber="Nome Barbeiro" 
               service="Corte" 
-              price="R$50,00" 
+              value="R$50,00" 
               status="Confirmado" 
             />
           </div>
@@ -514,11 +510,12 @@ const BarbeirosContent: React.FC = () => {
 
 // Componente Tela de Agendamentos
 // Componente Agendamento Status Bridge - Exibir status do agendamento para a tabela principal
-const AgendamentoStatusBridge: React.FC<{status: FullAppointmentStatus }> = ({status}) => {
-  const statusStyles: Record<FullAppointmentStatus, {icon: React.ElementType, color: string}> = {
+const AgendamentoStatusBridge: React.FC<{status: AppointmentStatus }> = ({status}) => {
+  const statusStyles: Record<AppointmentStatus, {icon: React.ElementType, color: string}> = {
     'Concluído': {icon: Check, color: '#58BEC3'},
     'Cancelado': {icon: UserX, color: '#5c5c5c'},
     'Pendente': {icon: Clock, color: '#DDDBCB'},
+    'Confirmado': {icon: Check, color: '#58BEC3'}
   };
 
   const{icon: Icon, color} = statusStyles[status];
