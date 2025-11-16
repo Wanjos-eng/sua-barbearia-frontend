@@ -17,7 +17,8 @@ import {
   UserX,
   Phone,
   Plus,
-  Search
+  Search,
+  ChevronDown
 } from 'lucide-react';
 import { Stats } from 'fs';
 
@@ -43,6 +44,19 @@ interface Appointment{
   service: string;
   price: string;
   status: 'Pendente' | 'Confirmado';
+}
+
+// Tipos de Páginas de Agendamentos
+type FullAppointmentStatus = 'Concluído' | 'Cancelado' | 'Pendente';
+interface FullAppoiment{
+  id: string;
+  client: string;
+  date: string;
+  time: string;
+  barber: string;
+  service: string;
+  value: string;
+  status: FullAppointmentStatus;
 }
 
 interface ActiveBarber {
