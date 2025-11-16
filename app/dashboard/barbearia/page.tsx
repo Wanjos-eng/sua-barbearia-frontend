@@ -543,9 +543,23 @@ const AgendamentosContent: React.FC = () => {
     <>
       {/* Header */}
       <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Agendamentos</h1>
-    
-    </>
+       {/* Filtros e Busca */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-[#151515] p-2 rounded-lg">
+        {/* Search Bar */}
+        <div className="relative flex-1 md:max-w-md">
+          <input
+            type="text"
+            placeholder="Buscar por cliente ou barbeiro..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#050505] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
+          />
+          <Search className="w-5 h-5 text-[#050505] absolute left-3 top-1/2 -translate-y-1/2"/>
+        </div>
 
+        
+      </div>
+    </>
   )
 
 }
