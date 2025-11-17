@@ -1,4 +1,6 @@
 {
+  "/cadastro/barbearia/page": "app/cadastro/barbearia/page.js",
   "/dashboard/barbearia/page": "app/dashboard/barbearia/page.js",
+  "/login/barbearia/page": "app/login/barbearia/page.js",
   "/page": "app/page.js"
 }

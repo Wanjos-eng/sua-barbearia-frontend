@@ -31,7 +31,6 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$phone$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Phone$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/phone.js [app-ssr] (ecmascript) <export default as Phone>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$plus$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Plus$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/plus.js [app-ssr] (ecmascript) <export default as Plus>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/search.js [app-ssr] (ecmascript) <export default as Search>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/chevron-down.js [app-ssr] (ecmascript) <export default as ChevronDown>");
 'use client';
 ;
 ;
@@ -1251,7 +1250,7 @@ const AgendamentosContent = ()=>{
                 className: "flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-[#151515] p-2 rounded-lg",
                 children: [
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "relative flex-1 md:max-w-md",
+                        className: "relative flex-1 ",
                         children: [
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                 type: "text",
@@ -1265,7 +1264,7 @@ const AgendamentosContent = ()=>{
                                 columnNumber: 11
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$search$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__Search$3e$__["Search"], {
-                                className: "w-5 h-5 text-[#050505] absolute left-3 top-1/2 -translate-y-1/2"
+                                className: "w-5 h-5 text-[#DDDBCB] absolute left-3 top-1/2 -translate-y-1/2"
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
                                 lineNumber: 557,
@@ -1278,60 +1277,51 @@ const AgendamentosContent = ()=>{
                         columnNumber: 9
                     }, ("TURBOPACK compile-time value", void 0)),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        className: "relative w-full md:w-auto md:min-w-[200px]",
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
-                                value: statusFilter,
-                                onChange: (e)=>setStatusFilter(e.target.value),
-                                className: "2-full bg-[#050505] text-sm font-semibold text-[#DDDBCB] px-4 py-3 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-[#58BEC3] pr-10",
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "Todos",
-                                        children: "Todos"
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                        lineNumber: 567,
-                                        columnNumber: 15
-                                    }, ("TURBOPACK compile-time value", void 0)),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "Concluído",
-                                        children: "Concluído"
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                        lineNumber: 568,
-                                        columnNumber: 15
-                                    }, ("TURBOPACK compile-time value", void 0)),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "Pendente",
-                                        children: "Pendente"
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                        lineNumber: 569,
-                                        columnNumber: 15
-                                    }, ("TURBOPACK compile-time value", void 0)),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
-                                        value: "Cancelado",
-                                        children: "Cancelado"
-                                    }, void 0, false, {
-                                        fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                        lineNumber: 570,
-                                        columnNumber: 15
-                                    }, ("TURBOPACK compile-time value", void 0))
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                lineNumber: 562,
-                                columnNumber: 11
-                            }, ("TURBOPACK compile-time value", void 0)),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$chevron$2d$down$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__$3c$export__default__as__ChevronDown$3e$__["ChevronDown"], {
-                                className: "w-5 h-5 text-[#050505] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"
-                            }, void 0, false, {
-                                fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                lineNumber: 572,
-                                columnNumber: 11
-                            }, ("TURBOPACK compile-time value", void 0))
-                        ]
-                    }, void 0, true, {
+                        className: "relative bg-[#050505] md:max-w-xs rounded-lg focus:outline-none focus:ring-2 focus:ring-[#58BEC3]",
+                        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("select", {
+                            value: statusFilter,
+                            onChange: (e)=>setStatusFilter(e.target.value),
+                            className: "text-sm font-semibold text-[#DDDBCB] px-4 py-3 appearance-[#DDDBCB]",
+                            children: [
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                    value: "Todos",
+                                    children: "Todos"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/barbearia/page.tsx",
+                                    lineNumber: 567,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                    value: "Concluído",
+                                    children: "Concluído"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/barbearia/page.tsx",
+                                    lineNumber: 568,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                    value: "Pendente",
+                                    children: "Pendente"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/barbearia/page.tsx",
+                                    lineNumber: 569,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0)),
+                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("option", {
+                                    value: "Cancelado",
+                                    children: "Cancelado"
+                                }, void 0, false, {
+                                    fileName: "[project]/app/dashboard/barbearia/page.tsx",
+                                    lineNumber: 570,
+                                    columnNumber: 15
+                                }, ("TURBOPACK compile-time value", void 0))
+                            ]
+                        }, void 0, true, {
+                            fileName: "[project]/app/dashboard/barbearia/page.tsx",
+                            lineNumber: 562,
+                            columnNumber: 11
+                        }, ("TURBOPACK compile-time value", void 0))
+                    }, void 0, false, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
                         lineNumber: 561,
                         columnNumber: 9
@@ -1358,7 +1348,7 @@ const AgendamentosContent = ()=>{
                                             children: "Cliente"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                            lineNumber: 583,
+                                            lineNumber: 582,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1366,7 +1356,7 @@ const AgendamentosContent = ()=>{
                                             children: "Data/Hora"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                            lineNumber: 584,
+                                            lineNumber: 583,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1374,7 +1364,7 @@ const AgendamentosContent = ()=>{
                                             children: "Barbeiro"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                            lineNumber: 585,
+                                            lineNumber: 584,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1382,7 +1372,7 @@ const AgendamentosContent = ()=>{
                                             children: "Serviço"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                            lineNumber: 586,
+                                            lineNumber: 585,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1390,7 +1380,7 @@ const AgendamentosContent = ()=>{
                                             children: "Valor"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                            lineNumber: 587,
+                                            lineNumber: 586,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0)),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("th", {
@@ -1398,18 +1388,18 @@ const AgendamentosContent = ()=>{
                                             children: "Status"
                                         }, void 0, false, {
                                             fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                            lineNumber: 588,
+                                            lineNumber: 587,
                                             columnNumber: 17
                                         }, ("TURBOPACK compile-time value", void 0))
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                    lineNumber: 582,
+                                    lineNumber: 581,
                                     columnNumber: 15
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                lineNumber: 581,
+                                lineNumber: 580,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0)),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tbody", {
@@ -1424,12 +1414,12 @@ const AgendamentosContent = ()=>{
                                                     children: app.client
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                    lineNumber: 601,
+                                                    lineNumber: 600,
                                                     columnNumber: 25
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                lineNumber: 600,
+                                                lineNumber: 599,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1440,7 +1430,7 @@ const AgendamentosContent = ()=>{
                                                         children: app.date
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                        lineNumber: 604,
+                                                        lineNumber: 603,
                                                         columnNumber: 25
                                                     }, ("TURBOPACK compile-time value", void 0)),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -1448,13 +1438,13 @@ const AgendamentosContent = ()=>{
                                                         children: app.time
                                                     }, void 0, false, {
                                                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                        lineNumber: 605,
+                                                        lineNumber: 604,
                                                         columnNumber: 25
                                                     }, ("TURBOPACK compile-time value", void 0))
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                lineNumber: 603,
+                                                lineNumber: 602,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1464,12 +1454,12 @@ const AgendamentosContent = ()=>{
                                                     children: app.barber
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                    lineNumber: 608,
+                                                    lineNumber: 607,
                                                     columnNumber: 25
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                lineNumber: 607,
+                                                lineNumber: 606,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1479,12 +1469,12 @@ const AgendamentosContent = ()=>{
                                                     children: app.service
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                    lineNumber: 611,
+                                                    lineNumber: 610,
                                                     columnNumber: 25
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                lineNumber: 610,
+                                                lineNumber: 609,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1494,12 +1484,12 @@ const AgendamentosContent = ()=>{
                                                     children: app.value
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                    lineNumber: 614,
+                                                    lineNumber: 613,
                                                     columnNumber: 25
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                lineNumber: 613,
+                                                lineNumber: 612,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0)),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1508,18 +1498,18 @@ const AgendamentosContent = ()=>{
                                                     status: app.status
                                                 }, void 0, false, {
                                                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                    lineNumber: 617,
+                                                    lineNumber: 616,
                                                     columnNumber: 25
                                                 }, ("TURBOPACK compile-time value", void 0))
                                             }, void 0, false, {
                                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                                lineNumber: 616,
+                                                lineNumber: 615,
                                                 columnNumber: 23
                                             }, ("TURBOPACK compile-time value", void 0))
                                         ]
                                     }, app.id, true, {
                                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                        lineNumber: 596,
+                                        lineNumber: 595,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("tr", {
                                     children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("td", {
@@ -1528,33 +1518,33 @@ const AgendamentosContent = ()=>{
                                         children: "Nenhum agendamento encontrado."
                                     }, void 0, false, {
                                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                        lineNumber: 624,
+                                        lineNumber: 623,
                                         columnNumber: 19
                                     }, ("TURBOPACK compile-time value", void 0))
                                 }, void 0, false, {
                                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                    lineNumber: 623,
+                                    lineNumber: 622,
                                     columnNumber: 17
                                 }, ("TURBOPACK compile-time value", void 0))
                             }, void 0, false, {
                                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                                lineNumber: 593,
+                                lineNumber: 592,
                                 columnNumber: 13
                             }, ("TURBOPACK compile-time value", void 0))
                         ]
                     }, void 0, true, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                        lineNumber: 579,
+                        lineNumber: 578,
                         columnNumber: 11
                     }, ("TURBOPACK compile-time value", void 0))
                 }, void 0, false, {
                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                    lineNumber: 578,
+                    lineNumber: 577,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                lineNumber: 577,
+                lineNumber: 576,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
@@ -1573,12 +1563,12 @@ const App = ()=>{
                     setCurrentPage: setCurrentPage
                 }, void 0, false, {
                     fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                    lineNumber: 648,
+                    lineNumber: 647,
                     columnNumber: 9
                 }, ("TURBOPACK compile-time value", void 0))
             }, void 0, false, {
                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                lineNumber: 647,
+                lineNumber: 646,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0)),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
@@ -1586,29 +1576,29 @@ const App = ()=>{
                 children: [
                     currentPage === 'Dashboard' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(DashboardContent, {}, void 0, false, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                        lineNumber: 652,
+                        lineNumber: 651,
                         columnNumber: 41
                     }, ("TURBOPACK compile-time value", void 0)),
                     currentPage === 'Barbeiros' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(BarbeirosContent, {}, void 0, false, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                        lineNumber: 653,
+                        lineNumber: 652,
                         columnNumber: 41
                     }, ("TURBOPACK compile-time value", void 0)),
                     currentPage === 'Agendamentos' && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])(AgendamentosContent, {}, void 0, false, {
                         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                        lineNumber: 654,
+                        lineNumber: 653,
                         columnNumber: 44
                     }, ("TURBOPACK compile-time value", void 0))
                 ]
             }, void 0, true, {
                 fileName: "[project]/app/dashboard/barbearia/page.tsx",
-                lineNumber: 651,
+                lineNumber: 650,
                 columnNumber: 7
             }, ("TURBOPACK compile-time value", void 0))
         ]
     }, void 0, true, {
         fileName: "[project]/app/dashboard/barbearia/page.tsx",
-        lineNumber: 645,
+        lineNumber: 644,
         columnNumber: 5
     }, ("TURBOPACK compile-time value", void 0));
 };

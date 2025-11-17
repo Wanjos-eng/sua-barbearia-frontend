@@ -546,7 +546,7 @@ const AgendamentosContent: React.FC = () => {
        {/* Filtros e Busca */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-[#151515] p-2 rounded-lg">
         {/* Search Bar */}
-        <div className="relative flex-1 md:max-w-md">
+        <div className="relative flex-1 ">
           <input
             type="text"
             placeholder="Buscar por cliente ou barbeiro..."
@@ -554,22 +554,21 @@ const AgendamentosContent: React.FC = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-[#050505] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
           />
-          <Search className="w-5 h-5 text-[#050505] absolute left-3 top-1/2 -translate-y-1/2"/>
+          <Search className="w-5 h-5 text-[#DDDBCB] absolute left-3 top-1/2 -translate-y-1/2"/>
         </div>
 
         {/* Status Filter */}
-        <div className="relative w-full md:w-auto md:min-w-[200px]">
+        <div className="relative bg-[#050505] md:max-w-xs rounded-lg focus:outline-none focus:ring-2 focus:ring-[#58BEC3]">
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="2-full bg-[#050505] text-sm font-semibold text-[#DDDBCB] px-4 py-3 rounded-lg appearance-none focus:outline-none focus:ring-2 focus:ring-[#58BEC3] pr-10"
+            className="text-sm font-semibold text-[#DDDBCB] px-4 py-3 appearance-[#DDDBCB]"
             >
               <option value="Todos">Todos</option>
               <option value="Concluído">Concluído</option>
               <option value="Pendente">Pendente</option>
               <option value="Cancelado">Cancelado</option>
           </select>
-          <ChevronDown className="w-5 h-5 text-[#050505] absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"/>
         </div>
       </div>
 

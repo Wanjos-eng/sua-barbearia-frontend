@@ -743,6 +743,10 @@
     flex: 1;
   }
 
+  .flex-4 {
+    flex: 4;
+  }
+
   .flex-shrink-0 {
     flex-shrink: 0;
   }
@@ -806,6 +810,10 @@
 
   .gap-1\.5 {
     gap: calc(var(--spacing) * 1.5);
+  }
+
+  .gap-2 {
+    gap: calc(var(--spacing) * 2);
   }
 
   .gap-4 {
@@ -1071,6 +1079,10 @@
 
   .p-8 {
     padding: calc(var(--spacing) * 8);
+  }
+
+  .px-0 {
+    padding-inline: calc(var(--spacing) * 0);
   }
 
   .px-2 {
