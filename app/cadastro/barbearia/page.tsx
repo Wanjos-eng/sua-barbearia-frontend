@@ -1,14 +1,17 @@
 "use client";
 import React, { useState } from 'react';
 
-import {User, Mail, Phone, Lock, MapPin} from 'lucide-react';
+import {User, Mail, Phone, Lock, MapPin, File} from 'lucide-react';
 
 // Definindo os tipos para o estado do formulário
 interface FormData{
     nome: string;
+    nomeFantasia: string,
     email: string;
     telefone: string;
-    endereco?: string; // como opcional
+    endereco: string;
+    tipoDocumento: string;
+    documento: string;
     senha: string;
     confirmarSenha: string;
 }
@@ -33,9 +36,12 @@ export default function RegisterBarbPage(){
     // Estado para controlar os dados do formulário
     const [formData, setFormData] = useState<FormData>({
         nome: '',
+        nomeFantasia: '',
         email: '',
         telefone: '',
         endereco: '',
+        tipoDocumento: '',
+        documento: '',
         senha: '',
         confirmarSenha: '',
     });
@@ -115,6 +121,21 @@ export default function RegisterBarbPage(){
                         />
                     </div>
 
+                    {/*Campo Nome Fantasia*/}
+                    <div className="relative">
+                        <InputIcon><User size={18} /></InputIcon>
+                        <input
+                            type="text"
+                            name="nomeFantasia"
+                            placeholder="Nome Fantasia"
+                            value={formData.nomeFantasia}
+                            onChange={handleInputChange}
+                            className={inputBaseStyle}
+                            required 
+                        />
+                    </div>
+
+
                     {/* Campo Email */}
                     <div className="relative">
                         <InputIcon><Mail size={18} /></InputIcon>
@@ -142,8 +163,23 @@ export default function RegisterBarbPage(){
                         required
                         />
                     </div>
+
                     
-                    {/* Campo Endereço (Condicional) */}
+                    {/*Campo Documento*/}
+                    <div className="relative">
+                        <InputIcon><File size={18} /></InputIcon>
+                        <input
+                            type="number" // tem que subir como string
+                            name="documento"
+                            placeholder="Documento CPF/CNPJ"
+                            value={formData.documento}
+                            onChange={handleInputChange}
+                            className={inputBaseStyle}
+                            required 
+                        />
+                    </div>
+                    
+                    {/* Campo Endereço */}
                     {userType === 'barbearia' && (
                         <div className="relative">
                         <InputIcon><MapPin size={18} /></InputIcon>
@@ -154,7 +190,7 @@ export default function RegisterBarbPage(){
                             value={formData.endereco}
                             onChange={handleInputChange}
                             className={inputBaseStyle}
-                            required // Só é obrigatório se for barbearia
+                            required
                         />
                         </div>
                     )}
