@@ -427,7 +427,7 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
                             
                             <div className="flex gap-3 overflow-x-auto pb-4 mb-6 scrollbar-hide">
                                 {dates.map(d => {
-                                    const isSelected = selectedDate?.getDate() === d.getDate();
+                                    const isSelected = selectedDate?.toDateString() === d.toDateString();
                                     return (
                                         <button 
                                             key={d.toISOString()}
