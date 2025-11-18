@@ -668,7 +668,34 @@ const FinancialContent: React.FC = () => {
         }
     }, [periodFilter]);
 
-    return ();
+    return (
+      <>
+          {/* Header e Filtros */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+            <div>
+                <h1 className="text-3xl font-bold text-[#DDDBCB]">Gestão Financeira</h1>
+                <p className="text-[#5C5C5C] text-sm mt-1">Acompanhe o fluxo de caixa e projeções.</p>
+            </div>
+            
+            <div className="bg-[#151515] p-1 rounded-lg flex items-center">
+                {(['Semanal', 'Mensal', 'Total'] as const).map((filter) => (
+                    <button
+                        key={filter}
+                        onClick={() => setPeriodFilter(filter)}
+                        className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
+                            periodFilter === filter 
+                            ? 'bg-[#58BEC3] text-[#151515] shadow-lg' 
+                            : 'text-[#5C5C5C] hover:text-[#DDDBCB] hover:bg-[#292929]'
+                        }`}
+                    >
+                        {filter}
+                    </button>
+                ))}
+            </div>
+          </div>
+      
+      </>
+    );
 
 //Componente App
 const App: React.FC = () => {

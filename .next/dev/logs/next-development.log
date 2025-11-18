@@ -194,3 +194,142 @@ Import traces:
   Client Component SSR:
     ./app/dashboard/barbearia/page.tsx [Client Component SSR]
     ./app/dashboard/barbearia/page.tsx [Server Component]
+[01:17:50.125] Browser ERROR   ./app/dashboard/barbearia/page.tsx:671:12
+Parsing ecmascript source code failed
+  669 |     }, [periodFilter]);
+  670 |
+> 671 |     return ();
+      |            ^^
+  672 |
+  673 | //Componente App
+  674 | const App: React.FC = () => {
+
+Parenthesized expression cannot be empty
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/barbearia/page.tsx [Client Component Browser]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/barbearia/page.tsx [Client Component SSR]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+[01:17:50.125] Browser ERROR   ./app/dashboard/barbearia/page.tsx:671:12
+Parsing ecmascript source code failed
+  669 |     }, [periodFilter]);
+  670 |
+> 671 |     return ();
+      |            ^^
+  672 |
+  673 | //Componente App
+  674 | const App: React.FC = () => {
+
+Parenthesized expression cannot be empty
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/barbearia/page.tsx [Client Component Browser]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/barbearia/page.tsx [Client Component SSR]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+[01:18:21.135] Browser ERROR   ./app/dashboard/barbearia/page.tsx:671:12
+Parsing ecmascript source code failed
+  669 |     }, [periodFilter]);
+  670 |
+> 671 |     return ();
+      |            ^^
+  672 |
+  673 | //Componente App
+  674 | const App: React.FC = () => {
+
+Parenthesized expression cannot be empty
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/barbearia/page.tsx [Client Component Browser]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/barbearia/page.tsx [Client Component SSR]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+[01:18:21.135] Browser ERROR   ./app/dashboard/barbearia/page.tsx:671:12
+Parsing ecmascript source code failed
+  669 |     }, [periodFilter]);
+  670 |
+> 671 |     return ();
+      |            ^^
+  672 |
+  673 | //Componente App
+  674 | const App: React.FC = () => {
+
+Parenthesized expression cannot be empty
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/barbearia/page.tsx [Client Component Browser]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/barbearia/page.tsx [Client Component SSR]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+[01:18:39.126] Browser ERROR   ./app/dashboard/barbearia/page.tsx:671:12
+Parsing ecmascript source code failed
+  669 |     }, [periodFilter]);
+  670 |
+> 671 |     return ();
+      |            ^^
+  672 |
+  673 | //Componente App
+  674 | const App: React.FC = () => {
+
+Parenthesized expression cannot be empty
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/barbearia/page.tsx [Client Component Browser]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/barbearia/page.tsx [Client Component SSR]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+[01:19:00.213] Browser ERROR   ./app/dashboard/barbearia/page.tsx:671:12
+Parsing ecmascript source code failed
+  669 |     }, [periodFilter]);
+  670 |
+> 671 |     return ();
+      |            ^^
+  672 |
+  673 | //Componente App
+  674 | const App: React.FC = () => {
+
+Parenthesized expression cannot be empty
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/barbearia/page.tsx [Client Component Browser]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/barbearia/page.tsx [Client Component SSR]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+[01:20:19.275] Server  LOG      ✓ Compiled in 37ms
+[01:20:20.136] Browser ERROR   ./app/dashboard/barbearia/page.tsx:726:1
+Parsing ecmascript source code failed
+  724 | }
+  725 |
+> 726 | export default App;
+      | ^^^^^^
+  727 |
+
+'import', and 'export' cannot be used outside of module code
+
+Import traces:
+  Client Component Browser:
+    ./app/dashboard/barbearia/page.tsx [Client Component Browser]
+    ./app/dashboard/barbearia/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/dashboard/barbearia/page.tsx [Client Component SSR]
+    ./app/dashboard/barbearia/page.tsx [Server Component]

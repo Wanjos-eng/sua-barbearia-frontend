@@ -7,7 +7,7 @@ module.exports = mod;
 }),
 "[project]/app/dashboard/barbearia/page.tsx [app-ssr] (ecmascript)", ((__turbopack_context__, module, exports) => {
 
-const e = new Error("Could not parse module '[project]/app/dashboard/barbearia/page.tsx'\n\nParenthesized expression cannot be empty");
+const e = new Error("Could not parse module '[project]/app/dashboard/barbearia/page.tsx'\n\n'import', and 'export' cannot be used outside of module code");
 e.code = 'MODULE_UNPARSABLE';
 throw e;
 }),
