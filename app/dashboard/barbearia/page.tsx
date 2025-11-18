@@ -20,7 +20,8 @@ import {
   Search,
   ChevronDown,
   X,
-  CheckCircle
+  CheckCircle,
+  Wallet
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -35,6 +36,8 @@ interface StatsCardProps{
   icon: React.ElementType;
   title: string;
   value: string;
+  trend?: string;
+  trendType?: 'up' | 'down' | 'neutral';
   //iconBgColor: string;
 }
 
@@ -162,7 +165,7 @@ const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) =>
 
 //Componente Cartão de Estatísticas
 
-const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value }) => (
+const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, trend }) => (
     <div className="bg-[#151515] p-5 rounded-lg flex items-center space-x-4">
       <div className="p-3 rounded-lg bg-[#5C5C5C]">
         <Icon className="w-6 h-6 text-[#DDDBCB]"/>
@@ -965,7 +968,39 @@ const FinancialContent: React.FC = () => {
           </button>
         </div>
       </div>
-      
+
+      {/* Cards Principais */}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+        <StatsCard
+          icon={DollarSign}
+          title="Receita Total"
+          value={`R$ ${metrics.revenue.toFixed(2)}`}
+          trend="+12%"
+          trendType="up"
+        />
+        <StatsCard
+          icon={TrendingUp}
+          title="Projeção (7 dias)"
+          value={`R$ ${metrics.projection.toFixed(2)}`}
+          trend="+5%"
+          trendType="up"
+        />
+        <StatsCard
+          icon={Percent}
+          title="Ticket Médio"
+          value={`R$ ${metrics.ticket.toFixed(2)}`}
+          trend="0%"
+          trendType="neutral"
+        />
+        <StatsCard
+          icon={Wallet}
+          title="Despesas"
+          value={`R$ ${metrics.expenses.toFixed(2)}`}
+          trend="-2%"
+          trendType="down"
+        />
+      </div>
+
       </div>
 
     );
