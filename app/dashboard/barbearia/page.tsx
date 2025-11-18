@@ -372,6 +372,25 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
               <X className="w-5 h-5" />
             </button>
         </div>
+
+         {/* Body */}
+        <div className="p-6 space-y-5">
+            {/* Type Switch */}
+            <div className="flex bg-[#050505] p-1 rounded-lg">
+              <button
+                onClick={() => setType('income')}
+                className={`flex-1 py-2 text-sm font-bold rounded-md transition-all duration-200 ${type === 'income' ? 'bg-green-500/20 text-green-500 shadow-sm' : 'text-[#5C5C5C] hover:text-[#DDDBCB]'}`}
+              >
+                Receita
+              </button>
+              <button
+                onClick={() => setType('expense')}
+                className={`flex-1 py-2 text-sm font-bold rounded-md transition-all duration-200 ${type === 'expense' ? 'bg-red-500/20 text-red-500 shadow-sm' : 'text-[#5C5C5C] hover:text-[#DDDBCB]'}`}
+              >
+                Despesa
+              </button>
+            </div>
+        </div>
       </div>
     </div>
   );
