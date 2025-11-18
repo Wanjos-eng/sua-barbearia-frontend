@@ -895,6 +895,14 @@ const FinancialContent: React.FC = () => {
     setIsModalOpen(false);
     setToastMessage("Transação registrada com sucesso!");
   };
+  
+  // Dados aleatórios estáticos para o gráfico para evitar que as barras "dancem" na renderização.
+  const chartData = useMemo(() => {
+    return ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'].map((day) => ({
+      day,
+      height: Math.floor(Math.random() * (80 - 20 + 1) + 20)
+    }));
+  }, []);
 
     return (
       <>
