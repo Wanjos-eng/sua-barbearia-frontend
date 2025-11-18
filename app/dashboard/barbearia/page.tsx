@@ -18,7 +18,8 @@ import {
   Phone,
   Plus,
   Search,
-  ChevronDown
+  ChevronDown,
+  X
 } from 'lucide-react';
 import { Stats } from 'fs';
 
@@ -362,7 +363,17 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   };
 
   return (
-
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300">
+      <div  className="bg-[#151515] w-full max-w-md rounded-xl border border-[#292929] shadow-2xl transform transition-all scale-100 opacity-100">
+          {/* Header */}
+          <div className="flex items-center justify-between p-5 border-b border-[#292929]">
+            <h2 className="text-lg font-bold text-[#DDDBCB]">Nova Transação</h2>
+            <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+              <X className="w-5 h-5" />
+            </button>
+        </div>
+      </div>
+    </div>
   );
 
 }
