@@ -937,69 +937,69 @@ const FinancialContent: React.FC = () => {
         />
 
         {/* Header e Filtros */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-[#DDDBCB]">Gestão Financeira</h1>
-          <p className="text-[#5C5C5C] text-sm mt-1">Acompanhe o fluxo de caixa e projeções financeiras.</p>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <div className="bg-[#151515] p-1 rounded-lg flex items-center border border-[#292929]">
-            {(['Semanal', 'Mensal', 'Total'] as const).map((filter) => (
-              <button
-                key={filter}
-                onClick={() => setPeriodFilter(filter)}
-                className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${periodFilter === filter
-                    ? 'bg-[#58BEC3] text-[#151515] shadow-lg'
-                    : 'text-[#5C5C5C] hover:text-[#DDDBCB] hover:bg-[#292929]'
-                  }`}
-              >
-                {filter}
-              </button>
-            ))}
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-[#DDDBCB]">Gestão Financeira</h1>
+            <p className="text-[#5C5C5C] text-sm mt-1">Acompanhe o fluxo de caixa e projeções financeiras.</p>
           </div>
 
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-2.5 px-4 rounded-lg transition-colors flex items-center shadow-lg shadow-[#58BEC3]/10"
-          >
-            <Plus className="w-5 h-5 md:mr-2" />
-            <span className="hidden md:inline">Nova Transação</span>
-          </button>
-        </div>
-      </div>
+          <div className="flex items-center gap-3">
+            <div className="bg-[#151515] p-1 rounded-lg flex items-center border border-[#292929]">
+              {(['Semanal', 'Mensal', 'Total'] as const).map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setPeriodFilter(filter)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${periodFilter === filter
+                      ? 'bg-[#58BEC3] text-[#151515] shadow-lg'
+                      : 'text-[#5C5C5C] hover:text-[#DDDBCB] hover:bg-[#292929]'
+                    }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
 
-      {/* Cards Principais */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-        <StatsCard
-          icon={DollarSign}
-          title="Receita Total"
-          value={`R$ ${metrics.revenue.toFixed(2)}`}
-          trend="+12%"
-          trendType="up"
-        />
-        <StatsCard
-          icon={TrendingUp}
-          title="Projeção (7 dias)"
-          value={`R$ ${metrics.projection.toFixed(2)}`}
-          trend="+5%"
-          trendType="up"
-        />
-        <StatsCard
-          icon={Percent}
-          title="Ticket Médio"
-          value={`R$ ${metrics.ticket.toFixed(2)}`}
-          trend="0%"
-          trendType="neutral"
-        />
-        <StatsCard
-          icon={Wallet}
-          title="Despesas"
-          value={`R$ ${metrics.expenses.toFixed(2)}`}
-          trend="-2%"
-          trendType="down"
-        />
-      </div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-2.5 px-4 rounded-lg transition-colors flex items-center shadow-lg shadow-[#58BEC3]/10"
+            >
+              <Plus className="w-5 h-5 md:mr-2" />
+              <span className="hidden md:inline">Nova Transação</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Cards Principais */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+          <StatsCard
+            icon={DollarSign}
+            title="Receita Total"
+            value={`R$ ${metrics.revenue.toFixed(2)}`}
+            trend="+12%"
+            trendType="up"
+          />
+          <StatsCard
+            icon={TrendingUp}
+            title="Projeção (7 dias)"
+            value={`R$ ${metrics.projection.toFixed(2)}`}
+            trend="+5%"
+            trendType="up"
+          />
+          <StatsCard
+            icon={Percent}
+            title="Ticket Médio"
+            value={`R$ ${metrics.ticket.toFixed(2)}`}
+            trend="0%"
+            trendType="neutral"
+          />
+          <StatsCard
+            icon={Wallet}
+            title="Despesas"
+            value={`R$ ${metrics.expenses.toFixed(2)}`}
+            trend="-2%"
+            trendType="down"
+          />
+        </div>
 
       </div>
 
