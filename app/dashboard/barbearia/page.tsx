@@ -405,6 +405,24 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
               />
             </div>
           </div>
+
+          {/* Category */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Tipo de Gasto/Receita *</label>
+            <div className="relative">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] appearance-none transition-all"
+              >
+                <option value="" disabled>Selecione uma categoria</option>
+                {(type === 'income' ? incomeCategories : expenseCategories).map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C5C5C] pointer-events-none" />
+            </div>
+          </div>
         </div>
       </div>
     </div>
