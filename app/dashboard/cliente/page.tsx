@@ -219,7 +219,7 @@ const ProfileModal: React.FC<{
 
     if (passwords.newPassword || passwords.confirmPassword) {
         if (passwords.newPassword !== passwords.confirmPassword) {
-            Toast("As senhas não conferem.");
+            alert("As senhas não conferem.");
             return;
         }
         // Lógica de salvar senha aqui
