@@ -19,9 +19,9 @@ import {
   Plus,
   Search,
   ChevronDown,
-  X
+  X,
+  CheckCircle
 } from 'lucide-react';
-import { Stats } from 'fs';
 
 // Tipos (Typescript)
 interface SidebarItemProps{
@@ -481,8 +481,29 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
       </div>
     </div>
   );
-
 }
+
+const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className="fixed top-6 right-6 z-[60] bg-[#151515] border border-[#58BEC3] rounded-lg shadow-2xl p-4 flex items-center gap-3 animate-in slide-in-from-right duration-300">
+      <div className="bg-[#58BEC3]/20 p-2 rounded-full">
+        <CheckCircle className="w-5 h-5 text-[#58BEC3]" />
+      </div>
+      <div>
+        <h4 className="text-sm font-bold text-[#DDDBCB]">Sucesso!</h4>
+        <p className="text-xs text-[#5C5C5C]">{message}</p>
+      </div>
+      <button onClick={onClose} className="ml-4 text-[#5C5C5C] hover:text-[#DDDBCB]">
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+  );
+};
 
 // Componente Conteúdo Principal
 const DashboardContent: React.FC = () => (
