@@ -1,6 +1,6 @@
 'use client';
 // app/barbershop/dashboard/page.tsx
-import React, {useMemo, useState} from 'react';
+import React, {useMemo, useState, useEffect} from 'react';
 import {
   LayoutGrid,
   Users,
@@ -318,6 +318,49 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   const expenseCategories = ['Pagamento Barbeiro', 'Contas (Luz/Água)', 'Estoque', 'Marketing', 'Aluguel', 'Outros'];
   const incomeCategories = ['Serviço', 'Venda de Produto', 'Outros'];
   
+  useEffect(() => {
+    if (isOpen) {
+      setAmount('');
+      setCategory('');
+      setBarberId('');
+      setDescription('');
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setCategory('');
+    setBarberId('');
+  }, [type]);
+
+  if (!isOpen) return null;
+
+  const isBarberRequired = category === 'Pagamento Barbeiro';
+  const isValid =
+    amount !== '' &&
+    parseFloat(amount) > 0 &&
+    category !== '' &&
+    (!isBarberRequired || barberId !== '');
+
+    const handleSubmit = () => {
+    if (!isValid) return;
+
+    let barberName = undefined;
+    if (isBarberRequired) {
+      const selectedBarber = barbeirosData.find(b => b.id === barberId);
+      barberName = selectedBarber ? selectedBarber.name : undefined;
+    }
+
+    onConfirm({
+      type,
+      amount: parseFloat(amount),
+      category,
+      barberName,
+      description: description || (type === 'income' ? 'Nova Receita' : 'Nova Despesa'),
+      date: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+      status: 'Pago'
+    });
+  };
+
   return (
 
   );
