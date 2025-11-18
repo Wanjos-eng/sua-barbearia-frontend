@@ -597,7 +597,7 @@ const AgendamentosContent: React.FC = () => {
                     className="hover:bg-[#0c0c0c] transition-colors">
                     
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-[#DDDBCB]">{app.client}</span>
+                        <span className="text-ms font-medium text-[#DDDBCB]">{app.client}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span className="text-sm font-medium text-[#DDDBCB]">{app.date}</span>
