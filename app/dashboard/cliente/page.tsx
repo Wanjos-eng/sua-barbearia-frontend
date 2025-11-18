@@ -17,7 +17,8 @@ import {
     Edit,
     LogOut,
     Mail,
-    Lock
+    Lock,
+    RefreshCw
 } from 'lucide-react';
 
 // --- INTERFACES ---
@@ -98,6 +99,108 @@ const SectionHeader: React.FC<{ icon: React.ReactNode, title: string }> = ({ ico
   <div className="flex items-center gap-3 mb-6">
     <div className="text-white">{icon}</div>
     <h2 className="text-2xl font-bold text-white">{title}</h2>
+  </div>
+);
+
+// --- TOAST NOTIFICATION ---
+const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, onClose }) => (
+  <div className="fixed bottom-6 right-6 md:top-24 md:right-6 md:bottom-auto z-[60] animate-slide-in">
+    <div className="bg-[#18181b] border border-[#d97757] text-white px-6 py-4 rounded-xl shadow-2xl flex items-center gap-4 min-w-[300px]">
+        <div className="bg-[#d97757]/20 p-2 rounded-full">
+            <CheckCircle className="w-6 h-6 text-[#d97757]" />
+        </div>
+        <div className="flex flex-col flex-1">
+            <span className="font-bold text-sm text-[#d97757]">Sucesso</span>
+            <span className="font-medium text-sm text-zinc-200">{message}</span>
+        </div>
+        <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
+            <X className="w-4 h-4" />
+        </button>
+    </div>
+  </div>
+);
+
+const BarberShopCard: React.FC<{ shop: BarberShop, onClick: () => void }> = ({ shop, onClick }) => (
+  <div className="bg-[#18181b] rounded-xl p-6 flex flex-col items-center text-center relative group transition-all hover:bg-[#202024] border border-transparent hover:border-white/5">
+    <div className="w-16 h-16 rounded-full bg-[#4a4a4d] flex items-center justify-center mb-4 text-2xl font-bold text-white/80">
+      {shop.initial}
+    </div>
+    
+    <h3 className="text-xl font-bold text-white mb-1">{shop.name}</h3>
+    
+    <div className="flex items-center gap-2 text-sm text-[#d97757] mb-1">
+      <Star className="w-3 h-3 fill-current" />
+      <span>{shop.rating}</span>
+    </div>
+    
+    <div className="flex items-center gap-2 text-xs text-zinc-500 mb-6">
+      <Phone className="w-3 h-3" />
+      <span>{shop.phone}</span>
+    </div>
+
+    <div className="flex items-center gap-3 w-full justify-center">
+      <button 
+        onClick={onClick}
+        className="bg-[#d97757] hover:bg-[#c0684b] text-white/90 font-medium text-sm py-2 px-6 rounded-lg transition-colors"
+      >
+        Agendar
+      </button>
+      <button className="text-zinc-500 hover:text-white transition-colors">
+        <Info className="w-5 h-5" />
+      </button>
+    </div>
+  </div>
+);
+
+const AppointmentRow: React.FC<{ app: Appointment }> = ({ app }) => (
+  <div className="flex flex-col md:flex-row items-start md:items-center justify-between py-6 border-b border-white/5 last:border-0 gap-4 md:gap-0">
+    <div className="text-3xl font-bold text-white w-24">
+      {app.time}
+    </div>
+    <div className="flex flex-col w-48">
+      <span className="text-white font-bold text-lg">{app.barberShopName}</span>
+      <span className="text-zinc-500 text-sm">Com {app.barberName}</span>
+    </div>
+    <div className="flex flex-col w-32">
+      <span className="text-white font-medium">{app.service}</span>
+      <span className="text-zinc-500 text-sm">{app.price}</span>
+    </div>
+    <div className="flex items-center gap-2 w-32">
+      {app.status === 'pending' ? (
+        <>
+          <Loader2 className="w-4 h-4 text-zinc-600 animate-spin" />
+          <span className="text-zinc-500 text-sm">Pendente</span>
+        </>
+      ) : (
+        <>
+          <Check className="w-4 h-4 text-[#d97757]" />
+          <span className="text-[#d97757] text-sm">Confirmado</span>
+        </>
+      )}
+    </div>
+    <div className="flex flex-col gap-2 w-32">
+        {app.status === 'pending' ? (
+             <button className="flex items-center justify-center gap-2 bg-[#d97757]/20 hover:bg-[#d97757]/30 text-[#d97757] text-xs py-1.5 px-3 rounded transition-colors">
+                <X className="w-3 h-3" /> Cancelar
+             </button>
+        ) : (
+             <span className="text-xs text-zinc-600 text-center"></span>
+        )}
+       
+        <button className="flex items-center justify-center gap-2 bg-[#e4e4e7] hover:bg-white text-zinc-900 text-xs py-1.5 px-3 rounded font-medium transition-colors">
+          <RefreshCw className="w-3 h-3" /> Reagendar
+        </button>
+    </div>
+  </div>
+);
+
+const HistoryCard: React.FC<{ app: Appointment }> = ({ app }) => (
+  <div className="bg-[#18181b] rounded-lg p-4 mb-3 flex items-center justify-between hover:bg-[#202024] transition-colors group cursor-pointer">
+    <div>
+      <h4 className="text-[#d97757] font-bold text-sm mb-0.5 group-hover:underline">{app.barberShopName}</h4>
+      <p className="text-zinc-400 text-xs mb-1">{app.service}</p>
+      <p className="text-white text-xs font-medium">{app.date} - {app.time}</p>
+    </div>
   </div>
 );
 
