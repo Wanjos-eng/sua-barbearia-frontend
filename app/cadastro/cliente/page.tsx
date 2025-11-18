@@ -24,7 +24,7 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 );
 
 // Componente principal da aplicação
-export default function RegisterBarbPage(){
+export default function RegisterCliente(){
 
     // Estado para controlar os dados do formulário
     const [formData, setFormData] = useState<FormData>({
