@@ -1,6 +1,6 @@
 'use client';
 // app/barbershop/dashboard/page.tsx
-import React from 'react';
+import React, {useMemo} from 'react';
 import {
   LayoutGrid,
   Users,
@@ -69,6 +69,16 @@ interface Barber{
   appointments: number;
   next7d: number;
   status: 'Ativo' | 'Desativo';
+}
+
+interface Transaction {
+    id: string;
+    description: string;
+    category: string;
+    date: string;
+    amount: number;
+    type: 'income' | 'expense';
+    status: 'Pago' | 'Pendente';
 }
 
 // 58BEC3 CIANO
@@ -281,6 +291,14 @@ const barbeirosData: Barber[] = [
     next7d: 5,
     status: 'Ativo'
   },
+];
+
+const transactionsData: Transaction[] = [
+    { id: 't1', description: 'Corte - Carlos Pereira', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
+    { id: 't2', description: 'Barba - Otávio Augusto', category: 'Serviço', date: '09/11', amount: 40.00, type: 'income', status: 'Pago' },
+    { id: 't3', description: 'Compra de Produtos', category: 'Estoque', date: '08/11', amount: 150.00, type: 'expense', status: 'Pago' },
+    { id: 't4', description: 'Conta de Luz', category: 'Utilidades', date: '05/11', amount: 320.00, type: 'expense', status: 'Pendente' },
+    { id: 't5', description: 'Corte - Marcos Santos', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
 ];
 
 // Componente Conteúdo Principal
@@ -634,6 +652,24 @@ const AgendamentosContent: React.FC = () => {
   )
 }
 
+// Componente GestãoFinanceira
+const FinancialContent: React.FC = () => {
+    const [periodFilter, setPeriodFilter] = React.useState<'Semanal' | 'Mensal' | 'Total'>('Semanal');
+
+    // Simulação de filtro de valores baseados no período
+    const metrics = useMemo(() => {
+        const multiplier = periodFilter === 'Semanal' ? 1 : periodFilter === 'Mensal' ? 4 : 12;
+        return {
+            revenue: 400.00 * multiplier,
+            expenses: 150.00 * multiplier,
+            profit: (400 - 150) * multiplier,
+            projection: 520.00 * multiplier,
+            ticket: 60.00 // Ticket médio costuma variar menos
+        }
+    }, [periodFilter]);
+
+    return ();
+
 //Componente App
 const App: React.FC = () => {
 
@@ -651,6 +687,7 @@ const App: React.FC = () => {
         {currentPage === 'Dashboard' && <DashboardContent />}
         {currentPage === 'Barbeiros' && <BarbeirosContent />}
         {currentPage === 'Agendamentos' && <AgendamentosContent />}
+        {currentPage === 'Gestão FInanceira' && <FinancialContent />}
          {/* Adicione outras páginas aqui, por ex:
         {currentPage === 'Agendamentos' && <AgendamentosContent />}
         */}
