@@ -390,6 +390,21 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
                 Despesa
               </button>
             </div>
+
+            {/* Amount */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Valor (R$) *</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5C5C5C] font-bold">R$</span>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0,00"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 pl-10 pr-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+          </div>
         </div>
       </div>
     </div>
