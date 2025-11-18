@@ -423,6 +423,26 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
               <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C5C5C] pointer-events-none" />
             </div>
           </div>
+
+          {/* Barber (Conditional) */}
+          {type === 'expense' && category === 'Pagamento Barbeiro' && (
+            <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+              <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Selecione o Barbeiro *</label>
+              <div className="relative">
+                <select
+                  value={barberId}
+                  onChange={(e) => setBarberId(e.target.value)}
+                  className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] appearance-none transition-all"
+                >
+                  <option value="" disabled>Selecione o barbeiro</option>
+                  {barbeirosData.filter(b => b.status === 'Ativo').map(barber => (
+                    <option key={barber.id} value={barber.id}>{barber.name}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C5C5C] pointer-events-none" />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
