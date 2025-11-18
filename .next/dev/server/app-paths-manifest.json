@@ -3,6 +3,7 @@
   "/barbershop/dashboard/page": "app/barbershop/dashboard/page.js",
   "/cadastro/barbearia/page": "app/cadastro/barbearia/page.js",
   "/cadastro/cliente/page": "app/cadastro/cliente/page.js",
+  "/dashboard/cliente/page": "app/dashboard/cliente/page.js",
   "/login/barbearia/page": "app/login/barbearia/page.js",
   "/login/cliente/page": "app/login/cliente/page.js",
   "/page": "app/page.js"
