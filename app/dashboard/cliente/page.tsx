@@ -100,3 +100,4 @@ const SectionHeader: React.FC<{ icon: React.ReactNode, title: string }> = ({ ico
     <h2 className="text-2xl font-bold text-white">{title}</h2>
   </div>
 );
+
