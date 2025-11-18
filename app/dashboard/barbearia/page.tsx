@@ -696,7 +696,7 @@ const FinancialContent: React.FC = () => {
       
       </>
     );
-
+}
 //Componente App
 const App: React.FC = () => {
 
@@ -714,7 +714,7 @@ const App: React.FC = () => {
         {currentPage === 'Dashboard' && <DashboardContent />}
         {currentPage === 'Barbeiros' && <BarbeirosContent />}
         {currentPage === 'Agendamentos' && <AgendamentosContent />}
-        {currentPage === 'Gestão FInanceira' && <FinancialContent />}
+        {currentPage === 'Gestão Financeira' && <FinancialContent />}
          {/* Adicione outras páginas aqui, por ex:
         {currentPage === 'Agendamentos' && <AgendamentosContent />}
         */}
