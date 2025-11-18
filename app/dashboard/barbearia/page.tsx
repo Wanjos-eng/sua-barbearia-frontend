@@ -885,6 +885,17 @@ const FinancialContent: React.FC = () => {
     };
   }, [transactions, periodFilter]);
 
+  const handleAddTransaction = (newTxData: Omit<Transaction, 'id'>) => {
+    const newTransaction: Transaction = {
+      id: Math.random().toString(36).substr(2, 9),
+      ...newTxData
+    };
+
+    setTransactions(prev => [newTransaction, ...prev]);
+    setIsModalOpen(false);
+    setToastMessage("Transação registrada com sucesso!");
+  };
+
     return (
       <>
           {/* Header e Filtros */}
