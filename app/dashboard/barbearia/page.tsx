@@ -443,7 +443,20 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
               </div>
             </div>
           )}
+
+          {/* Description */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Descrição <span className="text-[#292929]">(Opcional)</span></label>
+            <textarea
+              rows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Detalhes sobre a transação..."
+              className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] resize-none transition-all"
+            />
+          </div>
         </div>
+        
       </div>
     </div>
   );
