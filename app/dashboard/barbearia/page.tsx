@@ -21,7 +21,9 @@ import {
   ChevronDown,
   X,
   CheckCircle,
-  Wallet
+  Wallet,
+  ArrowDownRight,
+  ArrowUpRight
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -1032,7 +1034,54 @@ const FinancialContent: React.FC = () => {
               </div>
             ))}
           </div>
+        </div>
 
+         {/* Coluna Direita: Transações Recentes (1/3) */}
+        <div className="bg-[#151515] p-6 rounded-lg flex flex-col h-[450px] border border-[#292929]">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-bold text-[#DDDBCB]">Transações</h3>
+            <button className="text-[#58BEC3] text-xs hover:underline font-semibold transition-colors">Ver todas</button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+            {transactions.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-[#5C5C5C]">
+                <p className="text-sm">Nenhuma transação encontrada.</p>
+              </div>
+            ) : (
+              transactions.map((transaction) => (
+                <div key={transaction.id} className="flex items-center justify-between p-3 bg-[#0C0C0C] rounded-lg border border-transparent hover:border-[#292929] transition-colors group">
+                  <div className="flex items-center space-x-3 overflow-hidden">
+                    <div className={`p-2 rounded-lg flex-shrink-0 ${transaction.type === 'income' ? 'bg-[#58BEC3]/10 text-[#58BEC3]' : 'bg-red-500/10 text-red-500'}`}>
+                      {transaction.type === 'income' ? <ArrowDownRight className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-medium text-[#DDDBCB] truncate">{transaction.category}</p>
+                      <p className="text-xs text-[#5C5C5C] truncate">
+                        {transaction.barberName ? `Barbeiro: ${transaction.barberName}` : transaction.description}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0 ml-2">
+                    <p className={`text-sm font-bold ${transaction.type === 'income' ? 'text-[#58BEC3]' : 'text-red-400'}`}>
+                      {transaction.type === 'income' ? '+ ' : '- '}
+                      R$ {transaction.amount.toFixed(2)}
+                    </p>
+                    <p className="text-xs text-[#5C5C5C]">{transaction.date}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-[#292929]">
+            <div className="flex justify-between items-center">
+              <span className="text-[#5C5C5C] text-sm">Saldo Atual</span>
+              <span className={`font-bold text-lg ${(metrics.revenue - metrics.expenses) >= 0 ? 'text-[#58BEC3]' : 'text-red-500'}`}>
+                R$ {(metrics.revenue - metrics.expenses).toFixed(2)}
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
