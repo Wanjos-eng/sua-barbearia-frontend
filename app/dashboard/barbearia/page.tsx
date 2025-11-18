@@ -859,18 +859,31 @@ const AgendamentosContent: React.FC = () => {
 // Componente GestãoFinanceira
 const FinancialContent: React.FC = () => {
     const [periodFilter, setPeriodFilter] = React.useState<'Semanal' | 'Mensal' | 'Total'>('Semanal');
+    const [transactions, setTransactions] = useState<Transaction[]>(initialTransactionsData);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
 
     // Simulação de filtro de valores baseados no período
     const metrics = useMemo(() => {
-        const multiplier = periodFilter === 'Semanal' ? 1 : periodFilter === 'Mensal' ? 4 : 12;
-        return {
-            revenue: 400.00 * multiplier,
-            expenses: 150.00 * multiplier,
-            profit: (400 - 150) * multiplier,
-            projection: 520.00 * multiplier,
-            ticket: 60.00 // Ticket médio costuma variar menos
-        }
-    }, [periodFilter]);
+    const totalIncome = transactions
+      .filter(t => t.type === 'income')
+      .reduce((acc, curr) => acc + curr.amount, 0);
+
+    const totalExpense = transactions
+      .filter(t => t.type === 'expense')
+      .reduce((acc, curr) => acc + curr.amount, 0);
+
+    const displayIncome = totalIncome;
+    const displayExpense = totalExpense;
+
+    return {
+      revenue: displayIncome,
+      expenses: displayExpense,
+      profit: displayIncome - displayExpense,
+      projection: displayIncome * 1.2,
+      ticket: 60.00
+    };
+  }, [transactions, periodFilter]);
 
     return (
       <>
