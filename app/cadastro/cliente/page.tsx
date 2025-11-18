@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 
-import {User, Mail, Phone, Lock, MapPin} from 'lucide-react';
+import {User, Mail, Phone, Lock} from 'lucide-react';
 
 // Definindo os tipos para o estado do formulário
 interface FormData{
@@ -12,8 +12,7 @@ interface FormData{
     confirmarSenha: string;
 }
 
-// Definindo o tipo de usuário
-type UserType = 'barbearia' | 'barbeiro';
+
 
 /**
  * Componente de ícone para o input, para evitar repetição
@@ -26,15 +25,12 @@ const InputIcon = ({ children }: { children: React.ReactNode }) => (
 
 // Componente principal da aplicação
 export default function RegisterBarbPage(){
-    // Estado para controlar o tipo de usuario
-    const [userType, setUserType] = useState<UserType>('barbearia');
 
     // Estado para controlar os dados do formulário
     const [formData, setFormData] = useState<FormData>({
         nome: '',
         email: '',
         telefone: '',
-        endereco: '',
         senha: '',
         confirmarSenha: '',
     });
@@ -51,7 +47,6 @@ export default function RegisterBarbPage(){
         e.preventDefault();
         // Aqui adiciona-se a lógica de envio
         console.log('Dados do formulário: ', formData);
-        console.log('Tipo de usuário: ', userType);
         // Adicionar lógida de validação
     }
 
@@ -68,34 +63,6 @@ export default function RegisterBarbPage(){
                 <h1 className="text-3xl md:text-3x1 font-bold text-[#DDDBCB] text-center mb-6">
                     Registre-se
                 </h1>
-
-                {/* Seletor de Tipo de Usuário (Tabs) */}
-                <div className="mb-6 flex rounded-lg bg-black p-1">
-                    <button
-                        type="button"
-                        onClick={() => setUserType('barbearia')}
-                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors duration-300
-                            ${userType === 'barbearia'
-                                ? 'bg-[#58BEC3] text-[#151515]'
-                                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
-                            }
-                        `}
-                    >
-                        Barbearia
-                    </button>
-                    <button
-                        type="button"
-                        onClick={() => setUserType('barbeiro')}
-                        className={`w-1/2 py-2 px-4 rounded-md text-sm font-medium transition-colors duration-300
-                            ${userType === 'barbeiro'
-                                ? 'bg-[#58BEC3] text-[#151515]'
-                                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
-                            }
-                        `}
-                    >
-                        Barbeiro
-                    </button>
-                </div>
 
                 {/* Formulário */}
                 <form className="space-y-4" onSubmit={handleSubmit}>
@@ -141,22 +108,7 @@ export default function RegisterBarbPage(){
                         required
                         />
                     </div>
-                    
-                    {/* Campo Endereço (Condicional) */}
-                    {userType === 'barbearia' && (
-                        <div className="relative">
-                        <InputIcon><MapPin size={18} /></InputIcon>
-                        <input
-                            type="text"
-                            name="endereco"
-                            placeholder="Endereço"
-                            value={formData.endereco}
-                            onChange={handleInputChange}
-                            className={inputBaseStyle}
-                            required // Só é obrigatório se for barbearia
-                        />
-                        </div>
-                    )}
+                  
 
                     {/* Campo Senha */}
                     <div className="relative">
