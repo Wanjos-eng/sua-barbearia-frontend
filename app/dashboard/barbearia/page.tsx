@@ -17,7 +17,8 @@ import {
   UserX,
   Phone,
   Plus,
-  Search
+  Search,
+  ChevronDown
 } from 'lucide-react';
 import { Stats } from 'fs';
 
@@ -37,13 +38,18 @@ interface StatsCardProps{
 }
 
 interface Appointment{
+  id: string,
+  date: string,
   time: string,
   client: string;
   barber: string;
   service: string;
-  price: string;
-  status: 'Pendente' | 'Confirmado';
+  value: string;
+  status: AppointmentStatus;
 }
+
+// Tipos de Páginas de Agendamentos
+type AppointmentStatus = 'Concluído' | 'Cancelado' | 'Pendente' | 'Confirmado';
 
 interface ActiveBarber {
   initials: string;
@@ -153,7 +159,7 @@ const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value }) => (
 
 //Componente Item de Agendamento
 
-const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service, price, status }) => (
+const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service, value, status }) => (
   <div className="py- p-4 bg-[#0C0C0C] rounded-lg mh-4 my-3">
     <div className="flex flex-col md:flex-row md:items-center md:justify-between">
       {/* Informacoes Principais */}
@@ -166,7 +172,7 @@ const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service,
         </div>
         <div>
           <p className="text-lg font-semibold text-[#DDDBCB]">{service}</p>
-          <p className="text-sm text-[#5C5C5C]">{price}</p>
+          <p className="text-sm text-[#5C5C5C]">{value}</p>
         </div>
       </div>
 
@@ -228,8 +234,8 @@ const statsData = [
 ];
 
 const appointmentsData: Appointment[] = [
-  { time: '10:00', client: 'Carlos Pereira', barber: 'Nome Barbeiro', service: 'Corte', price: 'R$50,00', status: 'Pendente' },
-  { time: '11:00', client: 'Otávio Augusto', barber: 'Nome Barbeiro', service: 'Corte', price: 'R$50,00', status: 'Confirmado' },
+  { id: 'd1', date: '09/11', time: '10:00', client: 'Carlos Pereira', barber: 'Nome Barbeiro', service: 'Corte', value: 'R$50,00', status: 'Pendente' },
+  { id: 'd2', date: '09/11', time: '11:00', client: 'Otávio Augusto', barber: 'Nome Barbeiro', service: 'Corte', value: 'R$50,00', status: 'Confirmado' },
 ];
 
 const activeBarbersData: ActiveBarber[] = [
@@ -318,19 +324,23 @@ const DashboardContent: React.FC = () => (
             <p className="text-sm border-b border-[#5C5C5C] pb-3 mb-4 font-medium text-[#5C5C5C] mb-2">Dia 10/11 - Segunda</p>
             {/* Simulando mais dados */}
             <AppointmentItem 
+              id="d1"
+              date="19/11"
               time="10:00" 
               client="Carlos Pereira" 
               barber="Nome Barbeiro" 
               service="Corte" 
-              price="R$50,00" 
+              value="R$50,00" 
               status="Pendente" 
             />
             <AppointmentItem 
+              id="d1"
+              date="19/11"
               time="11:00" 
               client="Otávio Augusto" 
               barber="Nome Barbeiro" 
               service="Corte" 
-              price="R$50,00" 
+              value="R$50,00" 
               status="Confirmado" 
             />
           </div>
@@ -498,6 +508,132 @@ const BarbeirosContent: React.FC = () => {
 
 }
 
+// Componente Tela de Agendamentos
+// Componente Agendamento Status Bridge - Exibir status do agendamento para a tabela principal
+const AgendamentoStatusBridge: React.FC<{status: AppointmentStatus }> = ({status}) => {
+  const statusStyles: Record<AppointmentStatus, {icon: React.ElementType, color: string}> = {
+    'Concluído': {icon: Check, color: '#58BEC3'},
+    'Cancelado': {icon: UserX, color: '#5c5c5c'},
+    'Pendente': {icon: Clock, color: '#DDDBCB'},
+    'Confirmado': {icon: Check, color: '#58BEC3'}
+  };
+
+  const{icon: Icon, color} = statusStyles[status];
+
+  return(
+    <span className={`flex items-center gap-1.5 text-sm font-medium ${color}`}>
+      <Icon className="w-4 h-4"/>
+      {status}
+    </span>
+  );
+};
+
+// Componente AgendamentosContent (Página Principal de Agendamentos)
+const AgendamentosContent: React.FC = () => {
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [statusFilter, setStatusFilter] = React.useState('Todos');
+  
+  const filteredAppointments = appointmentsData
+    .filter(app => statusFilter === 'Todos' || app.status === statusFilter)
+    .filter(app => app.barber.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                   app.client.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+  
+  return(
+    <>
+      {/* Header */}
+      <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Agendamentos</h1>
+       {/* Filtros e Busca */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-[#151515] p-2 rounded-lg">
+        {/* Search Bar */}
+        <div className="relative flex-1 ">
+          <input
+            type="text"
+            placeholder="Buscar por cliente ou barbeiro..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#050505] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
+          />
+          <Search className="w-5 h-5 text-[#DDDBCB] absolute left-3 top-1/2 -translate-y-1/2"/>
+        </div>
+
+        {/* Status Filter */}
+        <div className="relative bg-[#050505] md:max-w-xs rounded-lg focus:outline-none focus:ring-2 focus:ring-[#58BEC3]">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="text-sm font-semibold text-[#DDDBCB] px-4 py-3 appearance-[#DDDBCB]"
+            >
+              <option value="Todos">Todos</option>
+              <option value="Concluído">Concluído</option>
+              <option value="Pendente">Pendente</option>
+              <option value="Cancelado">Cancelado</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Tabela de Agendamentos */}
+      <div className="bg-[#151515] rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <div className="w-full min-w-[700px]">
+            {/* Cabeçalho */}
+            <thead className="bg-[#0c0c0c]">
+              <tr>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Cliente</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Data/Hora</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Barbeiro</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Serviço</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Valor</th>
+                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Status</th>
+              </tr>
+            </thead>
+
+            {/* Corpo */}
+            <tbody className="divide-y divide-[#0c0c0c]">
+              {filteredAppointments.length > 0 ? (
+                filteredAppointments.map((app) => (
+                  <tr       
+                    key={app.id}
+                    className="hover:bg-[#0c0c0c] transition-colors">
+                    
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-ms font-medium text-[#DDDBCB]">{app.client}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.date}</span>
+                        <span className="block text-xs text-[#5c5c5c]">{app.time}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.barber}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.service}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.value}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <AgendamentoStatusBridge status={app.status}/>
+                      </td>
+                  </tr>
+                ))
+
+                ) : (
+                <tr>
+                  <td colSpan={6} className="text-center py-10 px-6 text-[#5C5C5C]">
+                    Nenhum agendamento encontrado.
+                  </td>
+                </tr>
+              )}
+
+            </tbody>
+          </div>
+        </div>
+      </div>
+    </>
+  )
+}
+
 //Componente App
 const App: React.FC = () => {
 
@@ -514,6 +650,7 @@ const App: React.FC = () => {
       <main className="flex-1 p-6 md-p10 min-h-screen overflow-y-auto">
         {currentPage === 'Dashboard' && <DashboardContent />}
         {currentPage === 'Barbeiros' && <BarbeirosContent />}
+        {currentPage === 'Agendamentos' && <AgendamentosContent />}
          {/* Adicione outras páginas aqui, por ex:
         {currentPage === 'Agendamentos' && <AgendamentosContent />}
         */}
