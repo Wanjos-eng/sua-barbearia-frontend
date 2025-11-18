@@ -219,7 +219,7 @@ const ProfileModal: React.FC<{
 
     if (passwords.newPassword || passwords.confirmPassword) {
         if (passwords.newPassword !== passwords.confirmPassword) {
-            alert("As senhas não conferem.");
+            Toast("As senhas não conferem.");
             return;
         }
         // Lógica de salvar senha aqui
@@ -333,3 +333,143 @@ const ProfileModal: React.FC<{
     </div>
   );
 };
+
+// --- MODAL DE AGENDAMENTO ---
+
+const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm: () => void }> = ({ shop, onClose, onConfirm }) => {
+    const [step, setStep] = useState(1);
+    const [selectedService, setSelectedService] = useState<Service | null>(null);
+    const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
+    const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+    const [selectedTime, setSelectedTime] = useState<string | null>(null);
+    
+    const dates = Array.from({length: 5}, (_, i) => {
+        const d = new Date();
+        d.setDate(d.getDate() + i);
+        return d;
+    });
+    const times = ["09:00", "10:00", "11:30", "14:00", "15:30", "18:00"];
+
+    const handleBack = () => {
+        if (step === 3) setStep(2);
+        else if (step === 2) setStep(1);
+    }
+
+    const handleConfirmClick = () => {
+        onConfirm(); 
+        onClose(); 
+    };
+
+    return (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
+            <div className="bg-[#18181b] w-full max-w-lg rounded-2xl border border-white/10 shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+                {/* Header */}
+                <div className="p-6 border-b border-white/5 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                        {step > 1 && (
+                            <button onClick={handleBack} className="text-zinc-400 hover:text-white">
+                                <ChevronLeft className="w-5 h-5" />
+                            </button>
+                        )}
+                        <div>
+                            <h3 className="text-xl font-bold text-white">{shop.name}</h3>
+                            <p className="text-xs text-[#d97757]">Agendamento - Etapa {step}/3</p>
+                        </div>
+                    </div>
+                    <button onClick={onClose} className="text-zinc-500 hover:text-white">
+                        <X className="w-5 h-5" />
+                    </button>
+                </div>
+
+                {/* Conteúdo */}
+                <div className="p-6 max-h-[60vh] overflow-y-auto scrollbar-custom">
+                    {/* Step 1: Serviço */}
+                    {step === 1 && (
+                        <div className="space-y-3">
+                            <h4 className="text-white mb-4 font-medium">Selecione o serviço</h4>
+                            {MOCK_SERVICES.map(s => (
+                                <button 
+                                    key={s.id} 
+                                    onClick={() => { setSelectedService(s); setStep(2); }}
+                                    className="w-full flex justify-between items-center p-4 bg-[#202024] hover:bg-[#27272a] rounded-lg border border-transparent hover:border-[#d97757]/50 group transition-all"
+                                >
+                                    <div className="text-left">
+                                        <p className="text-white font-medium">{s.name}</p>
+                                        <p className="text-xs text-zinc-500">{s.duration} min</p>
+                                    </div>
+                                    <span className="text-[#d97757] font-bold">{s.price}</span>
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Step 2: Barbeiro */}
+                    {step === 2 && (
+                        <div className="space-y-3">
+                             <h4 className="text-white mb-4 font-medium">Selecione o profissional</h4>
+                             {MOCK_BARBERS.map(b => (
+                                 <button
+                                    key={b.id}
+                                    onClick={() => { setSelectedBarber(b); setStep(3); }}
+                                    className="w-full flex items-center gap-4 p-4 bg-[#202024] hover:bg-[#27272a] rounded-lg border border-transparent hover:border-[#d97757]/50 transition-all"
+                                 >
+                                     <img src={b.avatarUrl} alt={b.name} className="w-12 h-12 rounded-full object-cover" />
+                                     <span className="text-white font-bold text-lg">{b.name}</span>
+                                 </button>
+                             ))}
+                        </div>
+                    )}
+
+                    {/* Step 3: Data/Hora */}
+                    {step === 3 && (
+                        <div>
+                            <h4 className="text-white mb-4 font-medium">Data e Horário</h4>
+                            
+                            <div className="flex gap-3 overflow-x-auto pb-4 mb-6 scrollbar-hide">
+                                {dates.map(d => {
+                                    const isSelected = selectedDate?.getDate() === d.getDate();
+                                    return (
+                                        <button 
+                                            key={d.toISOString()}
+                                            onClick={() => setSelectedDate(d)}
+                                            className={`min-w-[70px] h-20 rounded-lg flex flex-col items-center justify-center border transition-all ${isSelected ? 'bg-[#d97757] border-[#d97757] text-white' : 'bg-[#202024] border-transparent text-zinc-400 hover:border-zinc-600'}`}
+                                        >
+                                            <span className="text-xs uppercase font-bold">{d.toLocaleDateString('pt-BR', {weekday: 'short'}).slice(0,3)}</span>
+                                            <span className="text-2xl font-bold">{d.getDate()}</span>
+                                        </button>
+                                    )
+                                })}
+                            </div>
+
+                            {selectedDate && (
+                                <div className="grid grid-cols-3 gap-3">
+                                    {times.map(t => (
+                                        <button
+                                            key={t}
+                                            onClick={() => setSelectedTime(t)}
+                                            className={`py-2 rounded-md text-sm font-medium transition-all ${selectedTime === t ? 'bg-white text-black' : 'bg-[#202024] text-zinc-300 hover:bg-[#2a2a2e]'}`}
+                                        >
+                                            {t}
+                                        </button>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </div>
+
+                {/* Footer */}
+                {step === 3 && selectedTime && (
+                    <div className="p-4 border-t border-white/5 bg-[#121214]">
+                        <button 
+                            onClick={handleConfirmClick}
+                            className="w-full bg-[#d97757] hover:bg-[#c0684b] text-white font-bold py-3 rounded-lg transition-colors"
+                        >
+                            Confirmar Agendamento
+                        </button>
+                    </div>
+                )}
+            </div>
+        </div>
+    );
+}
