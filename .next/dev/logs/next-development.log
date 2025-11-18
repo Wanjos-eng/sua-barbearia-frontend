@@ -183,3 +183,4 @@ This will cause a hydration error.%s <tbody> div
 [00:52:09.783] Server  WARN     ⚠ Fast Refresh had to perform a full reload when ./app/cadastro/cliente/page.tsx changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
 [00:52:09.886] Server  LOG      ✓ Compiled in 30ms
 [00:52:10.564] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:55:01.717] Server  LOG      ✓ Compiled in 48ms
