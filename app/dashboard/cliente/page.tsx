@@ -1,6 +1,6 @@
 'use client';
 // Importando icons 
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
     Scissors,
     Calendar,
@@ -473,3 +473,4 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
         </div>
     );
 }
+
