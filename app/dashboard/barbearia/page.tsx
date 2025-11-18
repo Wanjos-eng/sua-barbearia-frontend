@@ -456,7 +456,28 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
             />
           </div>
         </div>
-        
+
+        {/* Footer */}
+        <div className="flex items-center justify-end p-5 border-t border-[#292929] gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-[#5C5C5C] hover:text-[#DDDBCB] transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!isValid}
+            className={`
+              px-6 py-2 text-sm font-bold rounded-lg transition-all
+              ${isValid
+                ? 'bg-[#58BEC3] text-[#151515] hover:bg-[#7ADBE0] shadow-lg shadow-[#58BEC3]/20'
+                : 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed'}
+            `}
+          >
+            Confirmar
+          </button>
+        </div>
       </div>
     </div>
   );
