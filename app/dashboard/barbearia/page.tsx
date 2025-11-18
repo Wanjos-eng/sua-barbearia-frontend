@@ -75,6 +75,7 @@ interface Transaction {
     id: string;
     description: string;
     category: string;
+    barberName?: string;
     date: string;
     amount: number;
     type: 'income' | 'expense';
@@ -293,7 +294,7 @@ const barbeirosData: Barber[] = [
   },
 ];
 
-const transactionsData: Transaction[] = [
+const initialTransactionsData: Transaction[] = [
     { id: 't1', description: 'Corte - Carlos Pereira', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
     { id: 't2', description: 'Barba - Otávio Augusto', category: 'Serviço', date: '09/11', amount: 40.00, type: 'income', status: 'Pago' },
     { id: 't3', description: 'Compra de Produtos', category: 'Estoque', date: '08/11', amount: 150.00, type: 'expense', status: 'Pago' },
