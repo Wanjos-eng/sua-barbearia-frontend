@@ -1012,9 +1012,30 @@ const FinancialContent: React.FC = () => {
                 <span className="flex items-center"><div className="w-2 h-2 rounded-full bg-[#292929] border border-[#5C5C5C] mr-1"></div> Despesa</span>
               </div>
           </div>
+         
+          {/* Visualização Gráfica Customizada */}
+          <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-2 border-b border-[#292929] border-l border-[#292929]/50">
+            {chartData.map((item) => (
+              <div key={item.day} className="flex flex-col items-center justify-end flex-1 group h-full relative">
+                {/* Tooltip */}
+                <div className="absolute -top-10 bg-[#DDDBCB] text-[#050505] text-xs font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-200 z-10 whitespace-nowrap shadow-xl translate-y-2 group-hover:translate-y-0 pointer-events-none">
+                  R$ {item.height * 10},00
+                  <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[#DDDBCB] rotate-45"></div>
+                </div>
+
+                {/* Bar */}
+                <div
+                  className="w-full max-w-[40px] bg-[#58BEC3] rounded-t-sm opacity-80 group-hover:opacity-100 transition-all duration-300 hover:shadow-[0_0_15px_rgba(88,190,195,0.3)]"
+                  style={{ height: `${item.height}%` }}
+                ></div>
+                <span className="text-xs text-[#5C5C5C] mt-3 font-medium">{item.day}</span>
+              </div>
+            ))}
           </div>
+
         </div>
       </div>
+    </div>
 
     );
 }
