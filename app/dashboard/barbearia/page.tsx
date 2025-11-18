@@ -1106,9 +1106,13 @@ const App: React.FC = () => {
         {currentPage === 'Barbeiros' && <BarbeirosContent />}
         {currentPage === 'Agendamentos' && <AgendamentosContent />}
         {currentPage === 'Gestão Financeira' && <FinancialContent />}
-         {/* Adicione outras páginas aqui, por ex:
-        {currentPage === 'Agendamentos' && <AgendamentosContent />}
-        */}
+        {currentPage === 'Clientes' && (
+            <div className="flex flex-col items-center justify-center h-[60vh] text-[#5C5C5C] animate-in fade-in">
+              <Users className="w-16 h-16 mb-4 opacity-20" />
+              <p className="text-lg font-medium">Módulo de Clientes</p>
+              <p className="text-sm">Em desenvolvimento...</p>
+            </div>
+          )}
       </main>
     </div>
   )
