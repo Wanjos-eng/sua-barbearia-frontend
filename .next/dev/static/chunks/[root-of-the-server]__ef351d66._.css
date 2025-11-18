@@ -812,6 +812,10 @@
     gap: calc(var(--spacing) * 1.5);
   }
 
+  .gap-3 {
+    gap: calc(var(--spacing) * 3);
+  }
+
   .gap-4 {
     gap: calc(var(--spacing) * 4);
   }

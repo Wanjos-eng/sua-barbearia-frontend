@@ -91,3 +91,12 @@ const MOCK_BARBERS: Barber[] = [
   { id: 'bar1', name: 'Roberto', avatarUrl: 'https://placehold.co/100x100/d97757/18181b?text=R' },
   { id: 'bar2', name: 'Miguel', avatarUrl: 'https://placehold.co/100x100/d97757/18181b?text=M' },
 ];
+
+// --- COMPONENTES ---
+
+const SectionHeader: React.FC<{ icon: React.ReactNode, title: string }> = ({ icon, title }) => (
+  <div className="flex items-center gap-3 mb-6">
+    <div className="text-white">{icon}</div>
+    <h2 className="text-2xl font-bold text-white">{title}</h2>
+  </div>
+);
