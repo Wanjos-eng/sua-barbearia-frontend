@@ -204,3 +204,132 @@ const HistoryCard: React.FC<{ app: Appointment }> = ({ app }) => (
   </div>
 );
 
+// --- MODAL DE PERFIL DO USUÁRIO ---
+
+const ProfileModal: React.FC<{ 
+  user: UserProfile, 
+  onClose: () => void, 
+  onSave: (updatedUser: UserProfile) => void 
+}> = ({ user, onClose, onSave }) => {
+  const [formData, setFormData] = useState(user);
+  const [passwords, setPasswords] = useState({ newPassword: '', confirmPassword: '' });
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (passwords.newPassword || passwords.confirmPassword) {
+        if (passwords.newPassword !== passwords.confirmPassword) {
+            alert("As senhas não conferem.");
+            return;
+        }
+        // Lógica de salvar senha aqui
+    }
+
+    onSave(formData);
+    onClose();
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-[#18181b] w-full max-w-md rounded-2xl border border-white/10 shadow-2xl overflow-hidden max-h-[90vh] overflow-y-auto scrollbar-custom" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="p-6 border-b border-white/5 flex items-center justify-between sticky top-0 bg-[#18181b] z-10">
+           <div className="flex items-center gap-3">
+              <User className="w-5 h-5 text-[#d97757]" />
+              <h3 className="text-xl font-bold text-white">Editar Perfil</h3>
+           </div>
+           <button onClick={onClose} className="text-zinc-500 hover:text-white">
+               <X className="w-5 h-5" />
+           </button>
+        </div>
+        
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+            {/* Dados Pessoais */}
+            <div className="space-y-4">
+                <h4 className="text-white font-semibold text-sm border-b border-white/5 pb-2">Dados Pessoais</h4>
+                <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5">Nome Completo</label>
+                    <div className="relative">
+                        <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <input 
+                            type="text" 
+                            value={formData.name}
+                            onChange={(e) => setFormData({...formData, name: e.target.value})}
+                            className="w-full bg-[#202024] border border-white/5 rounded-lg py-2.5 pl-10 pr-4 text-white text-sm focus:outline-none focus:border-[#d97757]/50 focus:ring-1 focus:ring-[#d97757]/50"
+                            required
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5">E-mail</label>
+                    <div className="relative">
+                        <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <input 
+                            type="email" 
+                            value={formData.email}
+                            onChange={(e) => setFormData({...formData, email: e.target.value})}
+                            className="w-full bg-[#202024] border border-white/5 rounded-lg py-2.5 pl-10 pr-4 text-white text-sm focus:outline-none focus:border-[#d97757]/50 focus:ring-1 focus:ring-[#d97757]/50"
+                            required
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5">Telefone</label>
+                    <div className="relative">
+                        <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <input 
+                            type="tel" 
+                            value={formData.phone}
+                            onChange={(e) => setFormData({...formData, phone: e.target.value})}
+                            className="w-full bg-[#202024] border border-white/5 rounded-lg py-2.5 pl-10 pr-4 text-white text-sm focus:outline-none focus:border-[#d97757]/50 focus:ring-1 focus:ring-[#d97757]/50"
+                            required
+                        />
+                    </div>
+                </div>
+            </div>
+
+            {/* Segurança */}
+            <div className="space-y-4">
+                <h4 className="text-white font-semibold text-sm border-b border-white/5 pb-2">Segurança</h4>
+                <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5">Nova Senha</label>
+                    <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <input 
+                            type="password" 
+                            placeholder="Preencha para alterar"
+                            value={passwords.newPassword}
+                            onChange={(e) => setPasswords({...passwords, newPassword: e.target.value})}
+                            className="w-full bg-[#202024] border border-white/5 rounded-lg py-2.5 pl-10 pr-4 text-white text-sm focus:outline-none focus:border-[#d97757]/50 focus:ring-1 focus:ring-[#d97757]/50"
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label className="block text-xs font-medium text-zinc-400 mb-1.5">Confirmar Senha</label>
+                    <div className="relative">
+                        <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-zinc-500" />
+                        <input 
+                            type="password" 
+                            placeholder="Confirme a nova senha"
+                            value={passwords.confirmPassword}
+                            onChange={(e) => setPasswords({...passwords, confirmPassword: e.target.value})}
+                            className="w-full bg-[#202024] border border-white/5 rounded-lg py-2.5 pl-10 pr-4 text-white text-sm focus:outline-none focus:border-[#d97757]/50 focus:ring-1 focus:ring-[#d97757]/50"
+                        />
+                    </div>
+                </div>
+            </div>
+            
+            <div className="pt-2">
+                <button 
+                    type="submit"
+                    className="w-full bg-[#d97757] hover:bg-[#c0684b] text-white font-bold py-3 rounded-lg transition-colors"
+                >
+                    Salvar Alterações
+                </button>
+            </div>
+        </form>
+      </div>
+    </div>
+  );
+};
