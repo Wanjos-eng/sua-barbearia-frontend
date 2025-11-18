@@ -1,6 +1,6 @@
 'use client';
 // app/barbershop/dashboard/page.tsx
-import React, {useMemo} from 'react';
+import React, {useMemo, useState} from 'react';
 import {
   LayoutGrid,
   Users,
@@ -80,6 +80,12 @@ interface Transaction {
     amount: number;
     type: 'income' | 'expense';
     status: 'Pago' | 'Pendente';
+}
+
+interface AddTransactionModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (transaction: Omit<Transaction, 'id'>) => void;
 }
 
 // 58BEC3 CIANO
@@ -301,6 +307,22 @@ const initialTransactionsData: Transaction[] = [
     { id: 't4', description: 'Conta de Luz', category: 'Utilidades', date: '05/11', amount: 320.00, type: 'expense', status: 'Pendente' },
     { id: 't5', description: 'Corte - Marcos Santos', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
 ];
+
+const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, onConfirm }) => {
+  const [type, setType] = useState<'income' | 'expense'>('expense');
+  const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('');
+  const [barberId, setBarberId] = useState('');
+  const [description, setDescription] = useState('');
+
+  const expenseCategories = ['Pagamento Barbeiro', 'Contas (Luz/Água)', 'Estoque', 'Marketing', 'Aluguel', 'Outros'];
+  const incomeCategories = ['Serviço', 'Venda de Produto', 'Outros'];
+  
+  return (
+
+  );
+
+}
 
 // Componente Conteúdo Principal
 const DashboardContent: React.FC = () => (
