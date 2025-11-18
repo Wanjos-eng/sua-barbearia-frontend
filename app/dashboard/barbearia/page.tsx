@@ -1000,7 +1000,20 @@ const FinancialContent: React.FC = () => {
             trendType="down"
           />
         </div>
-
+        
+        {/* Gráfico e Histórico */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Coluna Esquerda: Gráfico (2/3) */}
+          <div className="lg:col-span-2 bg-[#151515] p-6 rounded-lg flex flex-col h-[450px] border border-[#292929]">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-[#DDDBCB]">Fluxo de Receita</h3>
+              <div className="flex items-center space-x-3 text-xs text-[#5C5C5C]">
+                <span className="flex items-center"><div className="w-2 h-2 rounded-full bg-[#58BEC3] mr-1"></div> Receita</span>
+                <span className="flex items-center"><div className="w-2 h-2 rounded-full bg-[#292929] border border-[#5C5C5C] mr-1"></div> Despesa</span>
+              </div>
+          </div>
+          </div>
+        </div>
       </div>
 
     );
