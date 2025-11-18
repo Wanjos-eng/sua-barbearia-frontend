@@ -474,3 +474,238 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
     );
 }
 
+// --- APP PRINCIPAL ---
+
+export default function App() {
+  const [search, setSearch] = useState("");
+  const [selectedShop, setSelectedShop] = useState<BarberShop | null>(null);
+  const [notification, setNotification] = useState<string | null>(null);
+  
+  // Estado do Usuário
+  const [user, setUser] = useState<UserProfile>({
+    name: "Arthur",
+    email: "arthur@exemplo.com",
+    phone: "(11) 99999-9999"
+  });
+
+  // Estados para o Menu de Usuário
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+
+  // Fechar menu ao clicar fora
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setShowUserMenu(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleBookingSuccess = () => {
+      setNotification("Agendamento Realizado!");
+      setTimeout(() => setNotification(null), 4000);
+  };
+
+  const handleSaveProfile = (updatedUser: UserProfile) => {
+      setUser(updatedUser);
+      setNotification("Perfil atualizado com sucesso!");
+      setTimeout(() => setNotification(null), 4000);
+  };
+
+  const handleLogout = () => {
+      // Lógica de logout simulada
+      if(confirm("Deseja realmente sair da conta?")) {
+        alert("Saindo...");
+        // Aqui você redirecionaria para o login
+      }
+      setShowUserMenu(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-[#09090b] font-sans text-zinc-100 selection:bg-[#d97757] selection:text-white">
+      {/* Estilos Personalizados */}
+      <style>{`
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-custom::-webkit-scrollbar {
+            width: 6px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-track {
+            background: #18181b;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb {
+            background: #3f3f46;
+            border-radius: 3px;
+        }
+        .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+            background: #52525b;
+        }
+        @keyframes slideIn {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-in {
+            animation: slideIn 0.3s ease-out forwards;
+        }
+      `}</style>
+
+      {/* --- NOTIFICAÇÃO (Toast) --- */}
+      {notification && <Toast message={notification} onClose={() => setNotification(null)} />}
+
+      {/* Header */}
+      <header className="w-full py-6 px-6 md:px-12 flex items-center justify-between bg-[#09090b] relative z-40">
+        <div className="flex items-center gap-3">
+          <Scissors className="w-8 h-8 text-[#d97757]" />
+          <div className="flex flex-col leading-tight">
+             <span className="text-[#d97757] font-bold text-xl tracking-tight">Sua</span>
+             <span className="text-[#d97757] font-bold text-xl tracking-tight -mt-1">Barbearia</span>
+          </div>
+        </div>
+        
+        <div className="flex items-center gap-4 relative" ref={menuRef}>
+            <span className="font-medium hidden md:inline text-white">Olá, {user.name}</span>
+            
+            {/* Botão do Avatar */}
+            <button 
+                onClick={() => setShowUserMenu(!showUserMenu)}
+                className="w-10 h-10 rounded-full bg-[#202024] border border-white/10 flex items-center justify-center text-zinc-400 hover:text-white hover:border-white/30 transition-all cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#d97757]"
+            >
+                <User className="w-5 h-5" />
+            </button>
+
+            {/* Dropdown Menu */}
+            {showUserMenu && (
+                <div className="absolute top-full right-0 mt-2 w-48 bg-[#18181b] border border-white/10 rounded-xl shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200">
+                    <div className="py-1">
+                        <button 
+                            onClick={() => { setShowProfileModal(true); setShowUserMenu(false); }}
+                            className="w-full text-left px-4 py-3 text-sm text-zinc-300 hover:bg-[#202024] hover:text-white flex items-center gap-3 transition-colors"
+                        >
+                            <Edit className="w-4 h-4" />
+                            Editar Perfil
+                        </button>
+                        <div className="h-px bg-white/5 mx-2"></div>
+                        <button 
+                            onClick={handleLogout}
+                            className="w-full text-left px-4 py-3 text-sm text-red-400 hover:bg-[#202024] hover:text-red-300 flex items-center gap-3 transition-colors"
+                        >
+                            <LogOut className="w-4 h-4" />
+                            Sair
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+      </header>
+
+      <main className="px-6 md:px-12 pb-12">
+        
+        {/* Seção Barbearias */}
+        <section className="mb-12">
+          <SectionHeader icon={<Scissors className="w-6 h-6 text-[#d97757]" />} title="Barbearias" />
+          
+          {/* Barra de Busca Estilo Banner */}
+          <div className="bg-[#121214] p-2 rounded-lg flex flex-col md:flex-row gap-2 mb-8 max-w-full">
+            <button className="bg-[#d97757] hover:bg-[#c0684b] text-white font-medium px-6 py-3 rounded-md transition-colors whitespace-nowrap">
+                Buscar Barbearia
+            </button>
+            <input 
+                type="text" 
+                placeholder="Buscar barbearia pelo nome..." 
+                className="bg-transparent w-full px-4 text-white placeholder-zinc-600 focus:outline-none"
+                value={search}
+                onChange={e => setSearch(e.target.value)}
+            />
+          </div>
+
+          {/* Grid de Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {MOCK_BARBER_SHOPS.filter(s => s.name.toLowerCase().includes(search.toLowerCase())).map(shop => (
+                <BarberShopCard key={shop.id} shop={shop} onClick={() => setSelectedShop(shop)} />
+            ))}
+          </div>
+        </section>
+
+        {/* Grid Principal: Agendamentos e Histórico */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            {/* Coluna da Esquerda (2/3) - Próximos Agendamentos */}
+            <div className="lg:col-span-2 bg-[#121214] rounded-2xl p-6 md:p-8 border border-white/5">
+                <div className="flex items-center justify-between mb-8">
+                    <div className="flex items-center gap-3">
+                         <div className="w-1 h-8 bg-[#d97757] rounded-full mr-2"></div>
+                         <h2 className="text-2xl font-bold text-white">Próximos Agendamentos</h2>
+                    </div>
+                    <Scissors className="w-6 h-6 text-zinc-600 opacity-50" />
+                </div>
+
+                {/* Grupo de Data */}
+                <div className="mb-2">
+                     <div className="flex items-center gap-2 text-zinc-400 mb-4">
+                        <Calendar className="w-5 h-5" />
+                        <span className="text-lg">Dia 20/11 - Quinta-Feira</span>
+                     </div>
+                     <div className="w-full h-px bg-white/10 mb-4"></div>
+                </div>
+
+                {/* Lista de Agendamentos */}
+                <div className="space-y-1">
+                    {MOCK_UPCOMING.map(app => (
+                        <AppointmentRow key={app.id} app={app} />
+                    ))}
+                </div>
+                
+                <div className="mt-12 text-center text-zinc-600 text-sm">
+                    {MOCK_UPCOMING.length === 0 && "Nenhum agendamento futuro."}
+                </div>
+            </div>
+
+            {/* Coluna da Direita (1/3) - Histórico */}
+            <div className="lg:col-span-1">
+                <div className="flex items-center gap-3 mb-6">
+                    <Clock className="w-6 h-6 text-white" />
+                    <h2 className="text-2xl font-bold text-white">Histórico</h2>
+                </div>
+                
+                <div className="bg-[#121214] rounded-2xl p-4 border border-white/5 min-h-[400px]">
+                    {MOCK_HISTORY.map(app => (
+                        <HistoryCard key={app.id} app={app} />
+                    ))}
+                    <button className="w-full text-center text-zinc-500 text-sm mt-4 hover:text-[#d97757] transition-colors">
+                        Ver todo o histórico
+                    </button>
+                </div>
+            </div>
+
+        </div>
+      </main>
+
+      {/* Modal de Agendamento */}
+      {selectedShop && (
+          <ScheduleModal 
+            shop={selectedShop} 
+            onClose={() => setSelectedShop(null)} 
+            onConfirm={handleBookingSuccess} 
+          />
+      )}
+
+      {/* Modal de Edição de Perfil */}
+      {showProfileModal && (
+          <ProfileModal 
+            user={user}
+            onClose={() => setShowProfileModal(false)}
+            onSave={handleSaveProfile}
+          />
+      )}
+
+    </div>
+  );
+}
