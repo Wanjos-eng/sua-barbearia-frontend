@@ -184,3 +184,7 @@ This will cause a hydration error.%s <tbody> div
 [00:52:09.886] Server  LOG      ✓ Compiled in 30ms
 [00:52:10.564] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
 [00:55:01.717] Server  LOG      ✓ Compiled in 48ms
+[02:00:01.367] Server  ERROR    ⨯ Error: The default export is not a React Component in "/dashboard/cliente/page"
+[02:00:01.558] Server  ERROR    ⨯ Error: The default export is not a React Component in "/dashboard/cliente/page"
+[02:00:02.213] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/dashboard/cliente/page"
+[02:00:08.502] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
