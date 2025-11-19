@@ -174,7 +174,10 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
               icon={item.icon}
               label={item.label}
               active={item.label === currentPage}
-              onClick={() => setCurrentPage(item.label)}
+              onClick={() => {
+                    setCurrentPage(item.label);
+                    onClose(); // [MENU HAMBURGUER] 7. Fecha o menu automaticamente ao clicar em um link
+                  }}
             />
           </li>
         ))}
