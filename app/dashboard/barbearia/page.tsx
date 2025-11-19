@@ -1232,6 +1232,35 @@ const FinancialContent: React.FC = () => {
 
     );
 }
+
+// Componente Clientes
+const ClientesContent: React.FC = () => {
+  const [clients, setClients] = useState<Client[]>(initialClientsData);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const filteredClients = clients.filter(client => 
+    client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    client.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    client.phone.includes(searchQuery)
+  );
+
+  const handleDeleteClient = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation(); // Previne abrir o modal
+    if(confirm('Tem certeza que deseja remover este cliente?')) {
+      setClients(prev => prev.filter(c => c.id !== id));
+      setToastMessage("Cliente removido com sucesso.");
+    }
+  };
+  
+  return(
+    <div className="animate-in fade-in duration-500">
+
+    </div>
+  )
+}
+
 //Componente App
 const App: React.FC = () => {
 
