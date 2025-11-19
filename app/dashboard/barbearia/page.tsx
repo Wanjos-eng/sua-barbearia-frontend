@@ -25,7 +25,8 @@ import {
   ArrowDownRight,
   ArrowUpRight,
   Menu,
-  History
+  History,
+  Trash2
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -1284,6 +1285,67 @@ const ClientesContent: React.FC = () => {
           <Search className="w-5 h-5 text-[#5C5C5C] absolute left-3 top-1/2 -translate-y-1/2" />
         </div>
       </div>
+
+      {/* Lista de Clientes */}
+      {filteredClients.length === 0 ? (
+        <div className="bg-[#151515] p-10 rounded-lg border border-[#292929] text-center flex flex-col items-center">
+           <UserX className="w-16 h-16 text-[#292929] mb-4"/>
+           <p className="text-[#5C5C5C]">Nenhum cliente encontrado.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredClients.map((client) => (
+            <div 
+              key={client.id}
+              onClick={() => setSelectedClient(client)}
+              className="bg-[#151515] rounded-xl border border-[#292929] p-6 hover:border-[#58BEC3] transition-all cursor-pointer group relative overflow-hidden"
+            >
+              {/* Hover Effect bg */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#58BEC3]/0 to-[#58BEC3]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="flex items-start justify-between mb-4 relative z-10">
+                <div className={`w-12 h-12 rounded-full ${client.avatarColor} flex items-center justify-center text-lg font-bold text-white shadow-lg`}>
+                  {client.name.substring(0, 2).toUpperCase()}
+                </div>
+                <button 
+                  onClick={(e) => handleDeleteClient(e, client.id)}
+                  className="text-[#292929] group-hover:text-red-500 hover:bg-red-500/10 p-2 rounded-full transition-colors"
+                  title="Remover Cliente"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="relative z-10">
+                <h3 className="text-lg font-bold text-[#DDDBCB] mb-1 group-hover:text-[#58BEC3] transition-colors">{client.name}</h3>
+                
+                <div className="space-y-2 mt-4">
+                  <div className="flex items-center text-sm text-[#5C5C5C]">
+                    <Mail className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                    <span className="truncate">{client.email}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-[#5C5C5C]">
+                    <Phone className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                    <span>{client.phone}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-[#5C5C5C]">
+                     <Clock className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                     <span>Cliente desde {client.since}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-6 pt-4 border-t border-[#292929] flex items-center justify-between relative z-10">
+                 <span className="text-xs text-[#5C5C5C]">Última visita: <span className="text-[#DDDBCB]">{client.lastVisit}</span></span>
+                 <div className="flex items-center text-[#58BEC3] text-xs font-bold">
+                    <History className="w-3 h-3 mr-1" />
+                    Ver Histórico
+                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
