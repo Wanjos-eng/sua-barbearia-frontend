@@ -1139,7 +1139,7 @@ const App: React.FC = () => {
         onClose={() => setIsMobileMenuOpen(false)} // [MENU HAMBURGUER] 10. Passando a função de fechar
       />
       {/* Main Content */}
-      <main className="flex-1 md:ml-64 p-4 md:p-10 min-h-screen overflow-x-hidden">
+      <main className="flex-1 p-4 md:p-10 min-h-screen overflow-x-hidden">
 
         {/* Mobile Header Toggle */}
         {/* [MENU HAMBURGUER] 11. Cabeçalho visível APENAS em Mobile (md:hidden) */}
