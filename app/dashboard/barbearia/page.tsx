@@ -27,7 +27,8 @@ import {
   Menu,
   History,
   Trash2,
-  ChevronLeft
+  ChevronLeft,
+  Scissors
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -686,6 +687,32 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
           <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
             <X className="w-5 h-5" />
           </button>
+        </div>
+
+        <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
+          {!isCreatingClient && step === 1 && (
+            <div className="space-y-3 animate-in slide-in-from-right duration-300">
+              <h4 className="text-[#DDDBCB] mb-4 font-medium">Selecione o serviço</h4>
+              {MOCK_SERVICES.map(s => (
+                <button 
+                  key={s.id} 
+                  onClick={() => { setSelectedService(s); setStep(2); }}
+                  className="w-full flex justify-between items-center p-4 bg-[#0C0C0C] hover:bg-[#292929] rounded-lg border border-[#292929] hover:border-[#58BEC3]/50 group transition-all text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-[#151515] rounded-md text-[#5C5C5C] group-hover:text-[#58BEC3] transition-colors">
+                       <Scissors className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[#DDDBCB] font-medium">{s.name}</p>
+                      <p className="text-xs text-[#5C5C5C]">{s.duration} min</p>
+                    </div>
+                  </div>
+                  <span className="text-[#58BEC3] font-bold">{s.price}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
