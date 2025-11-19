@@ -1256,7 +1256,15 @@ const ClientesContent: React.FC = () => {
   
   return(
     <div className="animate-in fade-in duration-500">
+      {/* Toast de Sucesso */}
+      {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
 
+      {/* Modal de Detalhes */}
+      <ClientDetailsModal 
+        client={selectedClient} 
+        isOpen={!!selectedClient} 
+        onClose={() => setSelectedClient(null)} 
+      />
     </div>
   )
 }
