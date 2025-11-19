@@ -541,6 +541,40 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   );
 }
 
+// Modal de Detalhes do Cliente (Histórico)
+const ClientDetailsModal: React.FC<{client: Client | null, isOpen: boolean, onClose: () => void}> = ({ client, isOpen, onClose }) => {
+  if (!isOpen || !client) return null;
+
+  // Filtrar agendamentos deste cliente
+  const history = appointmentsData.filter(app => app.client === client.name);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300 animate-in fade-in">
+      <div className="bg-[#151515] w-full max-w-2xl rounded-xl border border-[#292929] shadow-2xl overflow-hidden">
+        
+        {/* Header com Avatar e Info */}
+        <div className="bg-[#0C0C0C] p-6 border-b border-[#292929] flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className={`w-16 h-16 rounded-full ${client.avatarColor} flex items-center justify-center text-2xl font-bold text-white border-4 border-[#151515]`}>
+               {client.name.substring(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-[#DDDBCB]">{client.name}</h2>
+              <div className="flex flex-col text-sm text-[#5C5C5C]">
+                <span className="flex items-center gap-2"><Mail className="w-3 h-3"/> {client.email}</span>
+                <span className="flex items-center gap-2"><Phone className="w-3 h-3"/> {client.phone}</span>
+              </div>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB] p-2 hover:bg-[#292929] rounded-full transition-colors">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(onClose, 3000);
