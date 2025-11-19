@@ -23,10 +23,18 @@ import {
   CheckCircle,
   Wallet,
   ArrowDownRight,
-  ArrowUpRight
+  ArrowUpRight,
+  Menu
 } from 'lucide-react';
 
 // Tipos (Typescript)
+
+interface SidebarProps {
+  currentPage: string;
+  setCurrentPage: (page: string) => void;
+  isOpen: boolean; // [MENU HAMBURGUER] 2. Propriedade para saber se o menu está visível
+  onClose: () => void; // [MENU HAMBURGUER] 3. Função para fechar o menu
+}
 interface SidebarItemProps{
   icon: React.ElementType;
   label: string;
