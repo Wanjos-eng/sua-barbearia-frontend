@@ -658,7 +658,7 @@ const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, on
 // Componente Conteúdo Principal
 const DashboardContent: React.FC = () => (
   <>
-    <h1 className="text-3x1 font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
+    <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
 
     {/* Grid de Estatísticas */}  
     <div className="grid grid-cols-1 sm:grid-cols-2 x1:grid-cols-4 gap-6 mb-8">
