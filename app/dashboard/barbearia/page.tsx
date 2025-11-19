@@ -609,6 +609,24 @@ const ClientDetailsModal: React.FC<{client: Client | null, isOpen: boolean, onCl
              </div>
           )}
         </div>
+
+        {/* Footer Stats */}
+        <div className="bg-[#0C0C0C] p-4 border-t border-[#292929] grid grid-cols-3 gap-4 text-center">
+           <div>
+              <p className="text-xs text-[#5C5C5C]">Total Visitas</p>
+              <p className="text-lg font-bold text-[#DDDBCB]">{history.length}</p>
+           </div>
+           <div>
+              <p className="text-xs text-[#5C5C5C]">Gasto Total</p>
+              <p className="text-lg font-bold text-[#58BEC3]">
+                R$ {history.reduce((acc, curr) => acc + parseFloat(curr.value.replace('R$', '').replace(',', '.')), 0).toFixed(2)}
+              </p>
+           </div>
+           <div>
+              <p className="text-xs text-[#5C5C5C]">Última Visita</p>
+              <p className="text-lg font-bold text-[#DDDBCB]">{client.lastVisit}</p>
+           </div>
+        </div>
       </div>
     </div>
   )
