@@ -543,13 +543,119 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   );
 }
 
-// Modal de Criação de novo Cliente
+// Modal de Criação de novo Cliente no botão + Novo Agendamento
 interface NewAppointmentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onConfirm: (appointment: any, clientData?: { name: string, isNew: boolean }) => void;
   onAddClient: (client: Client) => void;
   clients: Client[];
+}
+
+// Componente Modal Principal
+const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClose, onConfirm, onAddClient, clients }) => {
+  const [step, setStep] = useState(1);
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+  const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  
+  const [clientSearch, setClientSearch] = useState('');
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  
+  const [isCreatingClient, setIsCreatingClient] = useState(false);
+  const [newClientName, setNewClientName] = useState('');
+  const [newClientEmail, setNewClientEmail] = useState('');
+  const [newClientPhone, setNewClientPhone] = useState('');
+  const [localToast, setLocalToast] = useState<string | null>(null);
+
+  const dates = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < 14; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() + i);
+      arr.push(d);
+    }
+    return arr;
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setStep(1);
+      setSelectedService(null);
+      setSelectedBarber(null);
+      setSelectedDate(null);
+      setSelectedTime(null);
+      setClientSearch('');
+      setSelectedClient(null);
+      setIsCreatingClient(false);
+      setNewClientName('');
+      setNewClientEmail('');
+      setNewClientPhone('');
+      setLocalToast(null);
+    }
+  }, [isOpen]);
+
+  const handleBack = () => {
+    if(isCreatingClient) {
+      setIsCreatingClient(false);
+      return;
+    }
+    setStep(prev => prev - 1);
+  };
+
+  const filteredClients = useMemo(() => {
+    if (!clientSearch) return [];
+    return clients.filter(c => c.name.toLowerCase().includes(clientSearch.toLowerCase()));
+  }, [clients, clientSearch]);
+
+  const handleSaveClient = () => {
+    if(!newClientName || !newClientEmail || !newClientPhone) return;
+
+    const newClient: Client = {
+       id: Math.random().toString(36).substr(2, 9),
+       name: newClientName,
+       email: newClientEmail,
+       phone: newClientPhone,
+       since: new Date().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
+       avatarColor: 'bg-indigo-500',
+       lastVisit: '-'
+    };
+
+    onAddClient(newClient);
+    setLocalToast('Cliente cadastrado com sucesso!');
+
+    setTimeout(() => {
+      setClientSearch(newClient.name); 
+      setSelectedClient(newClient); 
+      setIsCreatingClient(false); 
+      setLocalToast(null);
+    }, 1500);
+  };
+
+   const handleConfirmClick = () => {
+    if (!selectedService || !selectedBarber || !selectedDate || !selectedTime) return;
+    
+    const clientName = selectedClient ? selectedClient.name : clientSearch;
+    const isNewClient = !selectedClient && clientSearch.length > 0;
+
+    if (!clientName) return;
+
+    const dateStr = selectedDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    
+    onConfirm({
+      date: dateStr,
+      time: selectedTime,
+      client: clientName,
+      barber: selectedBarber.name,
+      service: selectedService.name,
+      value: selectedService.price,
+      status: 'Confirmado'
+    }, { name: clientName, isNew: isNewClient });
+  };
+
+  if (!isOpen) return null;
+
 }
 
 // Modal de Detalhes do Cliente (Histórico)
