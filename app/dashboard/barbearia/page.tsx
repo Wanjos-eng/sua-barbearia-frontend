@@ -655,6 +655,24 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
   };
 
   if (!isOpen) return null;
+  return(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300" onClick={onClose}>
+      <div className="bg-[#151515] w-full max-w-lg rounded-2xl border border-[#292929] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] relative" onClick={e => e.stopPropagation()}>
+        {localToast && (
+           <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
+              <div className="bg-[#151515] border border-[#58BEC3] p-6 rounded-xl shadow-2xl flex flex-col items-center">
+                 <div className="w-12 h-12 bg-[#58BEC3]/20 rounded-full flex items-center justify-center mb-3">
+                    <CheckCircle className="w-6 h-6 text-[#58BEC3]" />
+                 </div>
+                 <h4 className="text-[#DDDBCB] font-bold text-lg">Sucesso!</h4>
+                 <p className="text-[#5C5C5C] text-sm">{localToast}</p>
+              </div>
+           </div>
+        )}
+      </div>
+    </div>
+
+  )
 
 }
 
