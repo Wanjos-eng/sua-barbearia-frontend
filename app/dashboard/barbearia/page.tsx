@@ -150,17 +150,22 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
         md:translate-x-0 md:static md:inset-auto
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
       `}>
-      {/* [MENU HAMBURGUER] 5. Classes acima: 'translate-x-0' mostra o menu, '-translate-x-full' esconde ele fora da tela à esquerda */}
+        {/* [MENU HAMBURGUER] 5. Classes acima: 'translate-x-0' mostra o menu, '-translate-x-full' esconde ele fora da tela à esquerda */}
+        {/* Mobile Close Button */}
+        <button 
+          onClick={onClose} // [MENU HAMBURGUER] 6. Botão 'X' interno para fechar explicitamente
+          className="absolute top-4 right-4 md:hidden text-[#5C5C5C] hover:text-[#DDDBCB]"
+        >
+          <X className="w-6 h-6" />
+        </button>
 
-    </div>
-    <div className="flex flex-col w-full md:w-64 bg-[#151515] border-r border-[#292929] min-h-screen p-6">
-      <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5">
+        <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5">
         {/* Aqui recebe-se o nome da barbearia que fez o login*/}
         Nome
         <br />
         Barbearia
       </h1>
-
+    </div>
       <nav className="flex-grow">
         <ul className="space-y-2">
           {navItems.map((item) => (
@@ -186,8 +191,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
           </div>
         </div>
       </div>
-    </div>
-  </>
+    </>
   )
 };
 
