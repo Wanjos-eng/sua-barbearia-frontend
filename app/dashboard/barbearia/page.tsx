@@ -143,7 +143,16 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
       className={`fixed inset-0 bg-black/50 z-20 md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
         
     />
-  
+    {/* Sidebar Container */}
+    <div className={`
+        fixed top-0 left-0 bottom-0 w-64 bg-[#151515] border-r border-[#292929] p-6 z-30
+        transform transition-transform duration-300 ease-in-out
+        md:translate-x-0 md:static md:inset-auto
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+      `}>
+      {/* [MENU HAMBURGUER] 5. Classes acima: 'translate-x-0' mostra o menu, '-translate-x-full' esconde ele fora da tela à esquerda */}
+
+    </div>
     <div className="flex flex-col w-full md:w-64 bg-[#151515] border-r border-[#292929] min-h-screen p-6">
       <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5">
         {/* Aqui recebe-se o nome da barbearia que fez o login*/}
