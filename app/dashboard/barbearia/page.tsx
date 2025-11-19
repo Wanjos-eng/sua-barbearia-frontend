@@ -26,7 +26,8 @@ import {
   ArrowUpRight,
   Menu,
   History,
-  Trash2
+  Trash2,
+  ChevronLeft
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -669,6 +670,23 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
               </div>
            </div>
         )}
+
+        <div className="p-6 border-b border-[#292929] flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center gap-3">
+            {(step > 1 || isCreatingClient) && (
+              <button onClick={handleBack} className="text-[#5C5C5C] hover:text-[#DDDBCB] transition-colors">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
+            <div>
+              <h3 className="text-xl font-bold text-[#DDDBCB]">{isCreatingClient ? 'Cadastrar Cliente' : 'Novo Agendamento'}</h3>
+              {!isCreatingClient && <p className="text-xs text-[#58BEC3] font-semibold uppercase tracking-wider">Etapa {step}/4</p>}
+            </div>
+          </div>
+          <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
       </div>
     </div>
 
