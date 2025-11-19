@@ -358,6 +358,15 @@ const initialTransactionsData: Transaction[] = [
     { id: 't5', description: 'Corte - Marcos Santos', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
 ];
 
+// Dados Iniciais de Clientes (Combinando com os nomes dos agendamentos)
+const initialClientsData: Client[] = [
+  { id: 'c1', name: 'Carlos Pereira', email: 'carlos.p@email.com', phone: '(11) 99999-1111', since: 'Jan 2023', lastVisit: '09/11/2024', avatarColor: 'bg-blue-500' },
+  { id: 'c2', name: 'Otávio Augusto', email: 'otavio.a@email.com', phone: '(11) 99999-2222', since: 'Mar 2023', lastVisit: '09/11/2024', avatarColor: 'bg-green-500' },
+  { id: 'c3', name: 'Marcos Santos', email: 'marcos.s@email.com', phone: '(11) 99999-3333', since: 'Jun 2023', lastVisit: '09/11/2024', avatarColor: 'bg-purple-500' },
+  { id: 'c4', name: 'Lucas Oliveira', email: 'lucas.o@email.com', phone: '(11) 99999-4444', since: 'Set 2023', lastVisit: '10/11/2024', avatarColor: 'bg-yellow-500' },
+  { id: 'c5', name: 'Fernando Dias', email: 'fernando.d@email.com', phone: '(11) 99999-5555', since: 'Nov 2023', lastVisit: '-', avatarColor: 'bg-red-500' },
+];
+
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const [type, setType] = useState<'income' | 'expense'>('expense');
   const [amount, setAmount] = useState('');
