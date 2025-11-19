@@ -1265,6 +1265,25 @@ const ClientesContent: React.FC = () => {
         isOpen={!!selectedClient} 
         onClose={() => setSelectedClient(null)} 
       />
+
+      {/* Header e Busca */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-[#DDDBCB]">Meus Clientes</h1>
+          <p className="text-[#5C5C5C] text-sm mt-1">Gerencie a base de clientes e veja o histórico.</p>
+        </div>
+
+        <div className="relative w-full md:max-w-md">
+          <input
+            type="text"
+            placeholder="Buscar por nome, email ou telefone..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#151515] border border-[#292929] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-3 rounded-lg pl-10 focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all shadow-lg"
+          />
+          <Search className="w-5 h-5 text-[#5C5C5C] absolute left-3 top-1/2 -translate-y-1/2" />
+        </div>
+      </div>
     </div>
   )
 }
