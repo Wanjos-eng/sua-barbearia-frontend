@@ -731,6 +731,27 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
               ))}
             </div>
           )}
+
+          {!isCreatingClient && step === 2 && (
+            <div className="space-y-3 animate-in slide-in-from-right duration-300">
+               <h4 className="text-[#DDDBCB] mb-4 font-medium">Selecione o profissional</h4>
+               {barbeirosData.filter(b => b.status === 'Ativo').map(b => (
+                 <button
+                    key={b.id}
+                    onClick={() => { setSelectedBarber(b); setStep(3); }}
+                    className="w-full flex items-center gap-4 p-4 bg-[#0C0C0C] hover:bg-[#292929] rounded-lg border border-[#292929] hover:border-[#58BEC3]/50 transition-all text-left group"
+                 >
+                    <div className="w-12 h-12 rounded-full bg-[#151515] border border-[#292929] flex items-center justify-center text-[#DDDBCB] font-bold group-hover:border-[#58BEC3]">
+                      {b.initials}
+                    </div>
+                    <div>
+                      <span className="text-[#DDDBCB] font-bold text-lg block">{b.name}</span>
+                      <span className="text-xs text-[#5C5C5C]">Disponível</span>
+                    </div>
+                 </button>
+               ))}
+            </div>
+          )}
         </div>
       </div>
     </div>
