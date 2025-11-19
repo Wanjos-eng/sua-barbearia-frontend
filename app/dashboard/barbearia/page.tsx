@@ -85,6 +85,16 @@ interface Barber{
   status: 'Ativo' | 'Desativo';
 }
 
+interface Client {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  since: string;
+  lastVisit?: string;
+  avatarColor: string;
+}
+
 interface Transaction {
     id: string;
     description: string;
