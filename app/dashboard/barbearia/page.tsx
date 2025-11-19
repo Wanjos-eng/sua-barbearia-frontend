@@ -24,7 +24,8 @@ import {
   Wallet,
   ArrowDownRight,
   ArrowUpRight,
-  Menu
+  Menu,
+  History
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -569,6 +570,44 @@ const ClientDetailsModal: React.FC<{client: Client | null, isOpen: boolean, onCl
           <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB] p-2 hover:bg-[#292929] rounded-full transition-colors">
             <X className="w-6 h-6" />
           </button>
+        </div>
+
+        {/* Conteúdo: Histórico */}
+        <div className="p-6">
+          <h3 className="text-lg font-semibold text-[#DDDBCB] mb-4 flex items-center">
+            <History className="w-5 h-5 mr-2 text-[#58BEC3]" />
+            Histórico de Agendamentos
+          </h3>
+
+          {history.length > 0 ? (
+            <div className="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+              {history.map((app) => (
+                <div key={app.id} className="flex items-center justify-between p-4 bg-[#0C0C0C] border border-[#292929] rounded-lg hover:border-[#58BEC3]/30 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="flex flex-col items-center bg-[#151515] p-2 rounded border border-[#292929] min-w-[60px]">
+                       <span className="text-xs text-[#5C5C5C]">{app.date.split('/')[1]}</span>
+                       <span className="text-lg font-bold text-[#DDDBCB]">{app.date.split('/')[0]}</span>
+                    </div>
+                    <div>
+                      <p className="text-[#DDDBCB] font-medium">{app.service}</p>
+                      <p className="text-xs text-[#5C5C5C]">Barbeiro: {app.barber}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                     <p className="text-[#58BEC3] font-bold">{app.value}</p>
+                     <span className={`text-xs px-2 py-0.5 rounded ${app.status === 'Concluído' ? 'bg-green-500/10 text-green-500' : app.status === 'Pendente' ? 'bg-yellow-500/10 text-yellow-500' : 'bg-gray-500/10 text-gray-400'}`}>
+                        {app.status}
+                     </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+             <div className="text-center py-10 text-[#5C5C5C] border border-dashed border-[#292929] rounded-lg">
+                <History className="w-10 h-10 mx-auto mb-2 opacity-20" />
+                <p>Nenhum histórico encontrado para este cliente.</p>
+             </div>
+          )}
         </div>
       </div>
     </div>
