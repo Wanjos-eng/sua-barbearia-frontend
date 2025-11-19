@@ -543,6 +543,15 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   );
 }
 
+// Modal de Criação de novo Cliente
+interface NewAppointmentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (appointment: any, clientData?: { name: string, isNew: boolean }) => void;
+  onAddClient: (client: Client) => void;
+  clients: Client[];
+}
+
 // Modal de Detalhes do Cliente (Histórico)
 const ClientDetailsModal: React.FC<{client: Client | null, isOpen: boolean, onClose: () => void}> = ({ client, isOpen, onClose }) => {
   if (!isOpen || !client) return null;
