@@ -1126,13 +1126,17 @@ const App: React.FC = () => {
 
   // Estado para controlar a página atual
   const [currentPage, setCurrentPage] = React.useState('Dashboard');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // [MENU HAMBURGUER] 8. Estado global que controla a visibilidade
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans">
       {/* A Sidebar agora recebe o estado da página e a função para alterá-lo */}
-      <div>
-        <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      </div>
+      <Sidebar
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        isOpen={isMobileMenuOpen} // [MENU HAMBURGUER] 9. Passando o estado
+        onClose={() => setIsMobileMenuOpen(false)} // [MENU HAMBURGUER] 10. Passando a função de fechar
+      />
       
       <main className="flex-1 p-6 md-p10 min-h-screen overflow-y-auto">
         {currentPage === 'Dashboard' && <DashboardContent />}
