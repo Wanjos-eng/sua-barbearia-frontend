@@ -99,6 +99,13 @@ interface Client {
   avatarColor: string;
 }
 
+interface ServiceItem {
+  id: string;
+  name: string;
+  price: string;
+  duration: string;
+}
+
 interface Transaction {
     id: string;
     description: string;
@@ -296,6 +303,17 @@ const ActiveBarberItem: React.FC<ActiveBarber> = ({ initials, name, total, next 
 );
 
 // Dados Modelo (Simulação)
+
+const MOCK_SERVICES: ServiceItem[] = [
+  { id: 's1', name: 'Corte de Cabelo', price: 'R$ 50,00', duration: '30' },
+  { id: 's2', name: 'Barba Completa', price: 'R$ 40,00', duration: '30' },
+  { id: 's3', name: 'Corte + Barba', price: 'R$ 80,00', duration: '60' },
+  { id: 's4', name: 'Acabamento / Pezinho', price: 'R$ 20,00', duration: '15' },
+  { id: 's5', name: 'Sobrancelha', price: 'R$ 15,00', duration: '10' },
+];
+
+const AVAILABLE_TIMES = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'];
+
 
 const statsData = [
   { icon: DollarSign, title: 'Receita', value: 'R$400,00', iconBgColor: 'bg-green-500' },
