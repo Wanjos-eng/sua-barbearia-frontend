@@ -1,6 +1,6 @@
 'use client';
 // app/barbershop/dashboard/page.tsx
-import React from 'react';
+import React, {useMemo, useState, useEffect} from 'react';
 import {
   LayoutGrid,
   Users,
@@ -18,11 +18,23 @@ import {
   Phone,
   Plus,
   Search,
-  ChevronDown
+  ChevronDown,
+  X,
+  CheckCircle,
+  Wallet,
+  ArrowDownRight,
+  ArrowUpRight,
+  Menu
 } from 'lucide-react';
-import { Stats } from 'fs';
 
 // Tipos (Typescript)
+
+interface SidebarProps {
+  currentPage: string;
+  setCurrentPage: (page: string) => void;
+  isOpen: boolean; // [MENU HAMBURGUER] 2. Propriedade para saber se o menu está visível
+  onClose: () => void; // [MENU HAMBURGUER] 3. Função para fechar o menu
+}
 interface SidebarItemProps{
   icon: React.ElementType;
   label: string;
@@ -34,6 +46,8 @@ interface StatsCardProps{
   icon: React.ElementType;
   title: string;
   value: string;
+  trend?: string;
+  trendType?: 'up' | 'down' | 'neutral';
   //iconBgColor: string;
 }
 
@@ -71,6 +85,23 @@ interface Barber{
   status: 'Ativo' | 'Desativo';
 }
 
+interface Transaction {
+    id: string;
+    description: string;
+    category: string;
+    barberName?: string;
+    date: string;
+    amount: number;
+    type: 'income' | 'expense';
+    status: 'Pago' | 'Pendente';
+}
+
+interface AddTransactionModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (transaction: Omit<Transaction, 'id'>) => void;
+}
+
 // 58BEC3 CIANO
 // 151515 Preto Cinza | 050505 Preto | 292929 Cinza | DDDBCB Branco Bege | 5C5C5C Cinza pouco escuro
 // gray-980 Preto escuro | gray-950 Preto um tom acima
@@ -95,7 +126,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active, on
 };
 
 //Componente Barra Lateral
-const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) => void }> = ({ currentPage, setCurrentPage }) => {
+const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, onClose }) => {
   const navItems = [
     {icon: LayoutGrid, label: 'Dashboard'},
     {icon: Users, label: 'Barbeiros' },
@@ -105,14 +136,36 @@ const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) =>
   ];
 
   return (
-    <div className="flex flex-col w-full md:w-64 bg-[#151515] border-r border-[#292929] min-h-screen p-6">
-      <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5">
+    <>
+    {/* Mobile Overlay*/}
+    <div
+      //  // [MENU HAMBURGUER] 4. Camada escura de fundo. Se isOpen for true, fica visível e clicável para fechar.
+      className={`fixed inset-0 bg-black/50 z-20 md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      onClick={onClose}
+        
+    />
+    {/* Sidebar Container */}
+    <div className={`
+        fixed top-0 left-0 bottom-0 w-64 bg-[#151515] border-r border-[#292929] p-6 z-30
+        transform transition-transform duration-300 ease-in-out
+        md:translate-x-0 md:static md:inset-auto flex flex-col
+        ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
+      `}>
+        {/* [MENU HAMBURGUER] 5. Classes acima: 'translate-x-0' mostra o menu, '-translate-x-full' esconde ele fora da tela à esquerda */}
+        {/* Mobile Close Button */}
+        <button 
+          onClick={onClose} // [MENU HAMBURGUER] 6. Botão 'X' interno para fechar explicitamente
+          className="absolute top-4 right-4 md:hidden text-[#5C5C5C] hover:text-[#DDDBCB]"
+        >
+          <X className="w-6 h-6" />
+        </button>
+
+        <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5 tracking-tight">
         {/* Aqui recebe-se o nome da barbearia que fez o login*/}
         Nome
         <br />
         Barbearia
       </h1>
-
       <nav className="flex-grow">
         <ul className="space-y-2">
           {navItems.map((item) => (
@@ -121,7 +174,10 @@ const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) =>
               icon={item.icon}
               label={item.label}
               active={item.label === currentPage}
-              onClick={() => setCurrentPage(item.label)}
+              onClick={() => {
+                    setCurrentPage(item.label);
+                    onClose(); // [MENU HAMBURGUER] 7. Fecha o menu automaticamente ao clicar em um link
+                  }}
             />
           </li>
         ))}
@@ -138,13 +194,14 @@ const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) =>
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   )
 };
 
 //Componente Cartão de Estatísticas
 
-const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value }) => (
+const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value, trend }) => (
     <div className="bg-[#151515] p-5 rounded-lg flex items-center space-x-4">
       <div className="p-3 rounded-lg bg-[#5C5C5C]">
         <Icon className="w-6 h-6 text-[#DDDBCB]"/>
@@ -282,6 +339,210 @@ const barbeirosData: Barber[] = [
     status: 'Ativo'
   },
 ];
+
+const initialTransactionsData: Transaction[] = [
+    { id: 't1', description: 'Corte - Carlos Pereira', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
+    { id: 't2', description: 'Barba - Otávio Augusto', category: 'Serviço', date: '09/11', amount: 40.00, type: 'income', status: 'Pago' },
+    { id: 't3', description: 'Compra de Produtos', category: 'Estoque', date: '08/11', amount: 150.00, type: 'expense', status: 'Pago' },
+    { id: 't4', description: 'Conta de Luz', category: 'Utilidades', date: '05/11', amount: 320.00, type: 'expense', status: 'Pendente' },
+    { id: 't5', description: 'Corte - Marcos Santos', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
+];
+
+const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, onConfirm }) => {
+  const [type, setType] = useState<'income' | 'expense'>('expense');
+  const [amount, setAmount] = useState('');
+  const [category, setCategory] = useState('');
+  const [barberId, setBarberId] = useState('');
+  const [description, setDescription] = useState('');
+
+  const expenseCategories = ['Pagamento Barbeiro', 'Contas (Luz/Água)', 'Estoque', 'Marketing', 'Aluguel', 'Outros'];
+  const incomeCategories = ['Serviço', 'Venda de Produto', 'Outros'];
+  
+  useEffect(() => {
+    if (isOpen) {
+      setAmount('');
+      setCategory('');
+      setBarberId('');
+      setDescription('');
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    setCategory('');
+    setBarberId('');
+  }, [type]);
+
+  if (!isOpen) return null;
+
+  const isBarberRequired = category === 'Pagamento Barbeiro';
+  const isValid =
+    amount !== '' &&
+    parseFloat(amount) > 0 &&
+    category !== '' &&
+    (!isBarberRequired || barberId !== '');
+
+    const handleSubmit = () => {
+    if (!isValid) return;
+
+    let barberName = undefined;
+    if (isBarberRequired) {
+      const selectedBarber = barbeirosData.find(b => b.id === barberId);
+      barberName = selectedBarber ? selectedBarber.name : undefined;
+    }
+
+    onConfirm({
+      type,
+      amount: parseFloat(amount),
+      category,
+      barberName,
+      description: description || (type === 'income' ? 'Nova Receita' : 'Nova Despesa'),
+      date: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+      status: 'Pago'
+    });
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300">
+      <div  className="bg-[#151515] w-full max-w-md rounded-xl border border-[#292929] shadow-2xl transform transition-all scale-100 opacity-100">
+          {/* Header */}
+          <div className="flex items-center justify-between p-5 border-b border-[#292929]">
+            <h2 className="text-lg font-bold text-[#DDDBCB]">Nova Transação</h2>
+            <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+              <X className="w-5 h-5" />
+            </button>
+        </div>
+
+         {/* Body */}
+        <div className="p-6 space-y-5">
+            {/* Type Switch */}
+            <div className="flex bg-[#050505] p-1 rounded-lg">
+              <button
+                onClick={() => setType('income')}
+                className={`flex-1 py-2 text-sm font-bold rounded-md transition-all duration-200 ${type === 'income' ? 'bg-green-500/20 text-green-500 shadow-sm' : 'text-[#5C5C5C] hover:text-[#DDDBCB]'}`}
+              >
+                Receita
+              </button>
+              <button
+                onClick={() => setType('expense')}
+                className={`flex-1 py-2 text-sm font-bold rounded-md transition-all duration-200 ${type === 'expense' ? 'bg-red-500/20 text-red-500 shadow-sm' : 'text-[#5C5C5C] hover:text-[#DDDBCB]'}`}
+              >
+                Despesa
+              </button>
+            </div>
+
+            {/* Amount */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Valor (R$) *</label>
+            <div className="relative">
+              <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#5C5C5C] font-bold">R$</span>
+              <input
+                type="number"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                placeholder="0,00"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 pl-10 pr-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Category */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Tipo de Gasto/Receita *</label>
+            <div className="relative">
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] appearance-none transition-all"
+              >
+                <option value="" disabled>Selecione uma categoria</option>
+                {(type === 'income' ? incomeCategories : expenseCategories).map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
+              <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C5C5C] pointer-events-none" />
+            </div>
+          </div>
+
+          {/* Barber (Conditional) */}
+          {type === 'expense' && category === 'Pagamento Barbeiro' && (
+            <div className="animate-in fade-in slide-in-from-top-2 duration-300">
+              <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Selecione o Barbeiro *</label>
+              <div className="relative">
+                <select
+                  value={barberId}
+                  onChange={(e) => setBarberId(e.target.value)}
+                  className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] appearance-none transition-all"
+                >
+                  <option value="" disabled>Selecione o barbeiro</option>
+                  {barbeirosData.filter(b => b.status === 'Ativo').map(barber => (
+                    <option key={barber.id} value={barber.id}>{barber.name}</option>
+                  ))}
+                </select>
+                <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C5C5C] pointer-events-none" />
+              </div>
+            </div>
+          )}
+
+          {/* Description */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Descrição <span className="text-[#292929]">(Opcional)</span></label>
+            <textarea
+              rows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              placeholder="Detalhes sobre a transação..."
+              className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] resize-none transition-all"
+            />
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end p-5 border-t border-[#292929] gap-3">
+          <button
+            onClick={onClose}
+            className="px-4 py-2 text-sm font-medium text-[#5C5C5C] hover:text-[#DDDBCB] transition-colors"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!isValid}
+            className={`
+              px-6 py-2 text-sm font-bold rounded-lg transition-all
+              ${isValid
+                ? 'bg-[#58BEC3] text-[#151515] hover:bg-[#7ADBE0] shadow-lg shadow-[#58BEC3]/20'
+                : 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed'}
+            `}
+          >
+            Confirmar
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, onClose }) => {
+  useEffect(() => {
+    const timer = setTimeout(onClose, 3000);
+    return () => clearTimeout(timer);
+  }, [onClose]);
+
+  return (
+    <div className="fixed top-6 right-6 z-[60] bg-[#151515] border border-[#58BEC3] rounded-lg shadow-2xl p-4 flex items-center gap-3 animate-in slide-in-from-right duration-300">
+      <div className="bg-[#58BEC3]/20 p-2 rounded-full">
+        <CheckCircle className="w-5 h-5 text-[#58BEC3]" />
+      </div>
+      <div>
+        <h4 className="text-sm font-bold text-[#DDDBCB]">Sucesso!</h4>
+        <p className="text-xs text-[#5C5C5C]">{message}</p>
+      </div>
+      <button onClick={onClose} className="ml-4 text-[#5C5C5C] hover:text-[#DDDBCB]">
+        <X className="w-4 h-4" />
+      </button>
+    </div>
+  );
+};
 
 // Componente Conteúdo Principal
 const DashboardContent: React.FC = () => (
@@ -634,29 +895,285 @@ const AgendamentosContent: React.FC = () => {
   )
 }
 
+// Componente GestãoFinanceira
+const FinancialContent: React.FC = () => {
+    const [periodFilter, setPeriodFilter] = React.useState<'Semanal' | 'Mensal' | 'Total'>('Semanal');
+    const [transactions, setTransactions] = useState<Transaction[]>(initialTransactionsData);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+    // Simulação de filtro de valores baseados no período
+    const metrics = useMemo(() => {
+    const totalIncome = transactions
+      .filter(t => t.type === 'income')
+      .reduce((acc, curr) => acc + curr.amount, 0);
+
+    const totalExpense = transactions
+      .filter(t => t.type === 'expense')
+      .reduce((acc, curr) => acc + curr.amount, 0);
+
+    const displayIncome = totalIncome;
+    const displayExpense = totalExpense;
+
+    return {
+      revenue: displayIncome,
+      expenses: displayExpense,
+      profit: displayIncome - displayExpense,
+      projection: displayIncome * 1.2,
+      ticket: 60.00
+    };
+  }, [transactions, periodFilter]);
+
+  const handleAddTransaction = (newTxData: Omit<Transaction, 'id'>) => {
+    const newTransaction: Transaction = {
+      id: Math.random().toString(36).substr(2, 9),
+      ...newTxData
+    };
+
+    setTransactions(prev => [newTransaction, ...prev]);
+    setIsModalOpen(false);
+    setToastMessage("Transação registrada com sucesso!");
+  };
+  
+  // Dados aleatórios estáticos para o gráfico para evitar que as barras "dancem" na renderização.
+  const chartData = useMemo(() => {
+    return ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'].map((day) => ({
+      day,
+      height: Math.floor(Math.random() * (80 - 20 + 1) + 20)
+    }));
+  }, []);
+
+    return (
+      <div className="animate-in fade-in duration-500">
+        {/* Estilos Globais Locais */}
+        <style>{`
+          .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-track {
+            background: #151515;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #292929;
+            border-radius: 10px;
+          }
+          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #58BEC3;
+          }
+        `}</style>
+
+        {/* Toast Popup */}
+        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
+        
+        {/* Modal */}
+        <AddTransactionModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={handleAddTransaction}
+        />
+
+        {/* Header e Filtros */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+          <div>
+            <h1 className="text-3xl font-bold text-[#DDDBCB]">Gestão Financeira</h1>
+            <p className="text-[#5C5C5C] text-sm mt-1">Acompanhe o fluxo de caixa e projeções financeiras.</p>
+          </div>
+
+          <div className="flex items-center gap-3">
+            <div className="bg-[#151515] p-1 rounded-lg flex items-center border border-[#292929]">
+              {(['Semanal', 'Mensal', 'Total'] as const).map((filter) => (
+                <button
+                  key={filter}
+                  onClick={() => setPeriodFilter(filter)}
+                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${periodFilter === filter
+                      ? 'bg-[#58BEC3] text-[#151515] shadow-lg'
+                      : 'text-[#5C5C5C] hover:text-[#DDDBCB] hover:bg-[#292929]'
+                    }`}
+                >
+                  {filter}
+                </button>
+              ))}
+            </div>
+
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-2.5 px-4 rounded-lg transition-colors flex items-center shadow-lg shadow-[#58BEC3]/10"
+            >
+              <Plus className="w-5 h-5 md:mr-2" />
+              <span className="hidden md:inline">Nova Transação</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Cards Principais */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+          <StatsCard
+            icon={DollarSign}
+            title="Receita Total"
+            value={`R$ ${metrics.revenue.toFixed(2)}`}
+            trend="+12%"
+            trendType="up"
+          />
+          <StatsCard
+            icon={TrendingUp}
+            title="Projeção (7 dias)"
+            value={`R$ ${metrics.projection.toFixed(2)}`}
+            trend="+5%"
+            trendType="up"
+          />
+          <StatsCard
+            icon={Percent}
+            title="Ticket Médio"
+            value={`R$ ${metrics.ticket.toFixed(2)}`}
+            trend="0%"
+            trendType="neutral"
+          />
+          <StatsCard
+            icon={Wallet}
+            title="Despesas"
+            value={`R$ ${metrics.expenses.toFixed(2)}`}
+            trend="-2%"
+            trendType="down"
+          />
+        </div>
+        
+        {/* Gráfico e Histórico */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* Coluna Esquerda: Gráfico (2/3) */}
+          <div className="lg:col-span-2 bg-[#151515] p-6 rounded-lg flex flex-col h-[450px] border border-[#292929]">
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-bold text-[#DDDBCB]">Fluxo de Receita</h3>
+              <div className="flex items-center space-x-3 text-xs text-[#5C5C5C]">
+                <span className="flex items-center"><div className="w-2 h-2 rounded-full bg-[#58BEC3] mr-1"></div> Receita</span>
+                <span className="flex items-center"><div className="w-2 h-2 rounded-full bg-[#292929] border border-[#5C5C5C] mr-1"></div> Despesa</span>
+              </div>
+          </div>
+         
+          {/* Visualização Gráfica Customizada */}
+          <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-2 border-b border-[#292929] border-l border-[#292929]/50">
+            {chartData.map((item) => (
+              <div key={item.day} className="flex flex-col items-center justify-end flex-1 group h-full relative">
+                {/* Tooltip */}
+                <div className="absolute -top-10 bg-[#DDDBCB] text-[#050505] text-xs font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-200 z-10 whitespace-nowrap shadow-xl translate-y-2 group-hover:translate-y-0 pointer-events-none">
+                  R$ {item.height * 10},00
+                  <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[#DDDBCB] rotate-45"></div>
+                </div>
+
+                {/* Bar */}
+                <div
+                  className="w-full max-w-[40px] bg-[#58BEC3] rounded-t-sm opacity-80 group-hover:opacity-100 transition-all duration-300 hover:shadow-[0_0_15px_rgba(88,190,195,0.3)]"
+                  style={{ height: `${item.height}%` }}
+                ></div>
+                <span className="text-xs text-[#5C5C5C] mt-3 font-medium">{item.day}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+         {/* Coluna Direita: Transações Recentes (1/3) */}
+        <div className="bg-[#151515] p-6 rounded-lg flex flex-col h-[450px] border border-[#292929]">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-bold text-[#DDDBCB]">Transações</h3>
+            <button className="text-[#58BEC3] text-xs hover:underline font-semibold transition-colors">Ver todas</button>
+          </div>
+
+          <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
+            {transactions.length === 0 ? (
+              <div className="flex flex-col items-center justify-center h-full text-[#5C5C5C]">
+                <p className="text-sm">Nenhuma transação encontrada.</p>
+              </div>
+            ) : (
+              transactions.map((transaction) => (
+                <div key={transaction.id} className="flex items-center justify-between p-3 bg-[#0C0C0C] rounded-lg border border-transparent hover:border-[#292929] transition-colors group">
+                  <div className="flex items-center space-x-3 overflow-hidden">
+                    <div className={`p-2 rounded-lg flex-shrink-0 ${transaction.type === 'income' ? 'bg-[#58BEC3]/10 text-[#58BEC3]' : 'bg-red-500/10 text-red-500'}`}>
+                      {transaction.type === 'income' ? <ArrowDownRight className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
+                    </div>
+                    <div className="overflow-hidden">
+                      <p className="text-sm font-medium text-[#DDDBCB] truncate">{transaction.category}</p>
+                      <p className="text-xs text-[#5C5C5C] truncate">
+                        {transaction.barberName ? `Barbeiro: ${transaction.barberName}` : transaction.description}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="text-right flex-shrink-0 ml-2">
+                    <p className={`text-sm font-bold ${transaction.type === 'income' ? 'text-[#58BEC3]' : 'text-red-400'}`}>
+                      {transaction.type === 'income' ? '+ ' : '- '}
+                      R$ {transaction.amount.toFixed(2)}
+                    </p>
+                    <p className="text-xs text-[#5C5C5C]">{transaction.date}</p>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          <div className="mt-4 pt-4 border-t border-[#292929]">
+            <div className="flex justify-between items-center">
+              <span className="text-[#5C5C5C] text-sm">Saldo Atual</span>
+              <span className={`font-bold text-lg ${(metrics.revenue - metrics.expenses) >= 0 ? 'text-[#58BEC3]' : 'text-red-500'}`}>
+                R$ {(metrics.revenue - metrics.expenses).toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    );
+}
 //Componente App
 const App: React.FC = () => {
 
   // Estado para controlar a página atual
   const [currentPage, setCurrentPage] = React.useState('Dashboard');
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // [MENU HAMBURGUER] 8. Estado global que controla a visibilidade
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-[#050505] text-white font-sans">
+    <div className="flex min-h-screen bg-[#050505] text-white font-sans selection:bg-[#58BEC3] selection:text-[#050505]">
       {/* A Sidebar agora recebe o estado da página e a função para alterá-lo */}
-      <div>
-        <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-      </div>
-      
-      <main className="flex-1 p-6 md-p10 min-h-screen overflow-y-auto">
-        {currentPage === 'Dashboard' && <DashboardContent />}
-        {currentPage === 'Barbeiros' && <BarbeirosContent />}
-        {currentPage === 'Agendamentos' && <AgendamentosContent />}
-         {/* Adicione outras páginas aqui, por ex:
-        {currentPage === 'Agendamentos' && <AgendamentosContent />}
-        */}
-      </main>
-    </div>
-  )
+      <Sidebar
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        isOpen={isMobileMenuOpen} // [MENU HAMBURGUER] 9. Passando o estado
+        onClose={() => setIsMobileMenuOpen(false)} // [MENU HAMBURGUER] 10. Passando a função de fechar
+      />
+      {/* Main Content */}
+      <main className="flex-1 p-4 md:p-10 min-h-screen overflow-x-hidden">
+
+        {/* Mobile Header Toggle */}
+        {/* [MENU HAMBURGUER] 11. Cabeçalho visível APENAS em Mobile (md:hidden) */}
+        <div className="md:hidden flex items-center justify-between mb-6 bg-[#151515] p-4 rounded-lg border border-[#292929]">
+            <div className="flex items-center space-x-3">
+              <div className="w-8 h-8 bg-[#58BEC3] rounded-lg flex items-center justify-center text-[#151515]">
+                <User className="w-5 h-5" />
+              </div>
+              <span className="font-bold text-[#DDDBCB]">Barbearia</span>
+            </div>
+            <button 
+              onClick={() => setIsMobileMenuOpen(true)} // [MENU HAMBURGUER] 12. Ação de clicar no ícone para abrir o menu
+              className="text-[#DDDBCB] hover:text-[#58BEC3] p-1"
+            >
+              <Menu className="w-6 h-6" />
+          </button>
+        </div>
+        
+        <div className="max-w-7xl mx-auto">
+          {currentPage === 'Dashboard' && <DashboardContent />}
+          {currentPage === 'Barbeiros' && <BarbeirosContent />}
+          {currentPage === 'Agendamentos' && <AgendamentosContent />}
+          {currentPage === 'Gestão Financeira' && <FinancialContent />}
+          {currentPage === 'Clientes' && (
+              <div className="flex flex-col items-center justify-center h-[60vh] text-[#5C5C5C] animate-in fade-in">
+                <Users className="w-16 h-16 mb-4 opacity-20" />
+                <p className="text-lg font-medium">Módulo de Clientes</p>
+                <p className="text-sm">Em desenvolvimento...</p>
+              </div>
+            )}
+        </div>
+    </main>
+  </div>
+)
 }
 
 export default App;
