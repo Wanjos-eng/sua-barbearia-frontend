@@ -148,7 +148,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
     <div className={`
         fixed top-0 left-0 bottom-0 w-64 bg-[#151515] border-r border-[#292929] p-6 z-30
         transform transition-transform duration-300 ease-in-out
-        md:translate-x-0 md:static md:inset-auto
+        md:translate-x-0 md:static md:inset-auto flex flex-col
         ${isOpen ? 'translate-x-0' : '-translate-x-full'} 
       `}>
         {/* [MENU HAMBURGUER] 5. Classes acima: 'translate-x-0' mostra o menu, '-translate-x-full' esconde ele fora da tela à esquerda */}
