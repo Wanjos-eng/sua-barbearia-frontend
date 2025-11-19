@@ -126,7 +126,7 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active, on
 };
 
 //Componente Barra Lateral
-const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) => void }> = ({ currentPage, setCurrentPage }) => {
+const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, onClose }) => {
   const navItems = [
     {icon: LayoutGrid, label: 'Dashboard'},
     {icon: Users, label: 'Barbeiros' },
@@ -136,6 +136,14 @@ const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) =>
   ];
 
   return (
+    <>
+    {/* Mobile Overlay*/}
+    <div
+      //  // [MENU HAMBURGUER] 4. Camada escura de fundo. Se isOpen for true, fica visível e clicável para fechar.
+      className={`fixed inset-0 bg-black/50 z-20 md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+        
+    />
+  
     <div className="flex flex-col w-full md:w-64 bg-[#151515] border-r border-[#292929] min-h-screen p-6">
       <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5">
         {/* Aqui recebe-se o nome da barbearia que fez o login*/}
@@ -170,6 +178,7 @@ const Sidebar: React.FC<{ currentPage: string, setCurrentPage: (page: string) =>
         </div>
       </div>
     </div>
+  </>
   )
 };
 
