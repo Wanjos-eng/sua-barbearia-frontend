@@ -24,7 +24,9 @@ import {
   Wallet,
   ArrowDownRight,
   ArrowUpRight,
-  Menu
+  Menu,
+  History,
+  Trash2
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -83,6 +85,16 @@ interface Barber{
   appointments: number;
   next7d: number;
   status: 'Ativo' | 'Desativo';
+}
+
+interface Client {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  since: string;
+  lastVisit?: string;
+  avatarColor: string;
 }
 
 interface Transaction {
@@ -348,6 +360,15 @@ const initialTransactionsData: Transaction[] = [
     { id: 't5', description: 'Corte - Marcos Santos', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
 ];
 
+// Dados Iniciais de Clientes (Combinando com os nomes dos agendamentos)
+const initialClientsData: Client[] = [
+  { id: 'c1', name: 'Carlos Pereira', email: 'carlos.p@email.com', phone: '(11) 99999-1111', since: 'Jan 2023', lastVisit: '09/11/2024', avatarColor: 'bg-blue-500' },
+  { id: 'c2', name: 'Otávio Augusto', email: 'otavio.a@email.com', phone: '(11) 99999-2222', since: 'Mar 2023', lastVisit: '09/11/2024', avatarColor: 'bg-green-500' },
+  { id: 'c3', name: 'Marcos Santos', email: 'marcos.s@email.com', phone: '(11) 99999-3333', since: 'Jun 2023', lastVisit: '09/11/2024', avatarColor: 'bg-purple-500' },
+  { id: 'c4', name: 'Lucas Oliveira', email: 'lucas.o@email.com', phone: '(11) 99999-4444', since: 'Set 2023', lastVisit: '10/11/2024', avatarColor: 'bg-yellow-500' },
+  { id: 'c5', name: 'Fernando Dias', email: 'fernando.d@email.com', phone: '(11) 99999-5555', since: 'Nov 2023', lastVisit: '-', avatarColor: 'bg-red-500' },
+];
+
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const [type, setType] = useState<'income' | 'expense'>('expense');
   const [amount, setAmount] = useState('');
@@ -520,6 +541,96 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
       </div>
     </div>
   );
+}
+
+// Modal de Detalhes do Cliente (Histórico)
+const ClientDetailsModal: React.FC<{client: Client | null, isOpen: boolean, onClose: () => void}> = ({ client, isOpen, onClose }) => {
+  if (!isOpen || !client) return null;
+
+  // Filtrar agendamentos deste cliente
+  const history = appointmentsData.filter(app => app.client === client.name);
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300 animate-in fade-in">
+      <div className="bg-[#151515] w-full max-w-2xl rounded-xl border border-[#292929] shadow-2xl overflow-hidden">
+        
+        {/* Header com Avatar e Info */}
+        <div className="bg-[#0C0C0C] p-6 border-b border-[#292929] flex items-center justify-between">
+          <div className="flex items-center space-x-4">
+            <div className={`w-16 h-16 rounded-full ${client.avatarColor} flex items-center justify-center text-2xl font-bold text-white border-4 border-[#151515]`}>
+               {client.name.substring(0, 2).toUpperCase()}
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-[#DDDBCB]">{client.name}</h2>
+              <div className="flex flex-col text-sm text-[#5C5C5C]">
+                <span className="flex items-center gap-2"><Mail className="w-3 h-3"/> {client.email}</span>
+                <span className="flex items-center gap-2"><Phone className="w-3 h-3"/> {client.phone}</span>
+              </div>
+            </div>
+          </div>
+          <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB] p-2 hover:bg-[#292929] rounded-full transition-colors">
+            <X className="w-6 h-6" />
+          </button>
+        </div>
+
+        {/* Conteúdo: Histórico */}
+        <div className="p-6">
+          <h3 className="text-lg font-semibold text-[#DDDBCB] mb-4 flex items-center">
+            <History className="w-5 h-5 mr-2 text-[#58BEC3]" />
+            Histórico de Agendamentos
+          </h3>
+
+          {history.length > 0 ? (
+            <div className="space-y-3 max-h-[300px] overflow-y-auto custom-scrollbar pr-2">
+              {history.map((app) => (
+                <div key={app.id} className="flex items-center justify-between p-4 bg-[#0C0C0C] border border-[#292929] rounded-lg hover:border-[#58BEC3]/30 transition-colors">
+                  <div className="flex items-center gap-4">
+                    <div className="flex flex-col items-center bg-[#151515] p-2 rounded border border-[#292929] min-w-[60px]">
+                       <span className="text-xs text-[#5C5C5C]">{app.date.split('/')[1]}</span>
+                       <span className="text-lg font-bold text-[#DDDBCB]">{app.date.split('/')[0]}</span>
+                    </div>
+                    <div>
+                      <p className="text-[#DDDBCB] font-medium">{app.service}</p>
+                      <p className="text-xs text-[#5C5C5C]">Barbeiro: {app.barber}</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                     <p className="text-[#58BEC3] font-bold">{app.value}</p>
+                     <span className={`text-xs px-2 py-0.5 rounded ${app.status === 'Concluído' ? 'bg-green-500/10 text-green-500' : app.status === 'Pendente' ? 'bg-yellow-500/10 text-yellow-500' : 'bg-gray-500/10 text-gray-400'}`}>
+                        {app.status}
+                     </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+             <div className="text-center py-10 text-[#5C5C5C] border border-dashed border-[#292929] rounded-lg">
+                <History className="w-10 h-10 mx-auto mb-2 opacity-20" />
+                <p>Nenhum histórico encontrado para este cliente.</p>
+             </div>
+          )}
+        </div>
+
+        {/* Footer Stats */}
+        <div className="bg-[#0C0C0C] p-4 border-t border-[#292929] grid grid-cols-3 gap-4 text-center">
+           <div>
+              <p className="text-xs text-[#5C5C5C]">Total Visitas</p>
+              <p className="text-lg font-bold text-[#DDDBCB]">{history.length}</p>
+           </div>
+           <div>
+              <p className="text-xs text-[#5C5C5C]">Gasto Total</p>
+              <p className="text-lg font-bold text-[#58BEC3]">
+                R$ {history.reduce((acc, curr) => acc + parseFloat(curr.value.replace('R$', '').replace(',', '.')), 0).toFixed(2)}
+              </p>
+           </div>
+           <div>
+              <p className="text-xs text-[#5C5C5C]">Última Visita</p>
+              <p className="text-lg font-bold text-[#DDDBCB]">{client.lastVisit}</p>
+           </div>
+        </div>
+      </div>
+    </div>
+  )
 }
 
 const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, onClose }) => {
@@ -1122,6 +1233,123 @@ const FinancialContent: React.FC = () => {
 
     );
 }
+
+// Componente Clientes
+const ClientesContent: React.FC = () => {
+  const [clients, setClients] = useState<Client[]>(initialClientsData);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const filteredClients = clients.filter(client => 
+    client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    client.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    client.phone.includes(searchQuery)
+  );
+
+  const handleDeleteClient = (e: React.MouseEvent, id: string) => {
+    e.stopPropagation(); // Previne abrir o modal
+    if(confirm('Tem certeza que deseja remover este cliente?')) {
+      setClients(prev => prev.filter(c => c.id !== id));
+      setToastMessage("Cliente removido com sucesso.");
+    }
+  };
+  
+  return(
+    <div className="animate-in fade-in duration-500">
+      {/* Toast de Sucesso */}
+      {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
+
+      {/* Modal de Detalhes */}
+      <ClientDetailsModal 
+        client={selectedClient} 
+        isOpen={!!selectedClient} 
+        onClose={() => setSelectedClient(null)} 
+      />
+
+      {/* Header e Busca */}
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+        <div>
+          <h1 className="text-3xl font-bold text-[#DDDBCB]">Meus Clientes</h1>
+          <p className="text-[#5C5C5C] text-sm mt-1">Gerencie a base de clientes e veja o histórico.</p>
+        </div>
+
+        <div className="relative w-full md:max-w-md">
+          <input
+            type="text"
+            placeholder="Buscar por nome, email ou telefone..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#151515] border border-[#292929] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-3 rounded-lg pl-10 focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all shadow-lg"
+          />
+          <Search className="w-5 h-5 text-[#5C5C5C] absolute left-3 top-1/2 -translate-y-1/2" />
+        </div>
+      </div>
+
+      {/* Lista de Clientes */}
+      {filteredClients.length === 0 ? (
+        <div className="bg-[#151515] p-10 rounded-lg border border-[#292929] text-center flex flex-col items-center">
+           <UserX className="w-16 h-16 text-[#292929] mb-4"/>
+           <p className="text-[#5C5C5C]">Nenhum cliente encontrado.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredClients.map((client) => (
+            <div 
+              key={client.id}
+              onClick={() => setSelectedClient(client)}
+              className="bg-[#151515] rounded-xl border border-[#292929] p-6 hover:border-[#58BEC3] transition-all cursor-pointer group relative overflow-hidden"
+            >
+              {/* Hover Effect bg */}
+              <div className="absolute inset-0 bg-gradient-to-r from-[#58BEC3]/0 to-[#58BEC3]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+              
+              <div className="flex items-start justify-between mb-4 relative z-10">
+                <div className={`w-12 h-12 rounded-full ${client.avatarColor} flex items-center justify-center text-lg font-bold text-white shadow-lg`}>
+                  {client.name.substring(0, 2).toUpperCase()}
+                </div>
+                <button 
+                  onClick={(e) => handleDeleteClient(e, client.id)}
+                  className="text-[#292929] group-hover:text-red-500 hover:bg-red-500/10 p-2 rounded-full transition-colors"
+                  title="Remover Cliente"
+                >
+                  <Trash2 className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="relative z-10">
+                <h3 className="text-lg font-bold text-[#DDDBCB] mb-1 group-hover:text-[#58BEC3] transition-colors">{client.name}</h3>
+                
+                <div className="space-y-2 mt-4">
+                  <div className="flex items-center text-sm text-[#5C5C5C]">
+                    <Mail className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                    <span className="truncate">{client.email}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-[#5C5C5C]">
+                    <Phone className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                    <span>{client.phone}</span>
+                  </div>
+                  <div className="flex items-center text-sm text-[#5C5C5C]">
+                     <Clock className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                     <span>Cliente desde {client.since}</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="mt-6 pt-4 border-t border-[#292929] flex items-center justify-between relative z-10">
+                 <span className="text-xs text-[#5C5C5C]">Última visita: <span className="text-[#DDDBCB]">{client.lastVisit}</span></span>
+                 <div className="flex items-center text-[#58BEC3] text-xs font-bold">
+                    <History className="w-3 h-3 mr-1" />
+                    Ver Histórico
+                 </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
+
 //Componente App
 const App: React.FC = () => {
 
@@ -1163,13 +1391,7 @@ const App: React.FC = () => {
           {currentPage === 'Barbeiros' && <BarbeirosContent />}
           {currentPage === 'Agendamentos' && <AgendamentosContent />}
           {currentPage === 'Gestão Financeira' && <FinancialContent />}
-          {currentPage === 'Clientes' && (
-              <div className="flex flex-col items-center justify-center h-[60vh] text-[#5C5C5C] animate-in fade-in">
-                <Users className="w-16 h-16 mb-4 opacity-20" />
-                <p className="text-lg font-medium">Módulo de Clientes</p>
-                <p className="text-sm">Em desenvolvimento...</p>
-              </div>
-            )}
+          {currentPage === 'Clientes' && <ClientesContent />}
         </div>
     </main>
   </div>
