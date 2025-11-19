@@ -1137,8 +1137,27 @@ const App: React.FC = () => {
         isOpen={isMobileMenuOpen} // [MENU HAMBURGUER] 9. Passando o estado
         onClose={() => setIsMobileMenuOpen(false)} // [MENU HAMBURGUER] 10. Passando a função de fechar
       />
+      {/* Main Content */}
+      <main className="flex-1 md:ml-64 p-4 md:p-10 min-h-screen overflow-x-hidden">
+
+      {/* Mobile Header Toggle */}
+      {/* [MENU HAMBURGUER] 11. Cabeçalho visível APENAS em Mobile (md:hidden) */}
+      <div className="md:hidden flex items-center justify-between mb-6 bg-[#151515] p-4 rounded-lg border border-[#292929]">
+          <div className="flex items-center space-x-3">
+            <div className="w-8 h-8 bg-[#58BEC3] rounded-lg flex items-center justify-center text-[#151515]">
+              <User className="w-5 h-5" />
+            </div>
+            <span className="font-bold text-[#DDDBCB]">Barbearia</span>
+          </div>
+          <button 
+            onClick={() => setIsMobileMenuOpen(true)} // [MENU HAMBURGUER] 12. Ação de clicar no ícone para abrir o menu
+            className="text-[#DDDBCB] hover:text-[#58BEC3] p-1"
+          >
+            <Menu className="w-6 h-6" />
+        </button>
+      </div>
       
-      <main className="flex-1 p-6 md-p10 min-h-screen overflow-y-auto">
+      <div className="max-w-7xl mx-auto">
         {currentPage === 'Dashboard' && <DashboardContent />}
         {currentPage === 'Barbeiros' && <BarbeirosContent />}
         {currentPage === 'Agendamentos' && <AgendamentosContent />}
@@ -1150,9 +1169,10 @@ const App: React.FC = () => {
               <p className="text-sm">Em desenvolvimento...</p>
             </div>
           )}
-      </main>
-    </div>
-  )
+      </div>
+    </main>
+  </div>
+)
 }
 
 export default App;
