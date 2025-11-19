@@ -141,6 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
     <div
       //  // [MENU HAMBURGUER] 4. Camada escura de fundo. Se isOpen for true, fica visível e clicável para fechar.
       className={`fixed inset-0 bg-black/50 z-20 md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+      onClick={onClose}
         
     />
     {/* Sidebar Container */}
@@ -159,13 +160,12 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
           <X className="w-6 h-6" />
         </button>
 
-        <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5">
+        <h1 className = "text-2xl font-bold text-center text-[#58BEC3] mb-10 my-5 tracking-tight">
         {/* Aqui recebe-se o nome da barbearia que fez o login*/}
         Nome
         <br />
         Barbearia
       </h1>
-    </div>
       <nav className="flex-grow">
         <ul className="space-y-2">
           {navItems.map((item) => (
@@ -193,6 +193,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
             </svg>
           </div>
         </div>
+      </div>
       </div>
     </>
   )
