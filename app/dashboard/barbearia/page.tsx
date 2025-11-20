@@ -323,6 +323,14 @@ const statsData = [
   { icon: Calendar, title: 'Agendamentos', value: '7', iconBgColor: 'bg-yellow-500' },
 ];
 
+const initialAppointmentsData: Appointment[] = [
+  { id: 'd1', date: '09/11', time: '10:00', client: 'Carlos Pereira', barber: 'João Silva', service: 'Corte', value: 'R$50,00', status: 'Pendente' },
+  { id: 'd2', date: '09/11', time: '11:00', client: 'Otávio Augusto', barber: 'João Silva', service: 'Barba', value: 'R$40,00', status: 'Confirmado' },
+  { id: 'd3', date: '09/11', time: '13:00', client: 'Marcos Santos', barber: 'Pedro Souza', service: 'Corte + Barba', value: 'R$80,00', status: 'Concluído' },
+  { id: 'd4', date: '10/11', time: '09:00', client: 'Lucas Oliveira', barber: 'João Silva', service: 'Corte', value: 'R$50,00', status: 'Pendente' },
+  { id: 'd5', date: '01/11', time: '14:00', client: 'Carlos Pereira', barber: 'Marcos Alves', service: 'Corte', value: 'R$50,00', status: 'Concluído' },
+];
+
 const appointmentsData: Appointment[] = [
   { id: 'd1', date: '09/11', time: '10:00', client: 'Carlos Pereira', barber: 'Nome Barbeiro', service: 'Corte', value: 'R$50,00', status: 'Pendente' },
   { id: 'd2', date: '09/11', time: '11:00', client: 'Otávio Augusto', barber: 'Nome Barbeiro', service: 'Corte', value: 'R$50,00', status: 'Confirmado' },
@@ -1748,6 +1756,18 @@ const App: React.FC = () => {
   // Estado para controlar a página atual
   const [currentPage, setCurrentPage] = React.useState('Dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // [MENU HAMBURGUER] 8. Estado global que controla a visibilidade
+  
+  const [appointments, setAppointments] = useState<Appointment[]>(initialAppointmentsData);
+  const [clients, setClients] = useState<Client[]>(initialClientsData);
+
+
+  // Estado para controlar a visibilidade do modal
+  const [isNewAppointmentOpen, setIsNewAppointmentOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const handleAddClient = (newClient: Client) => {
+    setClients(prev => [newClient, ...prev]);
+  };
 
   return (
     <div className="flex min-h-screen bg-[#050505] text-white font-sans selection:bg-[#58BEC3] selection:text-[#050505]">
