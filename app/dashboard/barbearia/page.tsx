@@ -774,9 +774,29 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
               </div>
             </div>
           )}
-        </div>
+
+          {selectedDate ? (
+                <div className="grid grid-cols-3 gap-3">
+                  {AVAILABLE_TIMES.map(t => (
+                    <button
+                      key={t}
+                      onClick={() => { setSelectedTime(t); setStep(4); }}
+                      className={`py-3 rounded-md text-sm font-bold transition-all border ${selectedTime === t ? 'bg-[#DDDBCB] text-[#151515] border-[#DDDBCB]' : 'bg-[#0C0C0C] text-[#DDDBCB] border-[#292929] hover:border-[#58BEC3] hover:text-[#58BEC3]'}`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-[#5C5C5C] border border-dashed border-[#292929] rounded-lg">
+                   <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50"/>
+                   <p>Selecione uma data acima</p>
+                </div>
+              )}
+          </div>
       </div>
     </div>
+    
 
   )
 
