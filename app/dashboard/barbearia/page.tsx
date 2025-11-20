@@ -829,7 +829,7 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                         </div>
                     )}
                   </div>
-                  
+
                   {/* [NOVO AGENDAMENTO] Botão + para adicionar cliente novo */}
                   <button 
                      onClick={() => setIsCreatingClient(true)}
@@ -838,6 +838,27 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                   >
                      <Plus className="w-5 h-5" />
                   </button>
+                </div>
+
+                <div className="bg-[#0C0C0C] rounded-lg p-4 border border-[#292929] space-y-3">
+                   <div className="flex justify-between items-center border-b border-[#292929] pb-2">
+                      <span className="text-[#5C5C5C] text-sm">Serviço</span>
+                      <span className="text-[#DDDBCB] font-medium">{selectedService?.name}</span>
+                   </div>
+                   <div className="flex justify-between items-center border-b border-[#292929] pb-2">
+                      <span className="text-[#5C5C5C] text-sm">Profissional</span>
+                      <span className="text-[#DDDBCB] font-medium">{selectedBarber?.name}</span>
+                   </div>
+                   <div className="flex justify-between items-center border-b border-[#292929] pb-2">
+                      <span className="text-[#5C5C5C] text-sm">Data/Hora</span>
+                      <span className="text-[#DDDBCB] font-medium">
+                        {selectedDate ? `${String(selectedDate.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}))} às ${selectedTime}` : ''}
+                      </span>
+                   </div>
+                   <div className="flex justify-between items-center pt-1">
+                      <span className="text-[#5C5C5C] text-sm">Total</span>
+                      <span className="text-[#58BEC3] font-bold text-lg">{selectedService?.price}</span>
+                   </div>
                 </div>
             </div>
           )}
