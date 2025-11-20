@@ -1769,7 +1769,7 @@ const App: React.FC = () => {
     setClients(prev => [newClient, ...prev]);
   };
 
-  // [NOVO AGENDAMENTO] Função para processar a criação do agendamento
+  // Função para processar a criação do agendamento
   const handleCreateAppointment = (newAppointmentData: any, clientData?: { name: string, isNew: boolean }) => {
     const newAppointment: Appointment = {
       id: Math.random().toString(36).substr(2, 9),
@@ -1798,6 +1798,8 @@ const App: React.FC = () => {
 
   return (
     <div className="flex min-h-screen bg-[#050505] text-white font-sans selection:bg-[#58BEC3] selection:text-[#050505]">
+      {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
+
       {/* A Sidebar agora recebe o estado da página e a função para alterá-lo */}
       <Sidebar
         currentPage={currentPage}
@@ -1805,6 +1807,16 @@ const App: React.FC = () => {
         isOpen={isMobileMenuOpen} // [MENU HAMBURGUER] 9. Passando o estado
         onClose={() => setIsMobileMenuOpen(false)} // [MENU HAMBURGUER] 10. Passando a função de fechar
       />
+
+      {/* Renderização do Modal NOVO AGENDAMENTO */}
+      <NewAppointmentModal 
+        isOpen={isNewAppointmentOpen} 
+        onClose={() => setIsNewAppointmentOpen(false)} 
+        onConfirm={handleCreateAppointment}
+        onAddClient={handleAddClient}
+        clients={clients}
+      />
+
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-10 min-h-screen overflow-x-hidden">
 
