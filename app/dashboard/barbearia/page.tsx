@@ -811,6 +811,23 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                       className="w-full bg-[#0C0C0C] border border-[#292929] text-[#DDDBCB] px-4 py-3 pl-10 rounded-lg focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3]"
                     />
                     <Search className="w-5 h-5 text-[#5C5C5C] absolute left-3 top-1/2 -translate-y-1/2" />
+
+                    {!selectedClient && clientSearch.length > 0 && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-[#151515] border border-[#292929] rounded-lg shadow-xl z-20 overflow-hidden">
+                          {filteredClients.length > 0 ? filteredClients.map(c => (
+                              <button 
+                                key={c.id}
+                                onClick={() => { setSelectedClient(c); setClientSearch(''); }}
+                                className="w-full text-left px-4 py-3 hover:bg-[#292929] text-[#DDDBCB] flex items-center justify-between group"
+                              >
+                                <span>{c.name}</span>
+                                <span className="text-xs text-[#5C5C5C] group-hover:text-[#58BEC3]">Existente</span>
+                              </button>
+                          )) : (
+                            <div className="px-4 py-3 text-[#5C5C5C] text-sm text-center">Nenhum cliente encontrado.</div>
+                          )}
+                        </div>
+                    )}
                   </div>
                 </div>
             </div>
