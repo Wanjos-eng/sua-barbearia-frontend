@@ -909,10 +909,21 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                    <Save className="w-4 h-4"/>
                    Salvar Cliente
                 </button>
-
             </div>
           )}
-          </div>
+        </div>
+
+        {!isCreatingClient && step === 4 && (
+           <div className="p-4 border-t border-[#292929] bg-[#151515] flex-shrink-0">
+              <button 
+                 onClick={handleConfirmClick}
+                 disabled={!selectedClient && clientSearch.length === 0}
+                 className={`w-full font-bold py-3 rounded-lg transition-all shadow-lg ${(!selectedClient && clientSearch.length === 0) ? 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed' : 'bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] shadow-[#58BEC3]/20'}`}
+              >
+                 Confirmar Agendamento
+              </button>
+           </div>
+        )}
       </div>
     </div>
   )
