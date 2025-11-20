@@ -1042,8 +1042,11 @@ const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, on
 };
 
 // Componente Conteúdo Principal
-const DashboardContent: React.FC = () => (
-  <>
+const DashboardContent: React.FC<{
+  onOpenNewAppointment: () => void, 
+  appointments: Appointment[],
+  activeBarbers: ActiveBarber[]}> = ({ onOpenNewAppointment, appointments, activeBarbers }) => (
+  <div className="animate-in fade-in duration-500">
     <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
 
     {/* Grid de Estatísticas */}  
@@ -1107,7 +1110,10 @@ const DashboardContent: React.FC = () => (
 
       {/* Coluna Direita: Ações e Barbeiros Ativos */}
       <div className="w-full lg:w-80">
-        <button className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors">
+        <button 
+          onClick={onOpenNewAppointment}
+          className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mb-8 shadow-lg shadow-[#58BEC3]/10"
+        >
           + Novo Agendamento
         </button>
 
@@ -1131,7 +1137,7 @@ const DashboardContent: React.FC = () => (
         </button>
       </div>
     </div>
-  </>
+  </div>
 )
 
 // Componente Card do Barbeiro
