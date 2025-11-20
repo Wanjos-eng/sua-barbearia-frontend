@@ -793,13 +793,32 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                    <p>Selecione uma data acima</p>
                 </div>
               )}
+
+          {!isCreatingClient && step === 4 && (
+            <div className="animate-in slide-in-from-right duration-300">
+              <h4 className="text-[#DDDBCB] mb-4 font-medium">Identifique o Cliente</h4>
+                
+                <div className="flex gap-2 mb-6">
+                  <div className="relative flex-1">
+                    <input 
+                      type="text" 
+                      value={selectedClient ? selectedClient.name : clientSearch}
+                      onChange={(e) => {
+                          setClientSearch(e.target.value);
+                          setSelectedClient(null);
+                      }}
+                      placeholder="Nome do cliente..."
+                      className="w-full bg-[#0C0C0C] border border-[#292929] text-[#DDDBCB] px-4 py-3 pl-10 rounded-lg focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3]"
+                    />
+                    <Search className="w-5 h-5 text-[#5C5C5C] absolute left-3 top-1/2 -translate-y-1/2" />
+                  </div>
+                </div>
+            </div>
+          )}
           </div>
       </div>
     </div>
-    
-
   )
-
 }
 
 // Modal de Detalhes do Cliente (Histórico)
