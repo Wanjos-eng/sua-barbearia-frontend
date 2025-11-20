@@ -862,6 +862,45 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                 </div>
             </div>
           )}
+
+          {/* [NOVO AGENDAMENTO] Formulário de Cadastro de Cliente */}
+          {isCreatingClient && (
+            <div className="animate-in slide-in-from-right duration-300 space-y-4">
+                <div className="bg-[#0C0C0C] p-4 rounded-lg border border-[#292929] mb-4">
+                  <p className="text-sm text-[#5C5C5C] mb-4">Preencha os dados abaixo para cadastrar um novo cliente.</p>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium text-[#DDDBCB] mb-1">Nome Completo *</label>
+                      <input 
+                        type="text" 
+                        value={newClientName} 
+                        onChange={e => setNewClientName(e.target.value)}
+                        className="w-full bg-[#151515] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:border-[#58BEC3] focus:outline-none" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-[#DDDBCB] mb-1">Email *</label>
+                      <input 
+                        type="email" 
+                        value={newClientEmail} 
+                        onChange={e => setNewClientEmail(e.target.value)}
+                        className="w-full bg-[#151515] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:border-[#58BEC3] focus:outline-none" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-[#DDDBCB] mb-1">Telefone *</label>
+                      <input 
+                        type="tel" 
+                        value={newClientPhone} 
+                        onChange={e => setNewClientPhone(e.target.value)}
+                        className="w-full bg-[#151515] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:border-[#58BEC3] focus:outline-none" 
+                      />
+                    </div>
+                </div>
+              </div>
+            </div>
+          )}
           </div>
       </div>
     </div>
