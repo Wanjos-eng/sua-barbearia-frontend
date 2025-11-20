@@ -829,7 +829,8 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                         </div>
                     )}
                   </div>
-
+                  
+                  {/* [NOVO AGENDAMENTO] Botão + para adicionar cliente novo */}
                   <button 
                      onClick={() => setIsCreatingClient(true)}
                      className="bg-[#292929] hover:bg-[#58BEC3] hover:text-[#151515] text-[#DDDBCB] px-4 rounded-lg border border-[#292929] transition-colors flex items-center justify-center"
