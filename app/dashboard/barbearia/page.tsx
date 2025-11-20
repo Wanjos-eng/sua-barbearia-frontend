@@ -1838,7 +1838,13 @@ const App: React.FC = () => {
         </div>
         
         <div className="max-w-7xl mx-auto">
-          {currentPage === 'Dashboard' && <DashboardContent />}
+          {currentPage === 'Dashboard' && (
+            <DashboardContent 
+              onOpenNewAppointment={() => setIsNewAppointmentOpen(true)} 
+              appointments={appointments}
+              activeBarbers={activeBarbersData}
+            />
+          )}
           {currentPage === 'Barbeiros' && <BarbeirosContent />}
           {currentPage === 'Agendamentos' && <AgendamentosContent />}
           {currentPage === 'Gestão Financeira' && <FinancialContent />}
