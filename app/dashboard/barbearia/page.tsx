@@ -1769,6 +1769,33 @@ const App: React.FC = () => {
     setClients(prev => [newClient, ...prev]);
   };
 
+  // [NOVO AGENDAMENTO] Função para processar a criação do agendamento
+  const handleCreateAppointment = (newAppointmentData: any, clientData?: { name: string, isNew: boolean }) => {
+    const newAppointment: Appointment = {
+      id: Math.random().toString(36).substr(2, 9),
+      ...newAppointmentData
+    };
+    setAppointments(prev => [newAppointment, ...prev]);
+
+    if (clientData && clientData.isNew) {
+       const newClient: Client = {
+         id: Math.random().toString(36).substr(2, 9),
+         name: clientData.name,
+         email: 'pendente@email.com', 
+         phone: '(00) 00000-0000', 
+         since: new Date().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
+         lastVisit: newAppointmentData.date,
+         avatarColor: 'bg-gray-500'
+       };
+       setClients(prev => [newClient, ...prev]);
+       setToastMessage(`Agendamento criado e cliente "${clientData.name}" cadastrado!`);
+    } else {
+       setToastMessage("Agendamento criado com sucesso!");
+    }
+
+    setIsNewAppointmentOpen(false);
+  };
+
   return (
     <div className="flex min-h-screen bg-[#050505] text-white font-sans selection:bg-[#58BEC3] selection:text-[#050505]">
       {/* A Sidebar agora recebe o estado da página e a função para alterá-lo */}
