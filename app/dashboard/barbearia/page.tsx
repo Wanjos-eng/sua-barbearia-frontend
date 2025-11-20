@@ -752,6 +752,28 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                ))}
             </div>
           )}
+
+          {!isCreatingClient && step === 3 && (
+            <div className="space-y-3 animate-in slide-in-from-right duration-300">
+              <h4 className="text-[#DDDBCB] mb-4 font-medium">Data e Horário</h4>
+              
+              <div className="flex gap-3 overflow-x-auto pb-4 mb-6 custom-scrollbar">
+                {dates.map(d => {
+                  const isSelected = selectedDate?.toDateString() === d.toDateString();
+                  return (<button 
+                      key={d.toISOString()}
+                      onClick={() => { setSelectedDate(d); setSelectedTime(null); }}
+                      className={`min-w-[70px] h-20 rounded-lg flex flex-col items-center justify-center border transition-all flex-shrink-0 ${isSelected ? 'bg-[#58BEC3] border-[#58BEC3] text-[#151515]' : 'bg-[#0C0C0C] border-[#292929] text-[#5C5C5C] hover:border-[#58BEC3]/50 hover:text-[#DDDBCB]'}`}
+                    >
+                      {/* [CORREÇÃO] Convertendo Data para String */}
+                      <span className="text-xs uppercase font-bold">{String(d.toLocaleDateString('pt-BR', {weekday: 'short'}).slice(0,3))}</span>
+                      <span className="text-2xl font-bold">{String(d.getDate())}</span>
+                    </button>
+                    )
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
