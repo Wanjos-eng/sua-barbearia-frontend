@@ -28,7 +28,8 @@ import {
   History,
   Trash2,
   ChevronLeft,
-  Scissors
+  Scissors,
+  Save
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -899,6 +900,16 @@ const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClo
                     </div>
                 </div>
               </div>
+
+              <button 
+                   onClick={handleSaveClient}
+                   disabled={!newClientName || !newClientEmail || !newClientPhone}
+                   className={`w-full font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 ${(!newClientName || !newClientEmail || !newClientPhone) ? 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed' : 'bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515]'}`}
+                >
+                   <Save className="w-4 h-4"/>
+                   Salvar Cliente
+                </button>
+
             </div>
           )}
           </div>
