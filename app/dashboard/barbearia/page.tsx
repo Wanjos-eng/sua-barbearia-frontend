@@ -1,6 +1,6 @@
 'use client';
-// app/barbershop/dashboard/page.tsx
-import React, {useMemo, useState, useEffect} from 'react';
+import React, { useMemo, useState, useEffect, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   LayoutGrid,
   Users,
@@ -31,43 +31,13 @@ import {
   Scissors,
   Save
 } from 'lucide-react';
+import ProtectedRoute from '@/app/components/auth/ProtectedRoute';
+import { useAuth } from '@/app/contexts/AuthContext';
 
-// Tipos (Typescript)
-
-interface SidebarProps {
-  currentPage: string;
-  setCurrentPage: (page: string) => void;
-  isOpen: boolean; // [MENU HAMBURGUER] 2. Propriedade para saber se o menu está visível
-  onClose: () => void; // [MENU HAMBURGUER] 3. Função para fechar o menu
-}
-interface SidebarItemProps{
-  icon: React.ElementType;
-  label: string;
-  active?: boolean;
-  onClick: () => void;
-}
-
-interface StatsCardProps{
-  icon: React.ElementType;
-  title: string;
-  value: string;
-  trend?: string;
-  trendType?: 'up' | 'down' | 'neutral';
-  //iconBgColor: string;
-}
-
-interface Appointment{
-  id: string,
-  date: string,
-  time: string,
-  client: string;
-  barber: string;
-  service: string;
-  value: string;
-  status: AppointmentStatus;
-}
-
-// Tipos de Páginas de Agendamentos
+// --- TIPOS E INTERFACES (mesmos de antes) ---
+interface SidebarProps { currentPage: string; onNavigate: (page: string) => void; isOpen: boolean; onClose: () => void; }
+interface SidebarItemProps { icon: React.ElementType; label: string; active?: boolean; onClick: () => void; }
+interface StatsCardProps { icon: React.ElementType; title: string; value: string; trend?: string; trendType?: 'up' | 'down' | 'neutral'; }
 type AppointmentStatus = 'Concluído' | 'Cancelado' | 'Pendente' | 'Confirmado';
 
 interface ActiveBarber {
@@ -1433,321 +1403,40 @@ const FinancialContent: React.FC = () => {
       projection: displayIncome * 1.2,
       ticket: 60.00
     };
-  }, [transactions, periodFilter]);
-
-  const handleAddTransaction = (newTxData: Omit<Transaction, 'id'>) => {
-    const newTransaction: Transaction = {
-      id: Math.random().toString(36).substr(2, 9),
-      ...newTxData
-    };
-
-    setTransactions(prev => [newTransaction, ...prev]);
-    setIsModalOpen(false);
-    setToastMessage("Transação registrada com sucesso!");
-  };
-  
-  // Dados aleatórios estáticos para o gráfico para evitar que as barras "dancem" na renderização.
-  const chartData = useMemo(() => {
-    return ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'].map((day) => ({
-      day,
-      height: Math.floor(Math.random() * (80 - 20 + 1) + 20)
-    }));
-  }, []);
-
+    
     return (
-      <div className="animate-in fade-in duration-500">
-        {/* Estilos Globais Locais */}
-        <style>{`
-          .custom-scrollbar::-webkit-scrollbar {
-            width: 6px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-track {
-            background: #151515;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #292929;
-            border-radius: 10px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #58BEC3;
-          }
-        `}</style>
-
-        {/* Toast Popup */}
-        {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
-        
-        {/* Modal */}
-        <AddTransactionModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-          onConfirm={handleAddTransaction}
-        />
-
-        {/* Header e Filtros */}
-        <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-          <div>
-            <h1 className="text-3xl font-bold text-[#DDDBCB]">Gestão Financeira</h1>
-            <p className="text-[#5C5C5C] text-sm mt-1">Acompanhe o fluxo de caixa e projeções financeiras.</p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <div className="bg-[#151515] p-1 rounded-lg flex items-center border border-[#292929]">
-              {(['Semanal', 'Mensal', 'Total'] as const).map((filter) => (
-                <button
-                  key={filter}
-                  onClick={() => setPeriodFilter(filter)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${periodFilter === filter
-                      ? 'bg-[#58BEC3] text-[#151515] shadow-lg'
-                      : 'text-[#5C5C5C] hover:text-[#DDDBCB] hover:bg-[#292929]'
-                    }`}
-                >
-                  {filter}
-                </button>
-              ))}
-            </div>
-
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-2.5 px-4 rounded-lg transition-colors flex items-center shadow-lg shadow-[#58BEC3]/10"
-            >
-              <Plus className="w-5 h-5 md:mr-2" />
-              <span className="hidden md:inline">Nova Transação</span>
-            </button>
-          </div>
-        </div>
-
-        {/* Cards Principais */}
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-          <StatsCard
-            icon={DollarSign}
-            title="Receita Total"
-            value={`R$ ${metrics.revenue.toFixed(2)}`}
-            trend="+12%"
-            trendType="up"
-          />
-          <StatsCard
-            icon={TrendingUp}
-            title="Projeção (7 dias)"
-            value={`R$ ${metrics.projection.toFixed(2)}`}
-            trend="+5%"
-            trendType="up"
-          />
-          <StatsCard
-            icon={Percent}
-            title="Ticket Médio"
-            value={`R$ ${metrics.ticket.toFixed(2)}`}
-            trend="0%"
-            trendType="neutral"
-          />
-          <StatsCard
-            icon={Wallet}
-            title="Despesas"
-            value={`R$ ${metrics.expenses.toFixed(2)}`}
-            trend="-2%"
-            trendType="down"
-          />
-        </div>
-        
-        {/* Gráfico e Histórico */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Coluna Esquerda: Gráfico (2/3) */}
-          <div className="lg:col-span-2 bg-[#151515] p-6 rounded-lg flex flex-col h-[450px] border border-[#292929]">
-            <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-[#DDDBCB]">Fluxo de Receita</h3>
-              <div className="flex items-center space-x-3 text-xs text-[#5C5C5C]">
-                <span className="flex items-center"><div className="w-2 h-2 rounded-full bg-[#58BEC3] mr-1"></div> Receita</span>
-                <span className="flex items-center"><div className="w-2 h-2 rounded-full bg-[#292929] border border-[#5C5C5C] mr-1"></div> Despesa</span>
-              </div>
-          </div>
-         
-          {/* Visualização Gráfica Customizada */}
-          <div className="flex-1 flex items-end justify-between gap-4 px-2 pb-2 border-b border-[#292929] border-l border-[#292929]/50">
-            {chartData.map((item) => (
-              <div key={item.day} className="flex flex-col items-center justify-end flex-1 group h-full relative">
-                {/* Tooltip */}
-                <div className="absolute -top-10 bg-[#DDDBCB] text-[#050505] text-xs font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-200 z-10 whitespace-nowrap shadow-xl translate-y-2 group-hover:translate-y-0 pointer-events-none">
-                  R$ {item.height * 10},00
-                  <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[#DDDBCB] rotate-45"></div>
-                </div>
-
-                {/* Bar */}
-                <div
-                  className="w-full max-w-[40px] bg-[#58BEC3] rounded-t-sm opacity-80 group-hover:opacity-100 transition-all duration-300 hover:shadow-[0_0_15px_rgba(88,190,195,0.3)]"
-                  style={{ height: `${item.height}%` }}
-                ></div>
-                <span className="text-xs text-[#5C5C5C] mt-3 font-medium">{item.day}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-         {/* Coluna Direita: Transações Recentes (1/3) */}
-        <div className="bg-[#151515] p-6 rounded-lg flex flex-col h-[450px] border border-[#292929]">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-bold text-[#DDDBCB]">Transações</h3>
-            <button className="text-[#58BEC3] text-xs hover:underline font-semibold transition-colors">Ver todas</button>
-          </div>
-
-          <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-            {transactions.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-[#5C5C5C]">
-                <p className="text-sm">Nenhuma transação encontrada.</p>
-              </div>
-            ) : (
-              transactions.map((transaction) => (
-                <div key={transaction.id} className="flex items-center justify-between p-3 bg-[#0C0C0C] rounded-lg border border-transparent hover:border-[#292929] transition-colors group">
-                  <div className="flex items-center space-x-3 overflow-hidden">
-                    <div className={`p-2 rounded-lg flex-shrink-0 ${transaction.type === 'income' ? 'bg-[#58BEC3]/10 text-[#58BEC3]' : 'bg-red-500/10 text-red-500'}`}>
-                      {transaction.type === 'income' ? <ArrowDownRight className="w-4 h-4" /> : <ArrowUpRight className="w-4 h-4" />}
+        <div className="flex min-h-screen bg-[#050505] text-white font-sans selection:bg-[#58BEC3] selection:text-[#050505]">
+            <Sidebar
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                isOpen={isMobileMenuOpen}
+                onClose={() => setIsMobileMenuOpen(false)}
+                barbeariaName={user?.nome || "Barbearia"}
+                onLogout={handleLogout}
+            />
+            <main className="flex-1 p-4 md:p-10 min-h-screen overflow-x-hidden">
+                <div className="md:hidden flex items-center justify-between mb-6 bg-[#151515] p-4 rounded-lg border border-[#292929]">
+                    <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-[#58BEC3] rounded-lg flex items-center justify-center text-[#151515]">
+                            <User className="w-5 h-5" />
+                        </div>
+                        <span className="font-bold text-[#DDDBCB]">{user?.nome || "Barbearia"}</span>
                     </div>
-                    <div className="overflow-hidden">
-                      <p className="text-sm font-medium text-[#DDDBCB] truncate">{transaction.category}</p>
-                      <p className="text-xs text-[#5C5C5C] truncate">
-                        {transaction.barberName ? `Barbeiro: ${transaction.barberName}` : transaction.description}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="text-right flex-shrink-0 ml-2">
-                    <p className={`text-sm font-bold ${transaction.type === 'income' ? 'text-[#58BEC3]' : 'text-red-400'}`}>
-                      {transaction.type === 'income' ? '+ ' : '- '}
-                      R$ {transaction.amount.toFixed(2)}
-                    </p>
-                    <p className="text-xs text-[#5C5C5C]">{transaction.date}</p>
-                  </div>
+                    <button onClick={() => setIsMobileMenuOpen(true)} className="text-[#DDDBCB] hover:text-[#58BEC3] p-1">
+                        <Menu className="w-6 h-6" />
+                    </button>
                 </div>
-              ))
-            )}
-          </div>
-
-          <div className="mt-4 pt-4 border-t border-[#292929]">
-            <div className="flex justify-between items-center">
-              <span className="text-[#5C5C5C] text-sm">Saldo Atual</span>
-              <span className={`font-bold text-lg ${(metrics.revenue - metrics.expenses) >= 0 ? 'text-[#58BEC3]' : 'text-red-500'}`}>
-                R$ {(metrics.revenue - metrics.expenses).toFixed(2)}
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    );
-}
-
-// Componente Clientes
-const ClientesContent: React.FC = () => {
-  const [clients, setClients] = useState<Client[]>(initialClientsData);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
-  const [toastMessage, setToastMessage] = useState<string | null>(null);
-
-  const filteredClients = clients.filter(client => 
-    client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.phone.includes(searchQuery)
-  );
-
-  const handleDeleteClient = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation(); // Previne abrir o modal
-    if(confirm('Tem certeza que deseja remover este cliente?')) {
-      setClients(prev => prev.filter(c => c.id !== id));
-      setToastMessage("Cliente removido com sucesso.");
-    }
-  };
-  
-  return(
-    <div className="animate-in fade-in duration-500">
-      {/* Toast de Sucesso */}
-      {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
-
-      {/* Modal de Detalhes */}
-      <ClientDetailsModal 
-        client={selectedClient} 
-        isOpen={!!selectedClient} 
-        onClose={() => setSelectedClient(null)} 
-      />
-
-      {/* Header e Busca */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
-        <div>
-          <h1 className="text-3xl font-bold text-[#DDDBCB]">Meus Clientes</h1>
-          <p className="text-[#5C5C5C] text-sm mt-1">Gerencie a base de clientes e veja o histórico.</p>
-        </div>
-
-        <div className="relative w-full md:max-w-md">
-          <input
-            type="text"
-            placeholder="Buscar por nome, email ou telefone..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-[#151515] border border-[#292929] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-3 rounded-lg pl-10 focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all shadow-lg"
-          />
-          <Search className="w-5 h-5 text-[#5C5C5C] absolute left-3 top-1/2 -translate-y-1/2" />
-        </div>
-      </div>
-
-      {/* Lista de Clientes */}
-      {filteredClients.length === 0 ? (
-        <div className="bg-[#151515] p-10 rounded-lg border border-[#292929] text-center flex flex-col items-center">
-           <UserX className="w-16 h-16 text-[#292929] mb-4"/>
-           <p className="text-[#5C5C5C]">Nenhum cliente encontrado.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredClients.map((client) => (
-            <div 
-              key={client.id}
-              onClick={() => setSelectedClient(client)}
-              className="bg-[#151515] rounded-xl border border-[#292929] p-6 hover:border-[#58BEC3] transition-all cursor-pointer group relative overflow-hidden"
-            >
-              {/* Hover Effect bg */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#58BEC3]/0 to-[#58BEC3]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-              
-              <div className="flex items-start justify-between mb-4 relative z-10">
-                <div className={`w-12 h-12 rounded-full ${client.avatarColor} flex items-center justify-center text-lg font-bold text-white shadow-lg`}>
-                  {client.name.substring(0, 2).toUpperCase()}
-                </div>
-                <button 
-                  onClick={(e) => handleDeleteClient(e, client.id)}
-                  className="text-[#292929] group-hover:text-red-500 hover:bg-red-500/10 p-2 rounded-full transition-colors"
-                  title="Remover Cliente"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="relative z-10">
-                <h3 className="text-lg font-bold text-[#DDDBCB] mb-1 group-hover:text-[#58BEC3] transition-colors">{client.name}</h3>
                 
-                <div className="space-y-2 mt-4">
-                  <div className="flex items-center text-sm text-[#5C5C5C]">
-                    <Mail className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
-                    <span className="truncate">{client.email}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-[#5C5C5C]">
-                    <Phone className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
-                    <span>{client.phone}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-[#5C5C5C]">
-                     <Clock className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
-                     <span>Cliente desde {client.since}</span>
-                  </div>
+                <div className="max-w-7xl mx-auto">
+                    {currentPage === 'Dashboard' && <DashboardSubContent />}
+                    {currentPage === 'Barbeiros' && <BarbeirosContent />}
+                    {currentPage === 'Agendamentos' && <AgendamentosContent />}
+                    {currentPage === 'Gestão Financeira' && <FinancialContent />}
+                    {currentPage === 'Clientes' && <ClientesContent />}
                 </div>
-              </div>
-              
-              <div className="mt-6 pt-4 border-t border-[#292929] flex items-center justify-between relative z-10">
-                 <span className="text-xs text-[#5C5C5C]">Última visita: <span className="text-[#DDDBCB]">{client.lastVisit}</span></span>
-                 <div className="flex items-center text-[#58BEC3] text-xs font-bold">
-                    <History className="w-3 h-3 mr-1" />
-                    Ver Histórico
-                 </div>
-              </div>
-            </div>
-          ))}
+            </main>
         </div>
-      )}
-    </div>
-  )
+    )
 }
 
 //Componente App
@@ -1855,4 +1544,3 @@ const App: React.FC = () => {
 )
 }
 
-export default App;
