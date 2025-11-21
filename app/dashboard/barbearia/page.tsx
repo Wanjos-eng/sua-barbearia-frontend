@@ -26,7 +26,10 @@ import {
   ArrowUpRight,
   Menu,
   History,
-  Trash2
+  Trash2,
+  ChevronLeft,
+  Scissors,
+  Save
 } from 'lucide-react';
 
 // Tipos (Typescript)
@@ -95,6 +98,13 @@ interface Client {
   since: string;
   lastVisit?: string;
   avatarColor: string;
+}
+
+interface ServiceItem {
+  id: string;
+  name: string;
+  price: string;
+  duration: string;
 }
 
 interface Transaction {
@@ -295,11 +305,30 @@ const ActiveBarberItem: React.FC<ActiveBarber> = ({ initials, name, total, next 
 
 // Dados Modelo (Simulação)
 
+const MOCK_SERVICES: ServiceItem[] = [
+  { id: 's1', name: 'Corte de Cabelo', price: 'R$ 50,00', duration: '30' },
+  { id: 's2', name: 'Barba Completa', price: 'R$ 40,00', duration: '30' },
+  { id: 's3', name: 'Corte + Barba', price: 'R$ 80,00', duration: '60' },
+  { id: 's4', name: 'Acabamento / Pezinho', price: 'R$ 20,00', duration: '15' },
+  { id: 's5', name: 'Sobrancelha', price: 'R$ 15,00', duration: '10' },
+];
+
+const AVAILABLE_TIMES = ['09:00', '10:00', '11:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00', '19:00'];
+
+
 const statsData = [
   { icon: DollarSign, title: 'Receita', value: 'R$400,00', iconBgColor: 'bg-green-500' },
   { icon: TrendingUp, title: 'Projeção (7d)', value: 'R$520,00', iconBgColor: 'bg-blue-500' },
   { icon: Percent, title: 'Ticket Médio', value: 'R$60,00', iconBgColor: 'bg-purple-500' },
   { icon: Calendar, title: 'Agendamentos', value: '7', iconBgColor: 'bg-yellow-500' },
+];
+
+const initialAppointmentsData: Appointment[] = [
+  { id: 'd1', date: '09/11', time: '10:00', client: 'Carlos Pereira', barber: 'João Silva', service: 'Corte', value: 'R$50,00', status: 'Pendente' },
+  { id: 'd2', date: '09/11', time: '11:00', client: 'Otávio Augusto', barber: 'João Silva', service: 'Barba', value: 'R$40,00', status: 'Confirmado' },
+  { id: 'd3', date: '09/11', time: '13:00', client: 'Marcos Santos', barber: 'Pedro Souza', service: 'Corte + Barba', value: 'R$80,00', status: 'Concluído' },
+  { id: 'd4', date: '10/11', time: '09:00', client: 'Lucas Oliveira', barber: 'João Silva', service: 'Corte', value: 'R$50,00', status: 'Pendente' },
+  { id: 'd5', date: '01/11', time: '14:00', client: 'Carlos Pereira', barber: 'Marcos Alves', service: 'Corte', value: 'R$50,00', status: 'Concluído' },
 ];
 
 const appointmentsData: Appointment[] = [
@@ -543,6 +572,371 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
   );
 }
 
+// Modal de Criação de novo Cliente no botão + Novo Agendamento
+interface NewAppointmentModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: (appointment: any, clientData?: { name: string, isNew: boolean }) => void;
+  onAddClient: (client: Client) => void;
+  clients: Client[];
+}
+
+// Componente Modal Principal
+const NewAppointmentModal: React.FC<NewAppointmentModalProps> = ({ isOpen, onClose, onConfirm, onAddClient, clients }) => {
+  const [step, setStep] = useState(1);
+  const [selectedService, setSelectedService] = useState<ServiceItem | null>(null);
+  const [selectedBarber, setSelectedBarber] = useState<Barber | null>(null);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  
+  const [clientSearch, setClientSearch] = useState('');
+  const [selectedClient, setSelectedClient] = useState<Client | null>(null);
+  
+  const [isCreatingClient, setIsCreatingClient] = useState(false);
+  const [newClientName, setNewClientName] = useState('');
+  const [newClientEmail, setNewClientEmail] = useState('');
+  const [newClientPhone, setNewClientPhone] = useState('');
+  const [localToast, setLocalToast] = useState<string | null>(null);
+
+  const dates = useMemo(() => {
+    const arr = [];
+    for (let i = 0; i < 14; i++) {
+      const d = new Date();
+      d.setDate(d.getDate() + i);
+      arr.push(d);
+    }
+    return arr;
+  }, []);
+
+  useEffect(() => {
+    if (isOpen) {
+      setStep(1);
+      setSelectedService(null);
+      setSelectedBarber(null);
+      setSelectedDate(null);
+      setSelectedTime(null);
+      setClientSearch('');
+      setSelectedClient(null);
+      setIsCreatingClient(false);
+      setNewClientName('');
+      setNewClientEmail('');
+      setNewClientPhone('');
+      setLocalToast(null);
+    }
+  }, [isOpen]);
+
+  const handleBack = () => {
+    if(isCreatingClient) {
+      setIsCreatingClient(false);
+      return;
+    }
+    setStep(prev => prev - 1);
+  };
+
+  const filteredClients = useMemo(() => {
+    if (!clientSearch) return [];
+    return clients.filter(c => c.name.toLowerCase().includes(clientSearch.toLowerCase()));
+  }, [clients, clientSearch]);
+
+  const handleSaveClient = () => {
+    if(!newClientName || !newClientEmail || !newClientPhone) return;
+
+    const newClient: Client = {
+       id: Math.random().toString(36).substr(2, 9),
+       name: newClientName,
+       email: newClientEmail,
+       phone: newClientPhone,
+       since: new Date().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
+       avatarColor: 'bg-indigo-500',
+       lastVisit: '-'
+    };
+
+    onAddClient(newClient);
+    setLocalToast('Cliente cadastrado com sucesso!');
+
+    setTimeout(() => {
+      setClientSearch(newClient.name); 
+      setSelectedClient(newClient); 
+      setIsCreatingClient(false); 
+      setLocalToast(null);
+    }, 1500);
+  };
+
+   const handleConfirmClick = () => {
+    if (!selectedService || !selectedBarber || !selectedDate || !selectedTime) return;
+    
+    const clientName = selectedClient ? selectedClient.name : clientSearch;
+    const isNewClient = !selectedClient && clientSearch.length > 0;
+
+    if (!clientName) return;
+
+    const dateStr = selectedDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' });
+    
+    onConfirm({
+      date: dateStr,
+      time: selectedTime,
+      client: clientName,
+      barber: selectedBarber.name,
+      service: selectedService.name,
+      value: selectedService.price,
+      status: 'Confirmado'
+    }, { name: clientName, isNew: isNewClient });
+  };
+
+  if (!isOpen) return null;
+  return(
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 animate-in fade-in duration-300" onClick={onClose}>
+      <div className="bg-[#151515] w-full max-w-lg rounded-2xl border border-[#292929] shadow-2xl overflow-hidden flex flex-col max-h-[90vh] relative" onClick={e => e.stopPropagation()}>
+        {localToast && (
+           <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-in fade-in">
+              <div className="bg-[#151515] border border-[#58BEC3] p-6 rounded-xl shadow-2xl flex flex-col items-center">
+                 <div className="w-12 h-12 bg-[#58BEC3]/20 rounded-full flex items-center justify-center mb-3">
+                    <CheckCircle className="w-6 h-6 text-[#58BEC3]" />
+                 </div>
+                 <h4 className="text-[#DDDBCB] font-bold text-lg">Sucesso!</h4>
+                 <p className="text-[#5C5C5C] text-sm">{localToast}</p>
+              </div>
+           </div>
+        )}
+
+        <div className="p-6 border-b border-[#292929] flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center gap-3">
+            {(step > 1 || isCreatingClient) && (
+              <button onClick={handleBack} className="text-[#5C5C5C] hover:text-[#DDDBCB] transition-colors">
+                <ChevronLeft className="w-5 h-5" />
+              </button>
+            )}
+            <div>
+              <h3 className="text-xl font-bold text-[#DDDBCB]">{isCreatingClient ? 'Cadastrar Cliente' : 'Novo Agendamento'}</h3>
+              {!isCreatingClient && <p className="text-xs text-[#58BEC3] font-semibold uppercase tracking-wider">Etapa {step}/4</p>}
+            </div>
+          </div>
+          <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6 overflow-y-auto custom-scrollbar flex-1">
+          {!isCreatingClient && step === 1 && (
+            <div className="space-y-3 animate-in slide-in-from-right duration-300">
+              <h4 className="text-[#DDDBCB] mb-4 font-medium">Selecione o serviço</h4>
+              {MOCK_SERVICES.map(s => (
+                <button 
+                  key={s.id} 
+                  onClick={() => { setSelectedService(s); setStep(2); }}
+                  className="w-full flex justify-between items-center p-4 bg-[#0C0C0C] hover:bg-[#292929] rounded-lg border border-[#292929] hover:border-[#58BEC3]/50 group transition-all text-left"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-[#151515] rounded-md text-[#5C5C5C] group-hover:text-[#58BEC3] transition-colors">
+                       <Scissors className="w-5 h-5" />
+                    </div>
+                    <div>
+                      <p className="text-[#DDDBCB] font-medium">{s.name}</p>
+                      <p className="text-xs text-[#5C5C5C]">{s.duration} min</p>
+                    </div>
+                  </div>
+                  <span className="text-[#58BEC3] font-bold">{s.price}</span>
+                </button>
+              ))}
+            </div>
+          )}
+
+          {!isCreatingClient && step === 2 && (
+            <div className="space-y-3 animate-in slide-in-from-right duration-300">
+               <h4 className="text-[#DDDBCB] mb-4 font-medium">Selecione o profissional</h4>
+               {barbeirosData.filter(b => b.status === 'Ativo').map(b => (
+                 <button
+                    key={b.id}
+                    onClick={() => { setSelectedBarber(b); setStep(3); }}
+                    className="w-full flex items-center gap-4 p-4 bg-[#0C0C0C] hover:bg-[#292929] rounded-lg border border-[#292929] hover:border-[#58BEC3]/50 transition-all text-left group"
+                 >
+                    <div className="w-12 h-12 rounded-full bg-[#151515] border border-[#292929] flex items-center justify-center text-[#DDDBCB] font-bold group-hover:border-[#58BEC3]">
+                      {b.initials}
+                    </div>
+                    <div>
+                      <span className="text-[#DDDBCB] font-bold text-lg block">{b.name}</span>
+                      <span className="text-xs text-[#5C5C5C]">Disponível</span>
+                    </div>
+                 </button>
+               ))}
+            </div>
+          )}
+
+          {!isCreatingClient && step === 3 && (
+            <div className="space-y-3 animate-in slide-in-from-right duration-300">
+              <h4 className="text-[#DDDBCB] mb-4 font-medium">Data e Horário</h4>
+              
+              <div className="flex gap-3 overflow-x-auto pb-4 mb-6 custom-scrollbar">
+                {dates.map(d => {
+                  const isSelected = selectedDate?.toDateString() === d.toDateString();
+                  return (<button 
+                      key={d.toISOString()}
+                      onClick={() => { setSelectedDate(d); setSelectedTime(null); }}
+                      className={`min-w-[70px] h-20 rounded-lg flex flex-col items-center justify-center border transition-all flex-shrink-0 ${isSelected ? 'bg-[#58BEC3] border-[#58BEC3] text-[#151515]' : 'bg-[#0C0C0C] border-[#292929] text-[#5C5C5C] hover:border-[#58BEC3]/50 hover:text-[#DDDBCB]'}`}
+                    >
+                      {/* [CORREÇÃO] Convertendo Data para String */}
+                      <span className="text-xs uppercase font-bold">{String(d.toLocaleDateString('pt-BR', {weekday: 'short'}).slice(0,3))}</span>
+                      <span className="text-2xl font-bold">{String(d.getDate())}</span>
+                    </button>
+                    )
+                })}
+              </div>
+            </div>
+          )}
+
+          {selectedDate ? (
+                <div className="grid grid-cols-3 gap-3">
+                  {AVAILABLE_TIMES.map(t => (
+                    <button
+                      key={t}
+                      onClick={() => { setSelectedTime(t); setStep(4); }}
+                      className={`py-3 rounded-md text-sm font-bold transition-all border ${selectedTime === t ? 'bg-[#DDDBCB] text-[#151515] border-[#DDDBCB]' : 'bg-[#0C0C0C] text-[#DDDBCB] border-[#292929] hover:border-[#58BEC3] hover:text-[#58BEC3]'}`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-[#5C5C5C] border border-dashed border-[#292929] rounded-lg">
+                   <Calendar className="w-8 h-8 mx-auto mb-2 opacity-50"/>
+                   <p>Selecione uma data acima</p>
+                </div>
+              )}
+
+          {!isCreatingClient && step === 4 && (
+            <div className="animate-in slide-in-from-right duration-300">
+              <h4 className="text-[#DDDBCB] mb-4 font-medium">Identifique o Cliente</h4>
+                
+                <div className="flex gap-2 mb-6">
+                  <div className="relative flex-1">
+                    <input 
+                      type="text" 
+                      value={selectedClient ? selectedClient.name : clientSearch}
+                      onChange={(e) => {
+                          setClientSearch(e.target.value);
+                          setSelectedClient(null);
+                      }}
+                      placeholder="Nome do cliente..."
+                      className="w-full bg-[#0C0C0C] border border-[#292929] text-[#DDDBCB] px-4 py-3 pl-10 rounded-lg focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3]"
+                    />
+                    <Search className="w-5 h-5 text-[#5C5C5C] absolute left-3 top-1/2 -translate-y-1/2" />
+
+                    {!selectedClient && clientSearch.length > 0 && (
+                        <div className="absolute top-full left-0 right-0 mt-2 bg-[#151515] border border-[#292929] rounded-lg shadow-xl z-20 overflow-hidden">
+                          {filteredClients.length > 0 ? filteredClients.map(c => (
+                              <button 
+                                key={c.id}
+                                onClick={() => { setSelectedClient(c); setClientSearch(''); }}
+                                className="w-full text-left px-4 py-3 hover:bg-[#292929] text-[#DDDBCB] flex items-center justify-between group"
+                              >
+                                <span>{c.name}</span>
+                                <span className="text-xs text-[#5C5C5C] group-hover:text-[#58BEC3]">Existente</span>
+                              </button>
+                          )) : (
+                            <div className="px-4 py-3 text-[#5C5C5C] text-sm text-center">Nenhum cliente encontrado.</div>
+                          )}
+                        </div>
+                    )}
+                  </div>
+
+                  {/* [NOVO AGENDAMENTO] Botão + para adicionar cliente novo */}
+                  <button 
+                     onClick={() => setIsCreatingClient(true)}
+                     className="bg-[#292929] hover:bg-[#58BEC3] hover:text-[#151515] text-[#DDDBCB] px-4 rounded-lg border border-[#292929] transition-colors flex items-center justify-center"
+                     title="Novo Cliente"
+                  >
+                     <Plus className="w-5 h-5" />
+                  </button>
+                </div>
+
+                <div className="bg-[#0C0C0C] rounded-lg p-4 border border-[#292929] space-y-3">
+                   <div className="flex justify-between items-center border-b border-[#292929] pb-2">
+                      <span className="text-[#5C5C5C] text-sm">Serviço</span>
+                      <span className="text-[#DDDBCB] font-medium">{selectedService?.name}</span>
+                   </div>
+                   <div className="flex justify-between items-center border-b border-[#292929] pb-2">
+                      <span className="text-[#5C5C5C] text-sm">Profissional</span>
+                      <span className="text-[#DDDBCB] font-medium">{selectedBarber?.name}</span>
+                   </div>
+                   <div className="flex justify-between items-center border-b border-[#292929] pb-2">
+                      <span className="text-[#5C5C5C] text-sm">Data/Hora</span>
+                      <span className="text-[#DDDBCB] font-medium">
+                        {selectedDate ? `${String(selectedDate.toLocaleDateString('pt-BR', {day:'2-digit', month:'2-digit'}))} às ${selectedTime}` : ''}
+                      </span>
+                   </div>
+                   <div className="flex justify-between items-center pt-1">
+                      <span className="text-[#5C5C5C] text-sm">Total</span>
+                      <span className="text-[#58BEC3] font-bold text-lg">{selectedService?.price}</span>
+                   </div>
+                </div>
+            </div>
+          )}
+
+          {/* [NOVO AGENDAMENTO] Formulário de Cadastro de Cliente */}
+          {isCreatingClient && (
+            <div className="animate-in slide-in-from-right duration-300 space-y-4">
+                <div className="bg-[#0C0C0C] p-4 rounded-lg border border-[#292929] mb-4">
+                  <p className="text-sm text-[#5C5C5C] mb-4">Preencha os dados abaixo para cadastrar um novo cliente.</p>
+                  
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-xs font-medium text-[#DDDBCB] mb-1">Nome Completo *</label>
+                      <input 
+                        type="text" 
+                        value={newClientName} 
+                        onChange={e => setNewClientName(e.target.value)}
+                        className="w-full bg-[#151515] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:border-[#58BEC3] focus:outline-none" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-[#DDDBCB] mb-1">Email *</label>
+                      <input 
+                        type="email" 
+                        value={newClientEmail} 
+                        onChange={e => setNewClientEmail(e.target.value)}
+                        className="w-full bg-[#151515] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:border-[#58BEC3] focus:outline-none" 
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-medium text-[#DDDBCB] mb-1">Telefone *</label>
+                      <input 
+                        type="tel" 
+                        value={newClientPhone} 
+                        onChange={e => setNewClientPhone(e.target.value)}
+                        className="w-full bg-[#151515] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:border-[#58BEC3] focus:outline-none" 
+                      />
+                    </div>
+                </div>
+              </div>
+
+              <button 
+                   onClick={handleSaveClient}
+                   disabled={!newClientName || !newClientEmail || !newClientPhone}
+                   className={`w-full font-bold py-3 rounded-lg transition-all flex items-center justify-center gap-2 ${(!newClientName || !newClientEmail || !newClientPhone) ? 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed' : 'bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515]'}`}
+                >
+                   <Save className="w-4 h-4"/>
+                   Salvar Cliente
+                </button>
+            </div>
+          )}
+        </div>
+
+        {!isCreatingClient && step === 4 && (
+           <div className="p-4 border-t border-[#292929] bg-[#151515] flex-shrink-0">
+              <button 
+                 onClick={handleConfirmClick}
+                 disabled={!selectedClient && clientSearch.length === 0}
+                 className={`w-full font-bold py-3 rounded-lg transition-all shadow-lg ${(!selectedClient && clientSearch.length === 0) ? 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed' : 'bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] shadow-[#58BEC3]/20'}`}
+              >
+                 Confirmar Agendamento
+              </button>
+           </div>
+        )}
+      </div>
+    </div>
+  )
+}
+
 // Modal de Detalhes do Cliente (Histórico)
 const ClientDetailsModal: React.FC<{client: Client | null, isOpen: boolean, onClose: () => void}> = ({ client, isOpen, onClose }) => {
   if (!isOpen || !client) return null;
@@ -656,9 +1050,12 @@ const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, on
 };
 
 // Componente Conteúdo Principal
-const DashboardContent: React.FC = () => (
-  <>
-    <h1 className="text-3x1 font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
+const DashboardContent: React.FC<{
+  onOpenNewAppointment: () => void, 
+  appointments: Appointment[],
+  activeBarbers: ActiveBarber[]}> = ({ onOpenNewAppointment, appointments, activeBarbers }) => (
+  <div className="animate-in fade-in duration-500">
+    <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
 
     {/* Grid de Estatísticas */}  
     <div className="grid grid-cols-1 sm:grid-cols-2 x1:grid-cols-4 gap-6 mb-8">
@@ -721,7 +1118,10 @@ const DashboardContent: React.FC = () => (
 
       {/* Coluna Direita: Ações e Barbeiros Ativos */}
       <div className="w-full lg:w-80">
-        <button className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors">
+        <button 
+          onClick={onOpenNewAppointment}
+          className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mb-8 shadow-lg shadow-[#58BEC3]/10"
+        >
           + Novo Agendamento
         </button>
 
@@ -745,7 +1145,7 @@ const DashboardContent: React.FC = () => (
         </button>
       </div>
     </div>
-  </>
+  </div>
 )
 
 // Componente Card do Barbeiro
@@ -1356,9 +1756,50 @@ const App: React.FC = () => {
   // Estado para controlar a página atual
   const [currentPage, setCurrentPage] = React.useState('Dashboard');
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false); // [MENU HAMBURGUER] 8. Estado global que controla a visibilidade
+  
+  const [appointments, setAppointments] = useState<Appointment[]>(initialAppointmentsData);
+  const [clients, setClients] = useState<Client[]>(initialClientsData);
+
+
+  // Estado para controlar a visibilidade do modal
+  const [isNewAppointmentOpen, setIsNewAppointmentOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  const handleAddClient = (newClient: Client) => {
+    setClients(prev => [newClient, ...prev]);
+  };
+
+  // Função para processar a criação do agendamento
+  const handleCreateAppointment = (newAppointmentData: any, clientData?: { name: string, isNew: boolean }) => {
+    const newAppointment: Appointment = {
+      id: Math.random().toString(36).substr(2, 9),
+      ...newAppointmentData
+    };
+    setAppointments(prev => [newAppointment, ...prev]);
+
+    if (clientData && clientData.isNew) {
+       const newClient: Client = {
+         id: Math.random().toString(36).substr(2, 9),
+         name: clientData.name,
+         email: 'pendente@email.com', 
+         phone: '(00) 00000-0000', 
+         since: new Date().toLocaleDateString('pt-BR', { month: 'short', year: 'numeric' }),
+         lastVisit: newAppointmentData.date,
+         avatarColor: 'bg-gray-500'
+       };
+       setClients(prev => [newClient, ...prev]);
+       setToastMessage(`Agendamento criado e cliente "${clientData.name}" cadastrado!`);
+    } else {
+       setToastMessage("Agendamento criado com sucesso!");
+    }
+
+    setIsNewAppointmentOpen(false);
+  };
 
   return (
     <div className="flex min-h-screen bg-[#050505] text-white font-sans selection:bg-[#58BEC3] selection:text-[#050505]">
+      {toastMessage && <Toast message={toastMessage} onClose={() => setToastMessage(null)} />}
+
       {/* A Sidebar agora recebe o estado da página e a função para alterá-lo */}
       <Sidebar
         currentPage={currentPage}
@@ -1366,6 +1807,16 @@ const App: React.FC = () => {
         isOpen={isMobileMenuOpen} // [MENU HAMBURGUER] 9. Passando o estado
         onClose={() => setIsMobileMenuOpen(false)} // [MENU HAMBURGUER] 10. Passando a função de fechar
       />
+
+      {/* Renderização do Modal NOVO AGENDAMENTO */}
+      <NewAppointmentModal 
+        isOpen={isNewAppointmentOpen} 
+        onClose={() => setIsNewAppointmentOpen(false)} 
+        onConfirm={handleCreateAppointment}
+        onAddClient={handleAddClient}
+        clients={clients}
+      />
+
       {/* Main Content */}
       <main className="flex-1 p-4 md:p-10 min-h-screen overflow-x-hidden">
 
@@ -1387,7 +1838,13 @@ const App: React.FC = () => {
         </div>
         
         <div className="max-w-7xl mx-auto">
-          {currentPage === 'Dashboard' && <DashboardContent />}
+          {currentPage === 'Dashboard' && (
+            <DashboardContent 
+              onOpenNewAppointment={() => setIsNewAppointmentOpen(true)} 
+              appointments={appointments}
+              activeBarbers={activeBarbersData}
+            />
+          )}
           {currentPage === 'Barbeiros' && <BarbeirosContent />}
           {currentPage === 'Agendamentos' && <AgendamentosContent />}
           {currentPage === 'Gestão Financeira' && <FinancialContent />}
