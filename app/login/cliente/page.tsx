@@ -1,8 +1,39 @@
+"use client";
 import Image from 'next/image';
 import Link from 'next/link';
 import loginIcon from '@/assets/LoginCliente/icone-logo-suabarbearia-Login.png';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { authService } from '@/services/authService';
 
 export default function LoginClientePage() {
+  const router = useRouter();
+  const [email, setEmail] = useState('');
+  const [senha, setSenha] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      const response = await authService.loginClient({ email, senha });
+      router.push('/dashboard/cliente');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else if (typeof err === 'object' && err !== null && 'message' in err) {
+        setError((err as { message: string }).message);
+      } else {
+        setError('Erro ao realizar login');
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       {/* 1. Imagem de Fundo (em tela cheia, fixa e atrás de tudo) */}
@@ -27,18 +58,18 @@ export default function LoginClientePage() {
 
       {/* 2. Container de Centralização */}
       <main className="min-h-screen flex items-center justify-center p-4">
-        
+
         {/* 3. O Card Preto Sólido (Corrigido para ser responsivo) */}
-        <div 
+        <div
           className="bg-[#151515] rounded-[17px] w-full max-w-[468px] h-auto p-8 md:p-10"
         >
-          <form className="flex flex-col gap-8">
-            
+          <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+
             {/* Seção 1: Cabeçalho (Agrupados) */}
             <div className="flex flex-col items-center">
-              
+
               {/* Header: "Agende com sua barbearia" */}
-              <h2 
+              <h2
                 className="text-gray-300 font-bold text-[40px] leading-[46px] text-center"
               >
                 Agende com
@@ -48,16 +79,17 @@ export default function LoginClientePage() {
 
               {/* Sub-Header: Icone + "Cliente" */}
               <div className="flex flex-row items-center justify-start gap-4 w-full">
-                
+
                 <Image
-                  src={loginIcon} 
+                  src={loginIcon}
                   alt="Icone Barbearia"
                   width={39}
                   height={87}
+                  style={{ width: 'auto', height: 'auto' }}
                 />
-                <h1 
+                <h1
                   className="text-[#B4654A] font-bold text-[40px]"
-                  style={{ lineHeight: '107px' }} 
+                  style={{ lineHeight: '107px' }}
                 >
                   Cliente
                 </h1>
@@ -66,35 +98,47 @@ export default function LoginClientePage() {
 
             {/* Seção 2: Inputs (Agrupados) */}
             <div className="flex flex-col gap-5">
+              {error && (
+                <div className="text-red-500 text-sm text-center bg-red-100/10 p-2 rounded">
+                  {error}
+                </div>
+              )}
               <input
                 type="email"
                 placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="bg-transparent border border-[#B4654A] rounded-lg w-full p-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50"
+                required
               />
               <input
                 type="password"
                 placeholder="Senha"
+                value={senha}
+                onChange={(e) => setSenha(e.target.value)}
                 className="bg-transparent border border-[#B4654A] rounded-lg w-full p-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50"
+                required
               />
             </div>
 
             {/* Seção 3: Ações (Agrupados) */}
             <div className="grid grid-cols-2 gap-6">
-              
+
               {/* Botão Cadastrar */}
               <Link
                 href="/cadastro/cliente"
-                className="text-center bg-transparent border border-[#5C5C5C] text-[#5C5C5C] font-bold text-[20px] rounded-[7px] py-3 transition-colors hover:bg-[#5C5C5C] hover:text-white"
+                className="text-center bg-transparent border border-[#5C5C5C] text-[#5C5C5C] font-bold text-[20px] rounded-[7px] py-3 transition-colors hover:bg-[#5C5C5C] hover:text-white flex items-center justify-center"
               >
                 Cadastrar
               </Link>
-              
+
               {/* Botão Entrar */}
               <button
                 type="submit"
-                className="text-center bg-[#B4654A] text-white font-bold text-[20px] rounded-[7px] py-3 transition-all hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50"
+                disabled={loading}
+                className="text-center bg-[#B4654A] text-white font-bold text-[20px] rounded-[7px] py-3 transition-all hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Entrar
+                {loading ? 'Entrando...' : 'Entrar'}
               </button>
             </div>
 
