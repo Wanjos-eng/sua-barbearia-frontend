@@ -1,62 +1,50 @@
 "use client";
 
-import React, { act, useState } from 'react';
-
-import {Mail, Lock} from 'lucide-react';
-
-// Componente ícone customizado
-// Alterar para a logo do projeto
-/*
-const BarberPoleIcon = ({ className }: { className?: string }) => (
-  <svg
-    className={className}
-    width="64"
-    height="64"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    strokeLinecap="round"
-    strokeLinejoin="round"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <title>Logo Barbearia</title>
-    <path d="M12 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2" />
-    <path d="M12 22a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2" />
-    <path d="M10 4V2" />
-    <path d="M14 4V2" />
-    <path d="M10 22v-2" />
-    <path d="M14 22v-2" />
-    <path d="M10 6h4" />
-    <path d="M10 10h4" />
-    <path d="M10 14h4" />
-    <path d="M10 18h4" />
-    <path d="m14 6-4 4" />
-    <path d="m14 14-4 4" />
-  </svg>
-);
-*/
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Mail, Lock } from 'lucide-react';
+import { authService } from '@/services/authService';
 
 // Componente principal da página de login
-export default function LoginPage(){
+export default function LoginPage() {
+    const router = useRouter();
     const [activeTab, setActiveTab] = useState<'barbearia' | 'barbeiro'>('barbearia');
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
     // Função para lidar com o envio do formulário
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Aqui adicionará a lógica de autenticação
-        console.log({
-            role: activeTab,
-            email,
-            password,
-        });
+        setError('');
+        setLoading(true);
 
+        try {
+            if (activeTab === 'barbearia') {
+                // Assuming endpoint for barbearia login
+                await authService.loginBarberShop({ email, senha: password });
+                router.push('/dashboard/barbearia');
+            } else {
+                // Assuming endpoint for barbeiro login
+                await authService.loginBarber({ email, senha: password });
+                router.push('/dashboard/barbeiro');
+            }
+        } catch (err: any) {
+            if (err instanceof Error) {
+                setError(err.message);
+            } else if (typeof err === 'object' && err !== null && 'message' in err) {
+                setError((err as { message: string }).message);
+            } else {
+                setError('Erro ao realizar login');
+            }
+        } finally {
+            setLoading(false);
+        }
     };
 
-    return(
+    return (
         //Container principal da página
         <div className="flex min-h-screen w-full items-center justify-center bg-black p-4">
             {/* Card de Login */}
@@ -72,32 +60,35 @@ export default function LoginPage(){
                     <button
                         type="button"
                         onClick={() => setActiveTab('barbearia')}
-                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${
-                            activeTab === 'barbearia'
+                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbearia'
                                 ? 'bg-[#58BEC3] text-[#151515]'
                                 : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
-                        }`}
+                            }`}
                     >Barbearia</button>
                     <button
                         type="button"
                         onClick={() => setActiveTab('barbeiro')}
-                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${
-                            activeTab === 'barbeiro'
+                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbeiro'
                                 ? 'bg-[#58BEC3] text-[#151515] shadow'
                                 : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
-                        }`}>
-                            Barbeiro
-                        </button>
+                            }`}>
+                        Barbeiro
+                    </button>
                 </div>
 
                 {/* Formulário de Login */}
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-6">
+                        {error && (
+                            <div className="text-red-500 text-sm text-center bg-red-100/10 p-2 rounded">
+                                {error}
+                            </div>
+                        )}
 
                         {/* Campo de Email */}
                         <div className="relative">
                             <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
-                            aria-hidden="true"/>
+                                aria-hidden="true" />
                             <input
                                 type="email"
                                 id="email"
@@ -113,7 +104,7 @@ export default function LoginPage(){
                         {/* Campo de Senha */}
                         <div className="relative">
                             <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
-                            aria-hidden="true"/>
+                                aria-hidden="true" />
                             <input
                                 type="password"
                                 id="password"
@@ -132,14 +123,15 @@ export default function LoginPage(){
                         <button
                             type="button" // Botão de "Cadastrar" (tipo button para não enviar o form)
                             className="text-sm font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900">
-                                Cadastrar
+                            Cadastrar
                         </button>
 
                         <button
                             type="submit" // Botão "Entrar" (tipo submit para enviar o form)
-                            className="rounded-lg bg-[#58BEC3] px-8 py-3 text-sm font-semibold text-[#151515] transition-transform hover:scale-105 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c]"
+                            disabled={loading}
+                            className="rounded-lg bg-[#58BEC3] px-8 py-3 text-sm font-semibold text-[#151515] transition-transform hover:scale-105 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
-                            Entrar
+                            {loading ? 'Entrando...' : 'Entrar'}
                         </button>
                     </div>
                 </form>
