@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { User, Mail, Phone, Lock } from 'lucide-react';
 import { authService } from '@/services/authService';
-import { RegisterClientData } from '@/types/api';
+import { RegisterClientData, ApiError } from '@/types/api';
 
 // Componente de ícone para o input, para evitar repetição
 const InputIcon = ({ children }: { children: React.ReactNode }) => (
@@ -48,7 +48,13 @@ export default function RegisterCliente() {
             await authService.registerClient(formData);
             router.push('/login/cliente');
         } catch (err: unknown) {
-            if (err instanceof Error) {
+            const apiError = err as ApiError;
+            if (apiError.errors) {
+                const messages = Object.entries(apiError.errors)
+                    .map(([field, msgs]) => `${field}: ${msgs.join(', ')}`)
+                    .join('; ');
+                setError(messages || apiError.message);
+            } else if (err instanceof Error) {
                 setError(err.message);
             } else if (typeof err === 'object' && err !== null && 'message' in err) {
                 setError((err as { message: string }).message);

@@ -30,6 +30,27 @@ export const clientService = {
             }
             throw { message: 'Erro de rede' };
         }
+    },
+
+    getUpcomingAppointments: async (): Promise<Appointment[]> => {
+        try {
+            const response = await api.get<Appointment[]>('/clientes/meus-agendamentos/historico');
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+
+            // Filter only future appointments (PENDENTE or CONFIRMADO)
+            const now = new Date();
+            return response.data.filter(app => {
+                const appointmentDate = new Date(app.dataHora);
+                return appointmentDate > now && (app.status === 'PENDENTE' || app.status === 'CONFIRMADO');
+            });
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
     }
 };
 

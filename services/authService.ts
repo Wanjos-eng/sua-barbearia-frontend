@@ -1,6 +1,6 @@
 
 import api from './api';
-import { RegisterClientData, LoginData, AuthResponse, ApiError, User } from '@/types/api';
+import { RegisterClientData, RegisterBarberShopData, LoginData, AuthResponse, ApiError, User } from '@/types/api';
 import axios from 'axios';
 
 export const authService = {
@@ -9,7 +9,23 @@ export const authService = {
             const response = await api.post<AuthResponse>('/auth/cliente/registrar', data);
             return response.data;
         } catch (error: unknown) {
+            console.error('Register client error:', error);
             if (axios.isAxiosError(error) && error.response) {
+                console.error('Error response data:', error.response.data);
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    registerBarberShop: async (data: RegisterBarberShopData): Promise<AuthResponse> => {
+        try {
+            const response = await api.post<AuthResponse>('/auth/barbearia/registrar', data);
+            return response.data;
+        } catch (error: unknown) {
+            console.error('Register barber shop error:', error);
+            if (axios.isAxiosError(error) && error.response) {
+                console.error('Error response data:', error.response.data);
                 throw error.response.data as ApiError;
             }
             throw { message: 'Erro de rede' };

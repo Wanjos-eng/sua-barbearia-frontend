@@ -2,13 +2,24 @@
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { Mail, Lock } from 'lucide-react';
 import { authService } from '@/services/authService';
+import { ApiError } from '@/types/api';
+
+// Componente visual de alerta de erro
+const ErrorAlert = ({ message }: { message: string }) => (
+    <div className="flex items-center gap-2 text-red-500 bg-red-100/10 p-2 rounded mb-4">
+        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{message}</span>
+    </div>
+);
 
 // Componente principal da página de login
 export default function LoginPage() {
     const router = useRouter();
-    const [activeTab, setActiveTab] = useState<'barbearia' | 'barbeiro'>('barbearia');
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -21,23 +32,39 @@ export default function LoginPage() {
         setError('');
         setLoading(true);
 
+        // Validação cliente: email e senha são obrigatórios
+        if (!email || !password) {
+            setError('Preencha email e senha para entrar.');
+            setLoading(false);
+            return;
+        }
+
         try {
-            if (activeTab === 'barbearia') {
-                // Assuming endpoint for barbearia login
-                await authService.loginBarberShop({ email, senha: password });
-                router.push('/dashboard/barbearia');
-            } else {
-                // Assuming endpoint for barbeiro login
-                await authService.loginBarber({ email, senha: password });
-                router.push('/dashboard/barbeiro');
-            }
-        } catch (err: any) {
-            if (err instanceof Error) {
+            await authService.loginBarberShop({ email, senha: password });
+            router.push('/dashboard/barbearia');
+        } catch (err: unknown) {
+            // Remove noisy console.error
+            const apiError = err as ApiError;
+            const lowerMsg = apiError.message?.toLowerCase() ?? '';
+            if (lowerMsg.includes('email') && lowerMsg.includes('cadastrado')) {
+                setError('Este e‑mail já está cadastrado. Por favor, faça login.');
+                setTimeout(() => router.push('/login/barbearia'), 3000);
+            } else if (lowerMsg.includes('senha') && lowerMsg.includes('incorreta')) {
+                setError('Senha incorreta. Verifique e tente novamente.');
+            } else if (apiError.errors) {
+                const messages = Object.entries(apiError.errors)
+                    .map(([field, msgs]) => {
+                        const fieldName = field === 'email' ? 'Email' : field === 'senha' ? 'Senha' : field;
+                        return `${fieldName}: ${msgs.join(', ')}`;
+                    })
+                    .join('; ');
+                setError(messages || apiError.message);
+            } else if (apiError.message) {
+                setError(apiError.message);
+            } else if (err instanceof Error) {
                 setError(err.message);
-            } else if (typeof err === 'object' && err !== null && 'message' in err) {
-                setError((err as { message: string }).message);
             } else {
-                setError('Erro ao realizar login');
+                setError('Credenciais inválidas');
             }
         } finally {
             setLoading(false);
@@ -52,38 +79,14 @@ export default function LoginPage() {
                 {/* Cabeçalho com Logo e Título */}
                 <div className="mb-8 flex flex-col items-center">
                     {/*<BarberPoleIcon className="h-16 w-16 text-[#B4654A]"/>*/}
-                    <h1 className="mt-4 text-3xl font-bold text-[#DDDBCB]">Login</h1>
+                    <h1 className="mt-4 text-3xl font-bold text-[#DDDBCB]">Login Barbearia</h1>
                 </div>
 
-                {/* Seletor de Tabs (Barbearia / Barbeiro) */}
-                <div className="mb-6 flex rounded-lg bg-black p-1">
-                    <button
-                        type="button"
-                        onClick={() => setActiveTab('barbearia')}
-                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbearia'
-                                ? 'bg-[#58BEC3] text-[#151515]'
-                                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
-                            }`}
-                    >Barbearia</button>
-                    <button
-                        type="button"
-                        onClick={() => setActiveTab('barbeiro')}
-                        className={`w-1/2 rounded-md py-2.5 text-sm font-medium transition-colors ${activeTab === 'barbeiro'
-                                ? 'bg-[#58BEC3] text-[#151515] shadow'
-                                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'
-                            }`}>
-                        Barbeiro
-                    </button>
-                </div>
 
                 {/* Formulário de Login */}
                 <form onSubmit={handleSubmit}>
                     <div className="space-y-6">
-                        {error && (
-                            <div className="text-red-500 text-sm text-center bg-red-100/10 p-2 rounded">
-                                {error}
-                            </div>
-                        )}
+                        {error && <ErrorAlert message={error} />}
 
                         {/* Campo de Email */}
                         <div className="relative">
@@ -120,11 +123,12 @@ export default function LoginPage() {
 
                     {/* Botões de Ação */}
                     <div className="mt-10 flex items-center justify-between">
-                        <button
-                            type="button" // Botão de "Cadastrar" (tipo button para não enviar o form)
-                            className="text-sm font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900">
+                        <Link
+                            href="/cadastro/barbearia"
+                            className="text-sm font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                        >
                             Cadastrar
-                        </button>
+                        </Link>
 
                         <button
                             type="submit" // Botão "Entrar" (tipo submit para enviar o form)

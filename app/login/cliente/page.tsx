@@ -5,6 +5,7 @@ import loginIcon from '@/assets/LoginCliente/icone-logo-suabarbearia-Login.png';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/services/authService';
+import { ApiError } from '@/types/api';
 
 export default function LoginClientePage() {
   const router = useRouter();
@@ -19,17 +20,41 @@ export default function LoginClientePage() {
     setLoading(true);
 
     try {
+      console.log('Tentando fazer login...');
       const response = await authService.loginClient({ email, senha });
-      router.push('/dashboard/cliente');
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else if (typeof err === 'object' && err !== null && 'message' in err) {
-        setError((err as { message: string }).message);
+      console.log('Login bem-sucedido:', response);
+
+      // Verificar se realmente recebeu o token
+      if (response.token) {
+        console.log('Token recebido, redirecionando...');
+        router.push('/dashboard/cliente');
       } else {
-        setError('Erro ao realizar login');
+        console.error('Resposta sem token:', response);
+        setError('Erro: Resposta inválida do servidor');
+        setLoading(false);
       }
-    } finally {
+    } catch (err: unknown) {
+      console.error('Erro no login:', err);
+
+      // Handle ApiError with field-specific errors
+      const apiError = err as import('@/types/api').ApiError;
+      if (apiError.errors) {
+        // Format field-specific errors
+        const messages = Object.entries(apiError.errors)
+          .map(([field, msgs]) => {
+            const fieldName = field === 'email' ? 'Email' : field === 'senha' ? 'Senha' : field;
+            return `${fieldName}: ${msgs.join(', ')}`;
+          })
+          .join('; ');
+        setError(messages || apiError.message);
+      } else if (apiError.message) {
+        // Show specific API error message
+        setError(apiError.message);
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Erro ao realizar login. Verifique suas credenciais.');
+      }
       setLoading(false);
     }
   };

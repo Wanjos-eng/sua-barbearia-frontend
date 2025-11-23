@@ -1,6 +1,6 @@
 
 import api from './api';
-import { BarberShop, Service, ApiError } from '@/types/api';
+import { BarberShop, Service, Professional, WorkingHours, ApiError } from '@/types/api';
 import axios from 'axios';
 
 export const barberShopService = {
@@ -31,10 +31,47 @@ export const barberShopService = {
         }
     },
 
-    getAvailableSlots: async (barberShopId: number, serviceId: number, date: string): Promise<import('@/types/api').AvailableSlot[]> => {
+    listProfessionals: async (serviceId: number, barberShopId: number): Promise<Professional[]> => {
         try {
+            const response = await api.get<Professional[]>(`/funcionarios/servico/${serviceId}`, {
+                params: { barbeariaId: barberShopId }
+            });
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 404) {
+                    return [];
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    getProfessionalWorkingHours: async (professionalId: number): Promise<WorkingHours[]> => {
+        try {
+            const response = await api.get<WorkingHours[]>(`/horarios/funcionario/${professionalId}`);
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 404) {
+                    return [];
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    getAvailableSlots: async (barberShopId: number, serviceId: number, date: string, professionalId?: number): Promise<import('@/types/api').AvailableSlot[]> => {
+        try {
+            const params: any = { servicoId: serviceId, data: date };
+            if (professionalId) {
+                params.funcionarioId = professionalId;
+            }
+            console.log('Fetching slots with params:', params);
             const response = await api.get<import('@/types/api').AvailableSlot[]>(`/barbearias/${barberShopId}/horarios-disponiveis`, {
-                params: { servicoId: serviceId, data: date }
+                params
             });
             return response.data;
         } catch (error: unknown) {
