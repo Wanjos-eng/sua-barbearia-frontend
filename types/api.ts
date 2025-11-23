@@ -25,6 +25,18 @@ export interface LoginData {
     senha?: string;
 }
 
+export interface RegisterBarberShopData {
+    nome: string;
+    email: string;
+    senha: string;
+    confirmarSenha: string;
+    telefone: string;
+    nomeFantasia: string;
+    tipoDocumento: 'CPF' | 'CNPJ';
+    documento: string;
+    endereco: string;
+}
+
 export interface Appointment {
     id: number;
     dataHora: string;
@@ -71,7 +83,63 @@ export interface AvailableSlot {
     horarioFim: string;
 }
 
+export interface Professional {
+    id: number;
+    barbeariaId: number;
+    nome: string;
+    email: string;
+    telefone: string;
+    perfilType: string;
+    profissao: string;
+    especialidades: string;
+    ativo: boolean;
+    dataCriacao: string;
+    dataAtualizacao: string;
+}
+
+export interface TimeSlot {
+    hour: number;
+    minute: number;
+    second: number;
+    nano: number;
+}
+
+export interface WorkingHours {
+    id: number;
+    barbeariaId: number;
+    funcionarioId: number;
+    diaSemana: number;
+    horaAbertura: TimeSlot;
+    horaFechamento: TimeSlot;
+    ativo: boolean;
+}
+
 export interface ApiError {
     message: string;
     errors?: Record<string, string[]>;
+}
+
+export interface CreateAppointmentData {
+    servicoId: number;
+    funcionarioId: number;
+    barbeariaId: number;
+    dataHora: string; // ISO 8601 format: "2025-11-25T14:30:00"
+    observacoes?: string;
+}
+
+export interface AppointmentResponse {
+    id: number;
+    clienteId: number;
+    barbeariaId: number;
+    servicoId: number;
+    funcionarioId: number;
+    dataHora: string;
+    status: string;
+    observacoes: string | null;
+    dataCriacao: string;
+    dataAtualizacao: string;
+}
+
+export interface RescheduleData {
+    novaDataHora: string;
 }
