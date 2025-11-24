@@ -1,4 +1,6 @@
 "use client";
+
+import { Mail, Lock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import loginIcon from '@/assets/LoginCliente/icone-logo-suabarbearia-Login.png';
@@ -92,33 +94,33 @@ export default function LoginClientePage() {
 
             {/* Seção 1: Cabeçalho (Agrupados) */}
             <div className="flex flex-col items-center">
+              {/* Sub-Header: Icone + "Cliente" */}
+              <div className="flex flex-row items-center justify-between gap-4 w-full">
+                <div className=" flex flex-row items-center justify-start gap-4">
+                  <Image
+                    src={loginIcon}
+                    alt="Icone Barbearia"
+                    width={25}
+                    height={87}
+                    style={{ width: 'auto', height: 'auto' }}
+                  />
+                  <h1
+                    className="text-[#B4654A] font-bold text-3xl"
+                    style={{ lineHeight: '107px' }}
+                  >
+                    Cliente
+                  </h1>
 
-              {/* Header: "Agende com sua barbearia" */}
-              <h2
-                className="text-gray-300 font-bold text-[40px] leading-[46px] text-center"
-              >
+                </div>
+               
+                <div className="text-ms text-[#DDDBCB] font-bold text-right">
                 Agende com
                 <br />
                 sua barbearia
-              </h2>
-
-              {/* Sub-Header: Icone + "Cliente" */}
-              <div className="flex flex-row items-center justify-start gap-4 w-full">
-
-                <Image
-                  src={loginIcon}
-                  alt="Icone Barbearia"
-                  width={39}
-                  height={87}
-                  style={{ width: 'auto', height: 'auto' }}
-                />
-                <h1
-                  className="text-[#B4654A] font-bold text-[40px]"
-                  style={{ lineHeight: '107px' }}
-                >
-                  Cliente
-                </h1>
               </div>
+              </div>
+
+              
             </div>
 
             {/* Seção 2: Inputs (Agrupados) */}
@@ -128,40 +130,54 @@ export default function LoginClientePage() {
                   {error}
                 </div>
               )}
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-transparent border border-[#B4654A] rounded-lg w-full p-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Senha"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                className="bg-transparent border border-[#B4654A] rounded-lg w-full p-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50"
-                required
-              />
+
+              {/* Campo de Email */}
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
+                                                aria-hidden="true" />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] py-4 p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#B4654A] focus:outline-none focus:ring-2 focus:ring-[#B4654A]"
+                  required
+                />
+
+              </div>
+              
+              {/* Campo de Senha */}
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
+                                aria-hidden="true" />
+                <input
+                  type="password"
+                  placeholder="Senha"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] py-4 p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#B4654A] focus:outline-none focus:ring-2 focus:ring-[#B4654A]"
+                  required
+                />
+
+              </div>              
             </div>
 
             {/* Seção 3: Ações (Agrupados) */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="mt-2 flex items-center justify-between">
 
               {/* Botão Cadastrar */}
               <Link
                 href="/cadastro/cliente"
-                className="text-center bg-transparent border border-[#5C5C5C] text-[#5C5C5C] font-bold text-[20px] rounded-[7px] py-3 transition-colors hover:bg-[#5C5C5C] hover:text-white flex items-center justify-center"
+                className="text-ms font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#B4654A]"
               >
                 Cadastrar
               </Link>
 
-              {/* Botão Entrar */}
+              {/* Botão Entrar  B4654A*/}
               <button
                 type="submit"
                 disabled={loading}
-                className="text-center bg-[#B4654A] text-white font-bold text-[20px] rounded-[7px] py-3 transition-all hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-lg bg-[#B4654A] px-16 py-3 text-ms font-semibold text-[#151515] transition-transform hover:scale-105 hover:bg-[#B4654A] focus:outline-none focus:ring-2 focus:ring-[#B4654A] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Entrando...' : 'Entrar'}
               </button>
