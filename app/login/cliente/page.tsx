@@ -147,21 +147,21 @@ export default function LoginClientePage() {
             </div>
 
             {/* Seção 3: Ações (Agrupados) */}
-            <div className="grid grid-cols-2 gap-6">
+            <div className="mt-2 flex items-center justify-between">
 
               {/* Botão Cadastrar */}
               <Link
                 href="/cadastro/cliente"
-                className="text-center bg-transparent border border-[#5C5C5C] text-[#5C5C5C] font-bold text-[20px] rounded-[7px] py-3 transition-colors hover:bg-[#5C5C5C] hover:text-white flex items-center justify-center"
+                className="text-ms font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#B4654A]"
               >
                 Cadastrar
               </Link>
 
-              {/* Botão Entrar */}
+              {/* Botão Entrar  B4654A*/}
               <button
                 type="submit"
                 disabled={loading}
-                className="text-center bg-[#B4654A] text-white font-bold text-[20px] rounded-[7px] py-3 transition-all hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="rounded-lg bg-[#B4654A] px-16 py-3 text-ms font-semibold text-[#151515] transition-transform hover:scale-105 hover:bg-[#B4654A] focus:outline-none focus:ring-2 focus:ring-[#B4654A] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {loading ? 'Entrando...' : 'Entrar'}
               </button>
