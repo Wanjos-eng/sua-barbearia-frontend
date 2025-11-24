@@ -1,4 +1,6 @@
 "use client";
+
+import { Mail, Lock } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import loginIcon from '@/assets/LoginCliente/icone-logo-suabarbearia-Login.png';
@@ -128,22 +130,36 @@ export default function LoginClientePage() {
                   {error}
                 </div>
               )}
-              <input
-                type="email"
-                placeholder="Email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="bg-transparent border border-[#B4654A] rounded-lg w-full p-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50"
-                required
-              />
-              <input
-                type="password"
-                placeholder="Senha"
-                value={senha}
-                onChange={(e) => setSenha(e.target.value)}
-                className="bg-transparent border border-[#B4654A] rounded-lg w-full p-4 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#B4654A]/50"
-                required
-              />
+
+              {/* Campo de Email */}
+              <div className="relative">
+                <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
+                                                aria-hidden="true" />
+                <input
+                  type="email"
+                  placeholder="Email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] py-4 p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#B4654A] focus:outline-none focus:ring-2 focus:ring-[#B4654A]"
+                  required
+                />
+
+              </div>
+              
+              {/* Campo de Senha */}
+              <div className="relative">
+                <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
+                                aria-hidden="true" />
+                <input
+                  type="password"
+                  placeholder="Senha"
+                  value={senha}
+                  onChange={(e) => setSenha(e.target.value)}
+                  className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] py-4 p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#B4654A] focus:outline-none focus:ring-2 focus:ring-[#B4654A]"
+                  required
+                />
+
+              </div>              
             </div>
 
             {/* Seção 3: Ações (Agrupados) */}
