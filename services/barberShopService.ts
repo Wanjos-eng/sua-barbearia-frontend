@@ -25,6 +25,11 @@ export const barberShopService = {
                 if (error.response.status === 404) {
                     return [];
                 }
+                if (error.response.status === 500) {
+                    // Log error but return empty array for better UX
+                    console.error('Erro ao listar serviços:', error.response.data);
+                    return [];
+                }
                 throw error.response.data as ApiError;
             }
             throw { message: 'Erro de rede' };
@@ -76,6 +81,52 @@ export const barberShopService = {
             return response.data;
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    listMyClients: async (): Promise<import('@/types/api').BarberShopClient[]> => {
+        try {
+            const response = await api.get<import('@/types/api').BarberShopClient[]>('/barbearias/meus-clientes');
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT ausente ou inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Usuário não possui permissão' } as ApiError;
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    listMyAppointments: async (data?: string): Promise<import('@/types/api').BarberShopAppointment[]> => {
+        try {
+            const params = data ? { data } : {};
+            const response = await api.get<import('@/types/api').BarberShopAppointment[]>('/barbearias/meus-agendamentos', { params });
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 400) {
+                    throw { message: 'Formato de data inválido' } as ApiError;
+                }
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT ausente ou inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Usuário não possui permissão' } as ApiError;
+                }
                 throw error.response.data as ApiError;
             }
             throw { message: 'Erro de rede' };
