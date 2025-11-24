@@ -31,6 +31,9 @@ import {
   Scissors,
   Save
 } from 'lucide-react';
+import { professionalService } from '@/services/professionalService';
+import { serviceService } from '@/services/serviceService';
+import { barberShopService } from '@/services/barberShopService';
 
 // Tipos (Typescript)
 
@@ -85,6 +88,7 @@ interface Barber {
   email: string;
   phone: string;
   cpf: string; // ou CPF, como na imagem
+  profissao?: string; // Tipo de profissional
   appointments: number;
   next7d: number;
   status: 'Ativo' | 'Desativo';
@@ -124,6 +128,20 @@ interface AddTransactionModalProps {
   onConfirm: (transaction: Omit<Transaction, 'id'>) => void;
 }
 
+interface AddProfessionalModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+}
+
+interface AddServiceModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+  barbeariaId: number;
+}
+
+
 // 58BEC3 CIANO
 // 151515 Preto Cinza | 050505 Preto | 292929 Cinza | DDDBCB Branco Bege | 5C5C5C Cinza pouco escuro
 // gray-980 Preto escuro | gray-950 Preto um tom acima
@@ -150,7 +168,8 @@ const SidebarItem: React.FC<SidebarItemProps> = ({ icon: Icon, label, active, on
 const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, onClose }) => {
   const navItems = [
     { icon: LayoutGrid, label: 'Dashboard' },
-    { icon: Users, label: 'Barbeiros' },
+    { icon: Users, label: 'Profissionais' },
+    { icon: Scissors, label: 'Serviços' },
     { icon: Calendar, label: 'Agendamentos' },
     { icon: DollarSign, label: 'Gestão Financeira' },
     { icon: User, label: 'Clientes' },
@@ -396,6 +415,367 @@ const initialClientsData: Client[] = [
   { id: 'c4', name: 'Lucas Oliveira', email: 'lucas.o@email.com', phone: '(11) 99999-4444', since: 'Set 2023', lastVisit: '10/11/2024', avatarColor: 'bg-yellow-500' },
   { id: 'c5', name: 'Fernando Dias', email: 'fernando.d@email.com', phone: '(11) 99999-5555', since: 'Nov 2023', lastVisit: '-', avatarColor: 'bg-red-500' },
 ];
+
+// Modal de Adicionar Profissional
+const AddProfessionalModal: React.FC<AddProfessionalModalProps> = ({ isOpen, onClose, onSuccess }) => {
+  const [nome, setNome] = useState('');
+  const [email, setEmail] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [perfilType, setPerfilType] = useState<'BARBEIRO' | 'MANICURE' | 'ESTETICISTA' | 'COLORISTA' | ''>('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const professionalTypes = [
+    { value: 'BARBEIRO', label: 'Barbeiro', description: 'Cortes e barba' },
+    { value: 'MANICURE', label: 'Manicure', description: 'Manicure e pedicure' },
+    { value: 'ESTETICISTA', label: 'Esteticista', description: 'Sobrancelhas e estética' },
+    { value: 'COLORISTA', label: 'Colorista', description: 'Coloração capilar' }
+  ] as const;
+
+  useEffect(() => {
+    if (isOpen) {
+      setNome('');
+      setEmail('');
+      setTelefone('');
+      setPerfilType('');
+      setError('');
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const isValid = nome.trim() !== '' && email.trim() !== '' && telefone.trim() !== '' && perfilType !== '';
+
+  const handleSubmit = async () => {
+    if (!isValid || !perfilType) return;
+
+    try {
+      setLoading(true);
+      setError('');
+
+      await professionalService.createProfessional({
+        nome: nome.trim(),
+        email: email.trim(),
+        telefone: telefone.trim(),
+        perfilType: perfilType as 'BARBEIRO' | 'MANICURE' | 'ESTETICISTA' | 'COLORISTA'
+      });
+
+      onSuccess();
+      onClose();
+    } catch (err: any) {
+      console.error('Error creating professional:', err);
+      setError(err.message || 'Erro ao criar profissional');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300">
+      <div className="bg-[#151515] w-full max-w-md rounded-xl border border-[#292929] shadow-2xl transform transition-all scale-100 opacity-100">
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b border-[#292929]">
+          <h2 className="text-lg font-bold text-[#DDDBCB]">Novo Profissional</h2>
+          <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-6 space-y-5">
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-500 text-sm">
+              {error}
+            </div>
+          )}
+
+          {/* Nome */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Nome Completo *</label>
+            <div className="relative">
+              <User className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C5C5C]" />
+              <input
+                type="text"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                placeholder="Ex: João Silva"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 pl-10 pr-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Email */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">E-mail *</label>
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C5C5C]" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="joao@email.com"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 pl-10 pr-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Telefone */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Telefone *</label>
+            <div className="relative">
+              <Phone className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#5C5C5C]" />
+              <input
+                type="tel"
+                value={telefone}
+                onChange={(e) => setTelefone(e.target.value)}
+                placeholder="(11) 99999-9999"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 pl-10 pr-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Tipo de Profissional - Botões Seletores */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-2">Tipo de Profissional *</label>
+            <div className="grid grid-cols-2 gap-3">
+              {professionalTypes.map((type) => (
+                <button
+                  key={type.value}
+                  type="button"
+                  onClick={() => setPerfilType(type.value)}
+                  className={`
+                    p-3 rounded-lg border-2 transition-all text-left
+                    ${perfilType === type.value
+                      ? 'border-[#58BEC3] bg-[#58BEC3]/10'
+                      : 'border-[#292929] bg-[#050505] hover:border-[#58BEC3]/50'
+                    }
+                  `}
+                >
+                  <div className={`font-bold text-sm mb-0.5 ${perfilType === type.value ? 'text-[#58BEC3]' : 'text-[#DDDBCB]'}`}>
+                    {type.label}
+                  </div>
+                  <div className="text-xs text-[#5C5C5C]">{type.description}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end p-5 border-t border-[#292929] gap-3">
+          <button
+            onClick={onClose}
+            disabled={loading}
+            className="px-4 py-2 text-sm font-medium text-[#5C5C5C] hover:text-[#DDDBCB] transition-colors disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!isValid || loading}
+            className={`
+              px-6 py-2 text-sm font-bold rounded-lg transition-all flex items-center gap-2
+              ${isValid && !loading
+                ? 'bg-[#58BEC3] text-[#151515] hover:bg-[#7ADBE0] shadow-lg shadow-[#58BEC3]/20'
+                : 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed'}
+            `}
+          >
+            {loading && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#151515]"></div>}
+            {loading ? 'Criando...' : 'Criar Profissional'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Modal de Adicionar Serviço
+const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSuccess, barbeariaId }) => {
+  const [nome, setNome] = useState('');
+  const [descricao, setDescricao] = useState('');
+  const [preco, setPreco] = useState('');
+  const [duracao, setDuracao] = useState('');
+  const [tipoServico, setTipoServico] = useState<'CORTE' | 'BARBA' | 'MANICURE' | 'SOBRANCELHA' | 'COLORACAO' | 'TRATAMENTO_CAPILAR' | ''>('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const serviceTypes = [
+    { value: 'CORTE', label: 'Corte', description: 'Cortes de cabelo' },
+    { value: 'BARBA', label: 'Barba', description: 'Aparar e modelar' },
+    { value: 'MANICURE', label: 'Manicure', description: 'Unha e cutícula' },
+    { value: 'SOBRANCELHA', label: 'Sobrancelha', description: 'Design e limpeza' },
+    { value: 'COLORACAO', label: 'Coloração', description: 'Pintura capilar' },
+    { value: 'TRATAMENTO_CAPILAR', label: 'Tratamento', description: 'Hidratação' }
+  ] as const;
+
+  useEffect(() => {
+    if (isOpen) {
+      setNome('');
+      setDescricao('');
+      setPreco('');
+      setDuracao('');
+      setTipoServico('');
+      setError('');
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  const isValid = nome.trim() !== '' && descricao.trim() !== '' && preco !== '' && duracao !== '' && tipoServico !== '';
+
+  const handleSubmit = async () => {
+    if (!isValid || !tipoServico) return;
+
+    try {
+      setLoading(true);
+      setError('');
+
+      await serviceService.createService({
+        nome: nome.trim(),
+        descricao: descricao.trim(),
+        preco: parseFloat(preco),
+        duracao: parseInt(duracao),
+        tipoServico: tipoServico as 'CORTE' | 'BARBA' | 'MANICURE' | 'SOBRANCELHA' | 'COLORACAO' | 'TRATAMENTO_CAPILAR'
+      });
+
+      onSuccess();
+      onClose();
+    } catch (err: any) {
+      console.error('Error creating service:', err);
+      setError(err.message || 'Erro ao criar serviço');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300">
+      <div className="bg-[#151515] w-full max-w-2xl rounded-xl border border-[#292929] shadow-2xl transform transition-all scale-100 opacity-100">
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b border-[#292929]">
+          <h2 className="text-lg font-bold text-[#DDDBCB]">Novo Serviço</h2>
+          <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-6 space-y-5">
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-500 text-sm">
+              {error}
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            {/* Nome */}
+            <div>
+              <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Nome do Serviço *</label>
+              <input
+                type="text"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                placeholder="Ex: Corte Masculino"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+
+            {/* Preço */}
+            <div>
+              <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Preço (R$) *</label>
+              <input
+                type="number"
+                value={preco}
+                onChange={(e) => setPreco(e.target.value)}
+                placeholder="50.00"
+                step="0.01"
+                min="0"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Descrição */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Descrição *</label>
+            <textarea
+              rows={2}
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descreva o serviço..."
+              className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] resize-none transition-all"
+            />
+          </div>
+
+          {/* Duração */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Duração (minutos) *</label>
+            <input
+              type="number"
+              value={duracao}
+              onChange={(e) => setDuracao(e.target.value)}
+              placeholder="30"
+              min="1"
+              className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+            />
+          </div>
+
+          {/* Tipo de Serviço - Botões Seletores */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-2">Tipo de Serviço *</label>
+            <div className="grid grid-cols-3 gap-3">
+              {serviceTypes.map((type) => (
+                <button
+                  key={type.value}
+                  type="button"
+                  onClick={() => setTipoServico(type.value)}
+                  className={`
+                    p-3 rounded-lg border-2 transition-all text-left
+                    ${tipoServico === type.value
+                      ? 'border-[#58BEC3] bg-[#58BEC3]/10'
+                      : 'border-[#292929] bg-[#050505] hover:border-[#58BEC3]/50'
+                    }
+                  `}
+                >
+                  <div className={`font-bold text-sm mb-0.5 ${tipoServico === type.value ? 'text-[#58BEC3]' : 'text-[#DDDBCB]'}`}>
+                    {type.label}
+                  </div>
+                  <div className="text-xs text-[#5C5C5C]">{type.description}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end p-5 border-t border-[#292929] gap-3">
+          <button
+            onClick={onClose}
+            disabled={loading}
+            className="px-4 py-2 text-sm font-medium text-[#5C5C5C] hover:text-[#DDDBCB] transition-colors disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!isValid || loading}
+            className={`
+              px-6 py-2 text-sm font-bold rounded-lg transition-all flex items-center gap-2
+              ${isValid && !loading
+                ? 'bg-[#58BEC3] text-[#151515] hover:bg-[#7ADBE0] shadow-lg shadow-[#58BEC3]/20'
+                : 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed'}
+            `}
+          >
+            {loading && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#151515]"></div>}
+            {loading ? 'Criando...' : 'Criar Serviço'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, onConfirm }) => {
   const [type, setType] = useState<'income' | 'expense'>('expense');
@@ -1141,15 +1521,15 @@ const DashboardContent: React.FC<{
         </div>
 
         <button className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mt-8">
-          Adicionar Barbeiro
+          Adicionar Profissional
         </button>
       </div>
     </div>
   </div>
 )
 
-// Componente Card do Barbeiro
-const BarbeirosCard: React.FC<{ barber: Barber }> = ({ barber }) => (
+// Componente Card do Profissional
+const ProfissionaisCard: React.FC<{ barber: Barber }> = ({ barber }) => (
   <div className="bg-[#151515] p-5 rounded-lg flex flex-col">
 
     {/* Header do Card */}
@@ -1180,8 +1560,8 @@ const BarbeirosCard: React.FC<{ barber: Barber }> = ({ barber }) => (
         <span>{barber.phone}</span>
       </p>
       <p className="text-sm text-[#5C5C5C] flex items-center space-x-2">
-        <Phone className="w-3 h-3 flex-shrink-0" />
-        <span>{barber.cpf}</span>
+        <User className="w-3 h-3 flex-shrink-0" />
+        <span>{barber.profissao || 'Profissional'}</span>
       </p>
     </div>
 
@@ -1215,24 +1595,222 @@ const BarbeirosCard: React.FC<{ barber: Barber }> = ({ barber }) => (
   </div>
 );
 
-// Componente Tela de Barbeiros
-const BarbeirosContent: React.FC = () => {
-  const [activeTab, setActiveTab] = React.useState('Ativos');
+// Componente Tela de Serviços
+const ServicosContent: React.FC = () => {
   const [searchQuery, setSearchQuery] = React.useState('');
+  const [services, setServices] = React.useState<import('@/types/api').ServiceResponse[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
 
-  const filteredBarbeiros = barbeirosData
-    .filter(barber => barber.status === (activeTab === 'Ativos' ? 'Ativo' : 'Desativo'))
-    .filter(barber => barber.name.toLowerCase().includes(searchQuery.toLowerCase()));
+  // Get barbeariaId from authenticated user
+  const getBarbeariaId = (): number => {
+    if (typeof window !== 'undefined') {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          // For BARBEARIA role, the id IS the barbeariaId
+          return user.id || 0;
+        } catch (e) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+    }
+    return 0;
+  };
 
+  const barbeariaId = getBarbeariaId();
+
+  const fetchServices = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await serviceService.listServices(barbeariaId);
+      setServices(data);
+    } catch (err: any) {
+      console.error('Error fetching services:', err);
+      setError(err.message || 'Erro ao carregar serviços');
+    } finally {
+      setLoading(false);
+    }
+  }, [barbeariaId]);
+
+  React.useEffect(() => {
+    fetchServices();
+  }, [fetchServices]);
+
+  const handleServiceCreated = () => {
+    fetchServices();
+  };
+
+  const filteredServices = services.filter(service =>
+    service.nome.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <>
       {/* Header */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
-        <h1 className="text-3xl font-bold text-[#DDDBCB]">Barbeiros</h1>
-        <button className="flex items-center justify-center space-x-2 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-5 rounded-lg transition-colors">
+        <h1 className="text-3xl font-bold text-[#DDDBCB]">Serviços</h1>
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="flex items-center justify-center space-x-2 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-5 rounded-lg transition-colors"
+        >
           <Plus className="w-5 h-5" />
-          <span>Novo Barbeiro</span>
+          <span>Novo Serviço</span>
+        </button>
+      </div>
+
+      {/* Busca */}
+      <div className="mb-6">
+        <div className="relative max-w-md">
+          <input
+            type="text"
+            placeholder="Buscar serviço pelo nome..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full bg-[#151515] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
+          />
+          <Search className="w-5 h-5 text-[#DDDBCB] absolute left-3 top-1/2 -translate-y-1/2" />
+        </div>
+      </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#58BEC3] mb-4"></div>
+          <p className="text-[#5C5C5C]">Carregando serviços...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-500">
+          {error}
+        </div>
+      )}
+
+      {/* Grid de Serviços */}
+      {!loading && !error && (
+        <>
+          {filteredServices.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredServices.map(service => (
+                <div key={service.id} className="bg-[#151515] p-5 rounded-lg flex flex-col">
+                  <h3 className="text-lg font-bold text-[#DDDBCB] mb-3">{service.nome}</h3>
+
+                  <p className="text-sm text-[#5C5C5C] mb-4 flex-grow">{service.descricao}</p>
+
+                  <div className="flex items-center justify-between pt-4 border-t border-[#292929]">
+                    <div>
+                      <p className="text-xs text-[#5C5C5C]">Preço</p>
+                      <p className="text-xl font-bold text-[#58BEC3]">R$ {service.preco.toFixed(2)}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="text-xs text-[#5C5C5C]">Duração</p>
+                      <p className="text-xl font-bold text-[#DDDBCB]">{service.duracao} min</p>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 mt-4">
+                    <button className="flex-1 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-semibold py-2 px-3 rounded-lg text-sm flex items-center justify-center space-x-1">
+                      <Edit className="w-4 h-4" />
+                      <span>Editar</span>
+                    </button>
+                    <button className="p-2 bg-[#5C5C5C] hover:bg-[#767676] rounded-lg text-[#DDDBCB]">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="bg-[#151515] p-6 rounded-full mb-4">
+                <Scissors className="w-12 h-12 text-[#5C5C5C]" />
+              </div>
+              <p className="text-[#DDDBCB] font-semibold mb-2">Nenhum serviço encontrado</p>
+              <p className="text-[#5C5C5C] text-sm">
+                {searchQuery ? 'Tente ajustar sua busca' : 'Adicione seu primeiro serviço'}
+              </p>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Modal de Adicionar Serviço */}
+      <AddServiceModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSuccess={handleServiceCreated}
+        barbeariaId={barbeariaId}
+      />
+    </>
+  );
+};
+
+// Componente Tela de Profissionais
+const ProfissionaisContent: React.FC = () => {
+  const [activeTab, setActiveTab] = React.useState('Ativos');
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [professionals, setProfessionals] = React.useState<import('@/types/api').ProfessionalResponse[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
+  const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
+
+  // Carregar profissionais ao montar o componente
+  const fetchProfessionals = React.useCallback(async () => {
+    try {
+      setLoading(true);
+      const data = await professionalService.listMyProfessionals();
+      setProfessionals(data);
+    } catch (err: any) {
+      console.error('Error fetching professionals:', err);
+      setError(err.message || 'Erro ao carregar profissionais');
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    fetchProfessionals();
+  }, [fetchProfessionals]);
+
+  // Handler para quando um profissional é criado com sucesso
+  const handleProfessionalCreated = () => {
+    fetchProfessionals(); // Recarrega a lista
+  };
+
+  // Mapear profissionaisresponse para o formato Barber usado nos componentes
+  const mappedProfessionals = professionals.map((prof) => ({
+    id: prof.id.toString(),
+    initials: prof.nome.charAt(0).toUpperCase() + (prof.nome.split(' ')[1]?.charAt(0).toUpperCase() || ''),
+    name: prof.nome,
+    ativo: prof.ativo,
+    email: prof.email,
+    phone: prof.telefone,
+    cpf: '', // Não disponível na API
+    profissao: prof.profissao, // Tipo de profissional
+    appointments: 0, // Não disponível na API
+    next7d: 0, // Não disponível na API  
+    status: prof.ativo ? 'Ativo' as const : 'Desativo' as const
+  }));
+
+  const filteredProfessionals = mappedProfessionals
+    .filter(prof => prof.status === (activeTab === 'Ativos' ? 'Ativo' : 'Desativo'))
+    .filter(prof => prof.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  return (
+    <>
+      {/* Header */}
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+        <h1 className="text-3xl font-bold text-[#DDDBCB]">Profissionais</h1>
+        <button
+          onClick={() => setIsAddModalOpen(true)}
+          className="flex items-center justify-center space-x-2 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-5 rounded-lg transition-colors"
+        >
+          <Plus className="w-5 h-5" />
+          <span>Novo Profissional</span>
         </button>
       </div>
 
@@ -1242,22 +1820,22 @@ const BarbeirosContent: React.FC = () => {
           <button
             onClick={() => setActiveTab('Ativos')}
             className={`px-4 py-2.5 rounded-lg text-sm font-medium ${activeTab === 'Ativos'
-                ? 'bg-[#58BEC3] text-[#151515] shadow'
-                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`}
+              ? 'bg-[#58BEC3] text-[#151515] shadow'
+              : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`}
           >Ativos </button>
 
           <button
             onClick={() => setActiveTab('Desativos')}
             className={`px-4 py-2.5 rounded-lg text-sm font-medium ${activeTab === 'Desativos'
-                ? 'bg-[#58BEC3] text-[#151515] shadow'
-                : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`}
+              ? 'bg-[#58BEC3] text-[#151515] shadow'
+              : 'hover:text-[#AAAAAA] hover:bg-[#292929] text-[#5c5c5c]'}`}
           >Desativos </button>
         </div>
 
         <div className="relative flex-1 md:max-w-xs">
           <input
             type="text"
-            placeholder="Buscar barbeiro pelo nome..."
+            placeholder="Buscar profissional pelo nome..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-[#151515] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
@@ -1266,16 +1844,52 @@ const BarbeirosContent: React.FC = () => {
         </div>
       </div>
 
-      {/* Grid de Barbeiros */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 x1:grid-cols-4 gap-6">
-        {filteredBarbeiros.map(barber => (
-          <BarbeirosCard key={barber.id} barber={barber} />
-        ))}
-      </div>
+      {/* Loading State */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#58BEC3] mb-4"></div>
+          <p className="text-[#5C5C5C]">Carregando profissionais...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-500">
+          {error}
+        </div>
+      )}
+
+      {/* Grid de Profissionais */}
+      {!loading && !error && (
+        <>
+          {filteredProfessionals.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 x1:grid-cols-4 gap-6">
+              {filteredProfessionals.map(prof => (
+                <ProfissionaisCard key={prof.id} barber={prof} />
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center">
+              <div className="bg-[#151515] p-6 rounded-full mb-4">
+                <Users className="w-12 h-12 text-[#5C5C5C]" />
+              </div>
+              <p className="text-[#DDDBCB] font-semibold mb-2">Nenhum profissional encontrado</p>
+              <p className="text-[#5C5C5C] text-sm">
+                {searchQuery ? 'Tente ajustar sua busca' : 'Adicione seu primeiro profissional'}
+              </p>
+            </div>
+          )}
+        </>
+      )}
+
+      {/* Modal de Adicionar Profissional */}
+      <AddProfessionalModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSuccess={handleProfessionalCreated}
+      />
     </>
   );
-
-
 }
 
 // Componente Tela de Agendamentos
@@ -1298,12 +1912,46 @@ const AgendamentoStatusBridge: React.FC<{ status: AppointmentStatus }> = ({ stat
   );
 };
 
-// Componente AgendamentosContent (Página Principal de Agendamentos)
+// Componente Agendamentos
 const AgendamentosContent: React.FC = () => {
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [statusFilter, setStatusFilter] = React.useState('Todos');
+  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('Todos');
 
-  const filteredAppointments = appointmentsData
+  // Fetch appointments from API
+  React.useEffect(() => {
+    const fetchAppointments = async () => {
+      try {
+        setLoading(true);
+        const data = await barberShopService.listMyAppointments();
+
+        // Map API data to Appointment interface
+        const mappedAppointments: Appointment[] = data.map((a: import('@/types/api').BarberShopAppointment) => ({
+          id: a.id.toString(),
+          date: new Date(a.data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+          time: a.horarioInicio.substring(0, 5),
+          client: a.clienteNome,
+          barber: a.funcionarioNome,
+          service: a.servicoNome,
+          value: `R$${a.valorTotal.toFixed(2).replace('.', ',')}`,
+          status: (a.status.charAt(0).toUpperCase() + a.status.slice(1).toLowerCase()) as AppointmentStatus
+        }));
+
+        setAppointments(mappedAppointments);
+      } catch (err: any) {
+        console.error('Error fetching appointments:', err);
+        setError(err.message || 'Erro ao carregar agendamentos');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAppointments();
+  }, []);
+
+  const filteredAppointments = appointments
     .filter(app => statusFilter === 'Todos' || app.status === statusFilter)
     .filter(app => app.barber.toLowerCase().includes(searchQuery.toLowerCase()) ||
       app.client.toLowerCase().includes(searchQuery.toLowerCase())
@@ -1342,67 +1990,84 @@ const AgendamentosContent: React.FC = () => {
         </div>
       </div>
 
+      {/* Loading State */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#58BEC3] mb-4"></div>
+          <p className="text-[#5C5C5C]">Carregando agendamentos...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-500 mb-6">
+          {error}
+        </div>
+      )}
+
       {/* Tabela de Agendamentos */}
-      <div className="bg-[#151515] rounded-lg overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="w-full min-w-[700px]">
-            {/* Cabeçalho */}
-            <thead className="bg-[#0c0c0c]">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Cliente</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Data/Hora</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Barbeiro</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Serviço</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Valor</th>
-                <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Status</th>
-              </tr>
-            </thead>
+      {!loading && !error && (
+        <div className="bg-[#151515] rounded-lg overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[700px]">
+              {/* Cabeçalho */}
+              <thead className="bg-[#0c0c0c]">
+                <tr>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Cliente</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Data/Hora</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Barbeiro</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Serviço</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Valor</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Status</th>
+                </tr>
+              </thead>
 
-            {/* Corpo */}
-            <tbody className="divide-y divide-[#0c0c0c]">
-              {filteredAppointments.length > 0 ? (
-                filteredAppointments.map((app) => (
-                  <tr
-                    key={app.id}
-                    className="hover:bg-[#0c0c0c] transition-colors">
+              {/* Corpo */}
+              <tbody className="divide-y divide-[#0c0c0c]">
+                {filteredAppointments.length > 0 ? (
+                  filteredAppointments.map((app) => (
+                    <tr
+                      key={app.id}
+                      className="hover:bg-[#0c0c0c] transition-colors">
 
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-ms font-medium text-[#DDDBCB]">{app.client}</span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-[#DDDBCB]">{app.date}</span>
-                      <span className="block text-xs text-[#5c5c5c]">{app.time}</span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-[#DDDBCB]">{app.barber}</span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-[#DDDBCB]">{app.service}</span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <span className="text-sm font-medium text-[#DDDBCB]">{app.value}</span>
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap">
-                      <AgendamentoStatusBridge status={app.status} />
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-ms font-medium text-[#DDDBCB]">{app.client}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.date}</span>
+                        <span className="block text-xs text-[#5c5c5c]">{app.time}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.barber}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.service}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.value}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <AgendamentoStatusBridge status={app.status} />
+                      </td>
+                    </tr>
+                  ))
+
+                ) : (
+                  <tr>
+                    <td colSpan={6} className="text-center py-10 px-6 text-[#5C5C5C]">
+                      Nenhum agendamento encontrado.
                     </td>
                   </tr>
-                ))
+                )}
 
-              ) : (
-                <tr>
-                  <td colSpan={6} className="text-center py-10 px-6 text-[#5C5C5C]">
-                    Nenhum agendamento encontrado.
-                  </td>
-                </tr>
-              )}
-
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
     </>
-  )
-}
+  );
+};
 
 // Componente GestãoFinanceira
 const FinancialContent: React.FC = () => {
@@ -1633,11 +2298,44 @@ const FinancialContent: React.FC = () => {
 }
 
 // Componente Clientes
+// Componente Clientes
 const ClientesContent: React.FC = () => {
-  const [clients, setClients] = useState<Client[]>(initialClientsData);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+
+  // Fetch clients from API
+  React.useEffect(() => {
+    const fetchClients = async () => {
+      try {
+        setLoading(true);
+        const data = await barberShopService.listMyClients();
+
+        // Map API data to Client interface
+        const mappedClients: Client[] = data.map(c => ({
+          id: c.id.toString(),
+          name: c.nome,
+          email: c.email,
+          phone: c.telefone,
+          since: '2024', // Placeholder as API doesn't provide this yet
+          lastVisit: c.ultimoAgendamento ? new Date(c.ultimoAgendamento).toLocaleDateString('pt-BR') : '-',
+          avatarColor: 'bg-[#58BEC3]' // Default color
+        }));
+
+        setClients(mappedClients);
+      } catch (err: any) {
+        console.error('Error fetching clients:', err);
+        setError(err.message || 'Erro ao carregar clientes');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchClients();
+  }, []);
 
   const filteredClients = clients.filter(client =>
     client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -1646,7 +2344,7 @@ const ClientesContent: React.FC = () => {
   );
 
   const handleDeleteClient = (e: React.MouseEvent, id: string) => {
-    e.stopPropagation(); // Previne abrir o modal
+    e.stopPropagation();
     if (confirm('Tem certeza que deseja remover este cliente?')) {
       setClients(prev => prev.filter(c => c.id !== id));
       setToastMessage("Cliente removido com sucesso.");
@@ -1684,69 +2382,88 @@ const ClientesContent: React.FC = () => {
         </div>
       </div>
 
-      {/* Lista de Clientes */}
-      {filteredClients.length === 0 ? (
-        <div className="bg-[#151515] p-10 rounded-lg border border-[#292929] text-center flex flex-col items-center">
-          <UserX className="w-16 h-16 text-[#292929] mb-4" />
-          <p className="text-[#5C5C5C]">Nenhum cliente encontrado.</p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredClients.map((client) => (
-            <div
-              key={client.id}
-              onClick={() => setSelectedClient(client)}
-              className="bg-[#151515] rounded-xl border border-[#292929] p-6 hover:border-[#58BEC3] transition-all cursor-pointer group relative overflow-hidden"
-            >
-              {/* Hover Effect bg */}
-              <div className="absolute inset-0 bg-gradient-to-r from-[#58BEC3]/0 to-[#58BEC3]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-
-              <div className="flex items-start justify-between mb-4 relative z-10">
-                <div className={`w-12 h-12 rounded-full ${client.avatarColor} flex items-center justify-center text-lg font-bold text-white shadow-lg`}>
-                  {client.name.substring(0, 2).toUpperCase()}
-                </div>
-                <button
-                  onClick={(e) => handleDeleteClient(e, client.id)}
-                  className="text-[#292929] group-hover:text-red-500 hover:bg-red-500/10 p-2 rounded-full transition-colors"
-                  title="Remover Cliente"
-                >
-                  <Trash2 className="w-5 h-5" />
-                </button>
-              </div>
-
-              <div className="relative z-10">
-                <h3 className="text-lg font-bold text-[#DDDBCB] mb-1 group-hover:text-[#58BEC3] transition-colors">{client.name}</h3>
-
-                <div className="space-y-2 mt-4">
-                  <div className="flex items-center text-sm text-[#5C5C5C]">
-                    <Mail className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
-                    <span className="truncate">{client.email}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-[#5C5C5C]">
-                    <Phone className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
-                    <span>{client.phone}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-[#5C5C5C]">
-                    <Clock className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
-                    <span>Cliente desde {client.since}</span>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-6 pt-4 border-t border-[#292929] flex items-center justify-between relative z-10">
-                <span className="text-xs text-[#5C5C5C]">Última visita: <span className="text-[#DDDBCB]">{client.lastVisit}</span></span>
-                <div className="flex items-center text-[#58BEC3] text-xs font-bold">
-                  <History className="w-3 h-3 mr-1" />
-                  Ver Histórico
-                </div>
-              </div>
-            </div>
-          ))}
+      {/* Loading State */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#58BEC3] mb-4"></div>
+          <p className="text-[#5C5C5C]">Carregando clientes...</p>
         </div>
       )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-500 mb-6">
+          {error}
+        </div>
+      )}
+
+      {/* Lista de Clientes */}
+      {!loading && !error && (
+        <>
+          {filteredClients.length === 0 ? (
+            <div className="bg-[#151515] p-10 rounded-lg border border-[#292929] text-center flex flex-col items-center">
+              <UserX className="w-16 h-16 text-[#292929] mb-4" />
+              <p className="text-[#5C5C5C]">Nenhum cliente encontrado.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredClients.map((client) => (
+                <div
+                  key={client.id}
+                  onClick={() => setSelectedClient(client)}
+                  className="bg-[#151515] rounded-xl border border-[#292929] p-6 hover:border-[#58BEC3] transition-all cursor-pointer group relative overflow-hidden"
+                >
+                  {/* Hover Effect bg */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-[#58BEC3]/0 to-[#58BEC3]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+
+                  <div className="flex items-start justify-between mb-4 relative z-10">
+                    <div className={`w-12 h-12 rounded-full ${client.avatarColor} flex items-center justify-center text-lg font-bold text-white shadow-lg`}>
+                      {client.name.substring(0, 2).toUpperCase()}
+                    </div>
+                    <button
+                      onClick={(e) => handleDeleteClient(e, client.id)}
+                      className="text-[#292929] group-hover:text-red-500 hover:bg-red-500/10 p-2 rounded-full transition-colors"
+                      title="Remover Cliente"
+                    >
+                      <Trash2 className="w-5 h-5" />
+                    </button>
+                  </div>
+
+                  <div className="relative z-10">
+                    <h3 className="text-lg font-bold text-[#DDDBCB] mb-1 group-hover:text-[#58BEC3] transition-colors">{client.name}</h3>
+
+                    <div className="space-y-2 mt-4">
+                      <div className="flex items-center text-sm text-[#5C5C5C]">
+                        <Mail className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                        <span className="truncate">{client.email}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-[#5C5C5C]">
+                        <Phone className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                        <span>{client.phone}</span>
+                      </div>
+                      <div className="flex items-center text-sm text-[#5C5C5C]">
+                        <Clock className="w-4 h-4 mr-2 text-[#292929] group-hover:text-[#58BEC3] transition-colors" />
+                        <span>Cliente desde {client.since}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="mt-6 pt-4 border-t border-[#292929] flex items-center justify-between relative z-10">
+                    <span className="text-xs text-[#5C5C5C]">Última visita: <span className="text-[#DDDBCB]">{client.lastVisit}</span></span>
+                    <div className="flex items-center text-[#58BEC3] text-xs font-bold">
+                      <History className="w-3 h-3 mr-1" />
+                      Ver Histórico
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
     </div>
-  )
-}
+  );
+};
 
 //Componente App
 const App: React.FC = () => {
@@ -1843,7 +2560,8 @@ const App: React.FC = () => {
               activeBarbers={activeBarbersData}
             />
           )}
-          {currentPage === 'Barbeiros' && <BarbeirosContent />}
+          {currentPage === 'Profissionais' && <ProfissionaisContent />}
+          {currentPage === 'Serviços' && <ServicosContent />}
           {currentPage === 'Agendamentos' && <AgendamentosContent />}
           {currentPage === 'Gestão Financeira' && <FinancialContent />}
           {currentPage === 'Clientes' && <ClientesContent />}

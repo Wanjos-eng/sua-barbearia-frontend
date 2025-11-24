@@ -71,7 +71,7 @@ export interface Service {
     duracao: number;
     barbeariaId: number;
     ativo: boolean;
-    tipoServico: string;
+    tipoServico: 'CORTE' | 'BARBA' | 'MANICURE' | 'SOBRANCELHA' | 'COLORACAO' | 'TRATAMENTO_CAPILAR' | string;
 }
 
 export interface AvailableSlot {
@@ -89,7 +89,7 @@ export interface Professional {
     nome: string;
     email: string;
     telefone: string;
-    perfilType: string;
+    perfilType: 'BARBEIRO' | 'MANICURE' | 'ESTETICISTA' | 'COLORISTA' | string;
     profissao: string;
     especialidades: string;
     ativo: boolean;
@@ -143,3 +143,77 @@ export interface AppointmentResponse {
 export interface RescheduleData {
     novaDataHora: string;
 }
+
+export interface RecentAppointment {
+    id: number;
+    clienteId: number;
+    barbeariaId: number;
+    servicoId: number;
+    funcionarioId: number;
+    dataHora: string;
+    status: string;
+    observacoes: string | null;
+    dataCriacao: string;
+    dataAtualizacao: string;
+    nomeBarbearia: string;
+    nomeBarbeiro: string | null;
+    nomeServico: string;
+}
+
+export interface CreateProfessionalData {
+    nome: string;
+    email: string;
+    telefone: string;
+    perfilType: 'BARBEIRO' | 'MANICURE' | 'ESTETICISTA' | 'COLORISTA';
+}
+
+export interface ProfessionalResponse {
+    id: number;
+    barbeariaId: number;
+    nome: string;
+    email: string;
+    telefone: string;
+    profissao: 'BARBEIRO' | 'MANICURE' | 'ESTETICISTA' | 'COLORISTA';
+    ativo: boolean;
+    dataCriacao: string;
+    dataAtualizacao: string;
+}
+
+export interface CreateServiceData {
+    nome: string;
+    descricao: string;
+    preco: number;
+    duracao: number;
+    tipoServico: 'CORTE' | 'BARBA' | 'MANICURE' | 'SOBRANCELHA' | 'COLORACAO' | 'TRATAMENTO_CAPILAR';
+}
+
+export interface ServiceResponse {
+    id: number;
+    nome: string;
+    descricao: string;
+    preco: number;
+    duracao: number;
+    ativo: boolean;
+}
+
+export interface BarberShopClient {
+    id: number;
+    nome: string;
+    email: string;
+    telefone: string;
+    totalAgendamentos: number;
+    ultimoAgendamento: string;
+}
+
+export interface BarberShopAppointment {
+    id: number;
+    clienteNome: string;
+    servicoNome: string;
+    funcionarioNome: string;
+    data: string;
+    horarioInicio: string;
+    horarioFim: string;
+    status: string;
+    valorTotal: number;
+}
+

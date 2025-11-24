@@ -1,6 +1,6 @@
 
 import api from './api';
-import { Appointment, UpdateProfileData, User, ApiError } from '@/types/api';
+import { Appointment, UpdateProfileData, User, ApiError, RecentAppointment } from '@/types/api';
 import axios from 'axios';
 
 export const clientService = {
@@ -47,6 +47,31 @@ export const clientService = {
             });
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    getRecentAppointments: async (tipo?: 'futuros' | 'concluidos_recentes'): Promise<RecentAppointment[]> => {
+        try {
+            const params: any = {};
+            if (tipo) {
+                params.tipo = tipo;
+            }
+            const response = await api.get<RecentAppointment[]>('/clientes/meus-agendamentos/recentes', { params });
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 400) {
+                    throw { message: 'Tipo inválido' } as ApiError;
+                }
+                if (error.response.status === 401) {
+                    throw { message: 'Token inválido' } as ApiError;
+                }
                 throw error.response.data as ApiError;
             }
             throw { message: 'Erro de rede' };
