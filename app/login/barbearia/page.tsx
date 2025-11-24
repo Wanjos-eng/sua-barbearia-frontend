@@ -75,17 +75,30 @@ export default function LoginPage() {
         //Container principal da página
         <div className="flex min-h-screen w-full items-center justify-center bg-black p-4">
             {/* Card de Login */}
-            <div className="w-full max-w-md rounded-lg bg-[#151515] p-8 shadow-2x1">
+            <div className="bg-[#151515] rounded-[17px] w-full max-w-[468px] h-auto p-8 md:p-10">
                 {/* Cabeçalho com Logo e Título */}
-                <div className="mb-8 flex flex-col items-center">
-                    {/*<BarberPoleIcon className="h-16 w-16 text-[#B4654A]"/>*/}
-                    <h1 className="mt-4 text-3xl font-bold text-[#DDDBCB]">Login Barbearia</h1>
-                </div>
+                <div className="flex flex-col items-center">
+                    <div className="flex flex-row items-center justify-between w-full mb-12">
+                            <h1
+                                className="text-[#58BEC3] font-bold text-3xl leading-tight"
+                            >
+                                Sua
+                                <br />
+                                Barbearia
+                            </h1>
 
+                            <div className="text-ms text-[#DDDBCB] font-bold text-right leading-snug">
+                                Gerencie a
+                                <br />
+                                sua barbearia
+
+                            </div>
+                    </div>
+                </div>
 
                 {/* Formulário de Login */}
                 <form onSubmit={handleSubmit}>
-                    <div className="space-y-6">
+                    <div className="flex flex-col gap-5">
                         {error && <ErrorAlert message={error} />}
 
                         {/* Campo de Email */}
