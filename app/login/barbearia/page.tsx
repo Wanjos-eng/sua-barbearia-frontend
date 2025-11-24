@@ -75,17 +75,30 @@ export default function LoginPage() {
         //Container principal da página
         <div className="flex min-h-screen w-full items-center justify-center bg-black p-4">
             {/* Card de Login */}
-            <div className="w-full max-w-md rounded-lg bg-[#151515] p-8 shadow-2x1">
+            <div className="bg-[#151515] rounded-[17px] w-full max-w-[468px] h-auto p-8 md:p-10">
                 {/* Cabeçalho com Logo e Título */}
-                <div className="mb-8 flex flex-col items-center">
-                    {/*<BarberPoleIcon className="h-16 w-16 text-[#B4654A]"/>*/}
-                    <h1 className="mt-4 text-3xl font-bold text-[#DDDBCB]">Login Barbearia</h1>
-                </div>
+                <div className="flex flex-col items-center">
+                    <div className="flex flex-row items-center justify-between w-full mb-12">
+                            <h1
+                                className="text-[#58BEC3] font-bold text-3xl leading-tight"
+                            >
+                                Sua
+                                <br />
+                                Barbearia
+                            </h1>
 
+                            <div className="text-ms text-[#DDDBCB] font-bold text-right leading-snug">
+                                Gerencie a
+                                <br />
+                                sua barbearia
+
+                            </div>
+                    </div>
+                </div>
 
                 {/* Formulário de Login */}
                 <form onSubmit={handleSubmit}>
-                    <div className="space-y-6">
+                    <div className="flex flex-col gap-5">
                         {error && <ErrorAlert message={error} />}
 
                         {/* Campo de Email */}
@@ -100,7 +113,7 @@ export default function LoginPage() {
                                 onChange={(e) => setEmail(e.target.value)}
                                 placeholder="Email"
                                 required
-                                className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] py-4 p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
                             />
                         </div>
 
@@ -116,7 +129,7 @@ export default function LoginPage() {
                                 onChange={(e) => setPassword(e.target.value)}
                                 placeholder="Senha"
                                 required
-                                className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
+                                className="w-full rounded-lg border border-[#5c5c5c] bg-[#151515] py-4 p-3 pl-10 text-[#DDDBCB] placeholder-[#5c5c5c] transition-all focus:border-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500"
                             />
                         </div>
                     </div>
@@ -125,7 +138,7 @@ export default function LoginPage() {
                     <div className="mt-10 flex items-center justify-between">
                         <Link
                             href="/cadastro/barbearia"
-                            className="text-sm font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                            className="text-ms font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900"
                         >
                             Cadastrar
                         </Link>
@@ -133,7 +146,7 @@ export default function LoginPage() {
                         <button
                             type="submit" // Botão "Entrar" (tipo submit para enviar o form)
                             disabled={loading}
-                            className="rounded-lg bg-[#58BEC3] px-8 py-3 text-sm font-semibold text-[#151515] transition-transform hover:scale-105 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="rounded-lg bg-[#58BEC3] px-16 py-3 text-ms font-semibold text-[#151515] transition-transform hover:scale-105 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? 'Entrando...' : 'Entrar'}
                         </button>
