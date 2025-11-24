@@ -138,7 +138,7 @@ export default function LoginPage() {
                     <div className="mt-10 flex items-center justify-between">
                         <Link
                             href="/cadastro/barbearia"
-                            className="text-sm font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+                            className="text-ms font-medium rounded-md p-3 text-[#5c5c5c] transition-colors hover:text-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 focus:ring-offset-gray-900"
                         >
                             Cadastrar
                         </Link>
@@ -146,7 +146,7 @@ export default function LoginPage() {
                         <button
                             type="submit" // Botão "Entrar" (tipo submit para enviar o form)
                             disabled={loading}
-                            className="rounded-lg bg-[#58BEC3] px-8 py-3 text-sm font-semibold text-[#151515] transition-transform hover:scale-105 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] disabled:opacity-50 disabled:cursor-not-allowed"
+                            className="rounded-lg bg-[#58BEC3] px-16 py-3 text-ms font-semibold text-[#151515] transition-transform hover:scale-105 hover:bg-[#58BEC3] focus:outline-none focus:ring-2 focus:ring-[#58BEC3] focus:ring-offset-2 focus:ring-offset-[#5c5c5c] disabled:opacity-50 disabled:cursor-not-allowed"
                         >
                             {loading ? 'Entrando...' : 'Entrar'}
                         </button>
