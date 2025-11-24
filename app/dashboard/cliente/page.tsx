@@ -64,10 +64,7 @@ const MOCK_BARBER_SHOPS: BarberShop[] = [
   { id: 4, nome: 'Barbearia 4', nomeFantasia: 'Barbearia 4', endereco: 'Praça Central, 10', telefone: '(11) 96666-5555', email: 'b4@email.com', avaliacaoMedia: 4.9 },
 ];
 
-const MOCK_UPCOMING: UIAppointment[] = [
-  { id: 'a1', barberShopName: 'Barbearia 1', service: 'Corte', price: 'R$50,00', date: '20/11', time: '10:00', barberName: 'Roberto', status: 'pending' },
-  { id: 'a2', barberShopName: 'Barbearia 2', service: 'Corte', price: 'R$50,00', date: '20/11', time: '11:00', barberName: 'Miguel', status: 'confirmed' },
-];
+// Removed MOCK_UPCOMING - now using real API data
 
 const MOCK_SERVICES: Service[] = [
   { id: 1, nome: 'Corte Degradê', preco: 50.00, duracao: 45, descricao: 'Corte moderno', barbeariaId: 1, ativo: true, tipoServico: 'CORTE' },
@@ -410,43 +407,11 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
       };
 
       checkDatesAvailability();
-    } else if (selectedService && selectedProfessional && workingHours.length === 0) {
-      // If working hours fetch failed or empty, try checking all dates anyway (fallback)
-      // Or maybe we are still loading working hours? 
-      // Let's rely on the previous logic if workingHours is empty but we have a professional
-      // Actually, let's wait for workingHours to be populated or confirmed empty.
-      // For now, I'll leave the fallback to check all dates if workingHours is empty to be safe.
-      const checkDatesAvailabilityFallback = async () => {
-        setCheckingAvailability(true);
-        const availableDates = new Set<string>();
-        const dates = Array.from({ length: 7 }, (_, i) => {
-          const d = new Date();
-          d.setDate(d.getDate() + i);
-          return d;
-        });
-
-        // If no working hours (fallback), we assume all days might be available 
-        // OR we try to fetch slots for each day (which was failing).
-        // Let's try to be optimistic and show all days, or stick to the fetch but log better.
-        // Given the 400 errors, let's try to fetch but handle failure gracefully.
-
-        await Promise.all(
-          dates.map(async (date) => {
-            try {
-              const dateStr = date.getFullYear() + '-' + String(date.getMonth() + 1).padStart(2, '0') + '-' + String(date.getDate()).padStart(2, '0');
-              // If selectedProfessional is present, use it.
-              const slots = await barberShopService.getAvailableSlots(shop.id, selectedService.id, dateStr, selectedProfessional?.id);
-              if (slots.length > 0) availableDates.add(date.toDateString());
-            } catch (e) {
-              console.error(`Fallback availability check failed for ${date}:`, e);
-              // If it fails, we don't add it.
-            }
-          })
-        );
-        setDatesWithAvailability(availableDates);
-        setCheckingAvailability(false);
-      };
-      checkDatesAvailabilityFallback();
+    } else if (selectedService && selectedProfessional) {
+      // If no working hours, show no available dates instead of fallback check
+      // This prevents multiple 400 errors when the professional has no working hours configured
+      setDatesWithAvailability(new Set<string>());
+      setCheckingAvailability(false);
     }
   }, [selectedService, selectedProfessional, shop.id, workingHours]);
 
@@ -772,6 +737,8 @@ export default function App() {
   const [loadingBarberShops, setLoadingBarberShops] = useState(true);
   const [history, setHistory] = useState<UIAppointment[]>([]);
   const [loadingHistory, setLoadingHistory] = useState(true);
+  const [upcomingAppointments, setUpcomingAppointments] = useState<UIAppointment[]>([]);
+  const [loadingUpcoming, setLoadingUpcoming] = useState(true);
 
   // Estado do Usuário
   const [user, setUser] = useState<UserProfile>({
@@ -834,8 +801,35 @@ export default function App() {
       }
     };
 
+    const fetchUpcomingAppointments = async () => {
+      try {
+        setLoadingUpcoming(true);
+        const recentData = await clientService.getRecentAppointments('futuros');
+        console.log('Recent Appointments Data:', recentData);
+        const formattedUpcoming: UIAppointment[] = recentData.map(item => {
+          const dateObj = new Date(item.dataHora);
+          return {
+            id: item.id.toString(),
+            barberShopName: item.nomeBarbearia,
+            service: item.nomeServico,
+            price: "R$ -", // API doesn't return price yet
+            date: dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+            time: dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+            barberName: item.nomeBarbeiro || 'Não informado',
+            status: item.status === 'PENDENTE' ? 'pending' : 'confirmed'
+          };
+        });
+        setUpcomingAppointments(formattedUpcoming);
+      } catch (error) {
+        console.error("Failed to fetch upcoming appointments", error);
+      } finally {
+        setLoadingUpcoming(false);
+      }
+    };
+
     fetchBarberShops();
     fetchHistory();
+    fetchUpcomingAppointments();
   }, []);
 
   // Fechar menu ao clicar fora
@@ -1007,25 +1001,61 @@ export default function App() {
               <Scissors className="w-6 h-6 text-zinc-600 opacity-50" />
             </div>
 
-            {/* Grupo de Data */}
-            <div className="mb-2">
-              <div className="flex items-center gap-2 text-zinc-400 mb-4">
-                <Calendar className="w-5 h-5" />
-                <span className="text-lg">Dia 20/11 - Quinta-Feira</span>
+            {loadingUpcoming ? (
+              <div className="flex flex-col items-center justify-center py-12">
+                <Loader2 className="w-10 h-10 text-[#d97757] animate-spin mb-4" />
+                <p className="text-zinc-500 text-sm">Carregando agendamentos...</p>
               </div>
-              <div className="w-full h-px bg-white/10 mb-4"></div>
-            </div>
+            ) : upcomingAppointments.length > 0 ? (
+              <>
+                {/* Group appointments by date */}
+                {(() => {
+                  const groupedByDate = upcomingAppointments.reduce((acc, app) => {
+                    const dateKey = app.date;
+                    if (!acc[dateKey]) acc[dateKey] = [];
+                    acc[dateKey].push(app);
+                    return acc;
+                  }, {} as Record<string, UIAppointment[]>);
 
-            {/* Lista de Agendamentos */}
-            <div className="space-y-1">
-              {MOCK_UPCOMING.map(app => (
-                <AppointmentRow key={app.id} app={app} />
-              ))}
-            </div>
+                  return Object.entries(groupedByDate).map(([date, appointments]) => {
+                    // Parse the date to get day of week
+                    const [day, month] = date.split('/');
+                    const year = new Date().getFullYear();
+                    const dateObj = new Date(year, parseInt(month) - 1, parseInt(day));
+                    const dayOfWeek = dateObj.toLocaleDateString('pt-BR', { weekday: 'long' });
+                    const capitalizedDayOfWeek = dayOfWeek.charAt(0).toUpperCase() + dayOfWeek.slice(1);
 
-            <div className="mt-12 text-center text-zinc-600 text-sm">
-              {MOCK_UPCOMING.length === 0 && "Nenhum agendamento futuro."}
-            </div>
+                    return (
+                      <div key={date} className="mb-8">
+                        {/* Grupo de Data */}
+                        <div className="mb-2">
+                          <div className="flex items-center gap-2 text-zinc-400 mb-4">
+                            <Calendar className="w-5 h-5" />
+                            <span className="text-lg">Dia {date} - {capitalizedDayOfWeek}</span>
+                          </div>
+                          <div className="w-full h-px bg-white/10 mb-4"></div>
+                        </div>
+
+                        {/* Lista de Agendamentos */}
+                        <div className="space-y-1">
+                          {appointments.map(app => (
+                            <AppointmentRow key={app.id} app={app} />
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
+              </>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="bg-white/5 p-6 rounded-full mb-4">
+                  <Calendar className="w-12 h-12 text-zinc-600" />
+                </div>
+                <p className="text-zinc-400 font-medium mb-1">Nenhum agendamento futuro</p>
+                <p className="text-zinc-600 text-sm max-w-xs">Seus próximos agendamentos aparecerão aqui.</p>
+              </div>
+            )}
           </div>
 
           {/* Coluna da Direita (1/3) - Histórico */}
