@@ -94,33 +94,33 @@ export default function LoginClientePage() {
 
             {/* Seção 1: Cabeçalho (Agrupados) */}
             <div className="flex flex-col items-center">
+              {/* Sub-Header: Icone + "Cliente" */}
+              <div className="flex flex-row items-center justify-between gap-4 w-full">
+                <div className=" flex flex-row items-center justify-start gap-4">
+                  <Image
+                    src={loginIcon}
+                    alt="Icone Barbearia"
+                    width={25}
+                    height={87}
+                    style={{ width: 'auto', height: 'auto' }}
+                  />
+                  <h1
+                    className="text-[#B4654A] font-bold text-3xl"
+                    style={{ lineHeight: '107px' }}
+                  >
+                    Cliente
+                  </h1>
 
-              {/* Header: "Agende com sua barbearia" */}
-              <h2
-                className="text-gray-300 font-bold text-[40px] leading-[46px] text-center"
-              >
+                </div>
+               
+                <div className="text-ms text-[#DDDBCB] font-bold text-right">
                 Agende com
                 <br />
                 sua barbearia
-              </h2>
-
-              {/* Sub-Header: Icone + "Cliente" */}
-              <div className="flex flex-row items-center justify-start gap-4 w-full">
-
-                <Image
-                  src={loginIcon}
-                  alt="Icone Barbearia"
-                  width={39}
-                  height={87}
-                  style={{ width: 'auto', height: 'auto' }}
-                />
-                <h1
-                  className="text-[#B4654A] font-bold text-[40px]"
-                  style={{ lineHeight: '107px' }}
-                >
-                  Cliente
-                </h1>
               </div>
+              </div>
+
+              
             </div>
 
             {/* Seção 2: Inputs (Agrupados) */}
