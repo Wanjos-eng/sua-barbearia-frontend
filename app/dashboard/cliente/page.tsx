@@ -1,6 +1,6 @@
 'use client';
 // Importando icons 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Scissors,
   Calendar,
@@ -14,10 +14,10 @@ import {
   CheckCircle,
   Loader2,
   ChevronLeft,
+  ChevronRight,
   Edit,
   LogOut,
   Mail,
-  Lock,
   RefreshCw,
   AlertCircle
 } from 'lucide-react';
@@ -37,17 +37,14 @@ interface UIAppointment {
   time: string;
   barberName: string;
   status: string;
+  barbeariaId?: number;
 }
 
 
 
 
 
-interface Barber {
-  id: string;
-  name: string;
-  avatarUrl: string;
-}
+
 
 interface UserProfile {
   name: string;
@@ -57,24 +54,7 @@ interface UserProfile {
 
 // --- MOCK DATA ---
 
-const MOCK_BARBER_SHOPS: BarberShop[] = [
-  { id: 1, nome: 'Barbearia 1', nomeFantasia: 'Barbearia 1', endereco: 'Rua das Flores, 123', telefone: '(11) 98888-7777', email: 'b1@email.com', avaliacaoMedia: 4.9 },
-  { id: 2, nome: 'Barbearia 2', nomeFantasia: 'Barbearia 2', endereco: 'Av. Principal, 456', telefone: '(11) 99999-8888', email: 'b2@email.com', avaliacaoMedia: 4.8 },
-  { id: 3, nome: 'Barbearia 3', nomeFantasia: 'Barbearia 3', endereco: 'Beco da Barba, 007', telefone: '(11) 97777-6666', email: 'b3@email.com', avaliacaoMedia: 4.7 },
-  { id: 4, nome: 'Barbearia 4', nomeFantasia: 'Barbearia 4', endereco: 'Praça Central, 10', telefone: '(11) 96666-5555', email: 'b4@email.com', avaliacaoMedia: 4.9 },
-];
 
-// Removed MOCK_UPCOMING - now using real API data
-
-const MOCK_SERVICES: Service[] = [
-  { id: 1, nome: 'Corte Degradê', preco: 50.00, duracao: 45, descricao: 'Corte moderno', barbeariaId: 1, ativo: true, tipoServico: 'CORTE' },
-  { id: 2, nome: 'Barba Terapia', preco: 40.00, duracao: 30, descricao: 'Tratamento completo', barbeariaId: 1, ativo: true, tipoServico: 'BARBA' },
-];
-
-const MOCK_BARBERS: Barber[] = [
-  { id: 'bar1', name: 'Roberto', avatarUrl: 'https://placehold.co/100x100/d97757/18181b?text=R' },
-  { id: 'bar2', name: 'Miguel', avatarUrl: 'https://placehold.co/100x100/d97757/18181b?text=M' },
-];
 
 // --- COMPONENTES ---
 
@@ -124,16 +104,119 @@ const BarberShopCard: React.FC<{ shop: BarberShop, onClick: () => void }> = ({ s
     <div className="flex items-center gap-3 w-full justify-center">
       <button
         onClick={onClick}
-        className="bg-[#d97757] hover:bg-[#c0684b] text-white/90 font-medium text-sm py-2 px-6 rounded-lg transition-colors"
+        className="w-full py-2 bg-[#d97757] hover:bg-[#e0886a] text-white rounded-lg text-sm font-medium transition-colors"
       >
-        Agendar
-      </button>
-      <button className="text-zinc-500 hover:text-white transition-colors">
-        <Info className="w-5 h-5" />
+        Ver Serviços
       </button>
     </div>
   </div>
 );
+
+// --- REVIEW MODAL ---
+const ReviewModal: React.FC<{ appointment: UIAppointment, onClose: () => void }> = ({ appointment, onClose }) => {
+  const [ratings, setRatings] = useState({
+    notaServico: 0,
+    notaAmbiente: 0,
+    notaLimpeza: 0,
+    notaAtendimento: 0
+  });
+  const [comment, setComment] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitting(true);
+    try {
+      let barbeariaId = appointment.barbeariaId;
+      if (!barbeariaId) {
+        // Fetch details if barbeariaId is missing
+        const details = await appointmentService.getAppointmentById(parseInt(appointment.id));
+        barbeariaId = details.barbeariaId;
+      }
+
+      await clientService.createReview({
+        barbeariaId: barbeariaId!,
+        agendamentoId: parseInt(appointment.id),
+        ...ratings,
+        comentario: comment
+      });
+      onClose();
+    } catch (error) {
+      console.error('Error submitting review:', error);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const renderStars = (category: keyof typeof ratings, label: string) => {
+    const [hoverRating, setHoverRating] = useState(0);
+
+    return (
+      <div className="mb-4">
+        <label className="block text-sm font-medium text-zinc-400 mb-1">{label}</label>
+        <div className="flex gap-1" onMouseLeave={() => setHoverRating(0)}>
+          {[1, 2, 3, 4, 5].map((star) => (
+            <button
+              key={star}
+              type="button"
+              onClick={() => setRatings(prev => ({ ...prev, [category]: star }))}
+              onMouseEnter={() => setHoverRating(star)}
+              className={`p-1 transition-all duration-200 hover:scale-110 ${(hoverRating || ratings[category]) >= star ? 'text-yellow-500' : 'text-zinc-600'
+                }`}
+            >
+              <Star
+                className={`w-6 h-6 transition-all duration-200 ${(hoverRating || ratings[category]) >= star ? 'fill-current' : 'stroke-current'
+                  }`}
+              />
+            </button>
+          ))}
+        </div>
+      </div>
+    );
+  };
+
+  return (
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-[#18181b] rounded-xl border border-white/10 max-w-md w-full p-6 relative">
+        <button onClick={onClose} className="absolute top-4 right-4 text-zinc-500 hover:text-white">
+          <X className="w-5 h-5" />
+        </button>
+
+        <h3 className="text-xl font-bold text-white mb-2">Avaliar Serviço</h3>
+        <p className="text-sm text-zinc-400 mb-6">
+          Como foi sua experiência em {appointment.barberShopName}?
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-2 gap-4">
+            {renderStars('notaServico', 'Serviço')}
+            {renderStars('notaAtendimento', 'Atendimento')}
+            {renderStars('notaAmbiente', 'Ambiente')}
+            {renderStars('notaLimpeza', 'Limpeza')}
+          </div>
+
+          <div className="mt-4 mb-6">
+            <label className="block text-sm font-medium text-zinc-400 mb-1">Comentário (Opcional)</label>
+            <textarea
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+              className="w-full bg-[#27272a] border border-white/10 rounded-lg p-3 text-white text-sm focus:outline-none focus:border-[#d97757] resize-none h-24"
+              placeholder="Conte mais sobre sua experiência..."
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full py-3 bg-[#d97757] hover:bg-[#e0886a] text-white rounded-lg font-bold transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+          >
+            {submitting ? <Loader2 className="w-5 h-5 animate-spin" /> : 'Enviar Avaliação'}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
+};
 
 const AppointmentRow: React.FC<{ app: UIAppointment }> = ({ app }) => (
   <div className="flex flex-col md:flex-row items-start md:items-center justify-between py-6 border-b border-white/5 last:border-0 gap-4 md:gap-0">
@@ -149,7 +232,7 @@ const AppointmentRow: React.FC<{ app: UIAppointment }> = ({ app }) => (
       <span className="text-zinc-500 text-sm">{app.price}</span>
     </div>
     <div className="flex items-center gap-2 w-32">
-      {app.status === 'pending' ? (
+      {app.status === 'PENDENTE' || app.status === 'pending' ? (
         <>
           <Loader2 className="w-4 h-4 text-zinc-600 animate-spin" />
           <span className="text-zinc-500 text-sm">Pendente</span>
@@ -162,7 +245,7 @@ const AppointmentRow: React.FC<{ app: UIAppointment }> = ({ app }) => (
       )}
     </div>
     <div className="flex flex-col gap-2 w-32">
-      {app.status === 'pending' ? (
+      {app.status === 'PENDENTE' || app.status === 'pending' ? (
         <button className="flex items-center justify-center gap-2 bg-[#d97757]/20 hover:bg-[#d97757]/30 text-[#d97757] text-xs py-1.5 px-3 rounded transition-colors">
           <X className="w-3 h-3" /> Cancelar
         </button>
@@ -177,17 +260,46 @@ const AppointmentRow: React.FC<{ app: UIAppointment }> = ({ app }) => (
   </div>
 );
 
-const HistoryCard: React.FC<{ app: UIAppointment }> = ({ app }) => (
-  <div className="bg-[#18181b] rounded-lg p-4 mb-3 flex items-center justify-between hover:bg-[#202024] transition-colors group cursor-pointer">
-    <div>
-      <h4 className="text-[#d97757] font-bold text-sm mb-0.5 group-hover:underline">{app.barberShopName}</h4>
-      <p className="text-zinc-400 text-xs mb-1">{app.service}</p>
-      <p className="text-white text-xs font-medium">{app.date} - {app.time}</p>
+const HistoryCard: React.FC<{ appointment: UIAppointment, onRate?: () => void }> = ({ appointment, onRate }) => (
+  <div className="bg-[#18181b] rounded-xl p-4 border border-white/5 flex items-center justify-between group hover:border-white/10 transition-all">
+    <div className="flex items-center gap-4">
+      <div className={`w-10 h-10 rounded-full flex items-center justify-center ${appointment.status === 'CONCLUIDO' ? 'bg-green-500/10 text-green-500' :
+        appointment.status === 'CANCELADO' ? 'bg-red-500/10 text-red-500' :
+          'bg-blue-500/10 text-blue-500'
+        }`}>
+        {appointment.status === 'CONCLUIDO' ? <CheckCircle className="w-5 h-5" /> :
+          appointment.status === 'CANCELADO' ? <X className="w-5 h-5" /> :
+            <Calendar className="w-5 h-5" />
+        }
+      </div>
+      <div>
+        <h4 className="font-bold text-white">{appointment.service}</h4>
+        <p className="text-sm text-zinc-400">{appointment.barberShopName} • {appointment.date}</p>
+      </div>
     </div>
+
+    {appointment.status === 'CONCLUIDO' && onRate && (
+      <button
+        onClick={onRate}
+        className="px-4 py-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+      >
+        <Star className="w-4 h-4" />
+        Avaliar
+      </button>
+    )}
+
+    {appointment.status !== 'CONCLUIDO' && (
+      <div className="text-right">
+        <span className={`text-xs font-bold px-2 py-1 rounded-full ${appointment.status === 'CONCLUIDO' ? 'bg-green-500/10 text-green-500' :
+          appointment.status === 'CANCELADO' ? 'bg-red-500/10 text-red-500' :
+            'bg-blue-500/10 text-blue-500'
+          }`}>
+          {appointment.status}
+        </span>
+      </div>
+    )}
   </div>
 );
-
-// --- MODAL DE PERFIL DO USUÁRIO ---
 
 const ProfileModal: React.FC<{ user: UserProfile, onClose: () => void, onSave: (user: UserProfile) => void }> = ({ user, onClose, onSave }) => {
   const [formData, setFormData] = useState(user);
@@ -212,8 +324,9 @@ const ProfileModal: React.FC<{ user: UserProfile, onClose: () => void, onSave: (
         phone: updatedUser.telefone || ''
       });
       onClose();
-    } catch (err: any) {
-      setError(err.message || 'Erro ao atualizar perfil');
+    } catch (err: unknown) {
+      const error = err as { message?: string };
+      setError(error.message || 'Erro ao atualizar perfil');
     } finally {
       setLoading(false);
     }
@@ -300,6 +413,7 @@ const ProfileModal: React.FC<{ user: UserProfile, onClose: () => void, onSave: (
 
 const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm: () => void }> = ({ shop, onClose, onConfirm }) => {
   const [step, setStep] = useState(1);
+  const [viewStartDate, setViewStartDate] = useState(new Date());
   const [selectedService, setSelectedService] = useState<Service | null>(null);
   const [selectedProfessional, setSelectedProfessional] = useState<Professional | null>(null);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
@@ -312,9 +426,6 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
   const [loadingProfessionals, setLoadingProfessionals] = useState(false);
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  const [datesWithAvailability, setDatesWithAvailability] = useState<Set<string>>(new Set());
-  const [checkingAvailability, setCheckingAvailability] = useState(false);
-  const [workingHours, setWorkingHours] = useState<import('@/types/api').WorkingHours[]>([]);
   const [creatingAppointment, setCreatingAppointment] = useState(false);
   const [error, setError] = useState('');
 
@@ -353,67 +464,6 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
     }
   }, [selectedService, shop.id]);
 
-  // Fetch working hours when professional is selected
-  useEffect(() => {
-    if (selectedProfessional) {
-      const fetchWorkingHours = async () => {
-        try {
-          const hours = await barberShopService.getProfessionalWorkingHours(selectedProfessional.id);
-          setWorkingHours(hours);
-        } catch (error) {
-          console.error("Error fetching working hours:", error);
-          setWorkingHours([]);
-        }
-      };
-      fetchWorkingHours();
-    }
-  }, [selectedProfessional]);
-
-  // Check availability for all dates when professional is selected
-  useEffect(() => {
-    if (selectedService && selectedProfessional && workingHours.length > 0) {
-      const checkDatesAvailability = async () => {
-        setCheckingAvailability(true);
-        const availableDates = new Set<string>();
-
-        const dates = Array.from({ length: 7 }, (_, i) => {
-          const d = new Date();
-          d.setDate(d.getDate() + i);
-          return d;
-        });
-
-        // Map JS day (0=Sun, 1=Mon... 6=Sat) to API day (assuming 1=Mon... 7=Sun or similar)
-        // Let's verify the API response format from user request: "seg-dom"
-        // Usually Java DayOfWeek: 1=Mon, 7=Sun.
-        // JS getDay(): 0=Sun, 1=Mon, ..., 6=Sat.
-        // Mapping: JS 0 -> 7, JS 1 -> 1, JS 2 -> 2 ...
-        const getApiDay = (jsDay: number) => jsDay === 0 ? 7 : jsDay;
-
-        // Check each date for availability based on working hours
-        // Optimization: Instead of calling API for every date, we trust the working hours.
-        // If the professional works on that day, we mark it as available.
-        // Real availability (slots) will be checked when the user selects the date.
-        dates.forEach((date) => {
-          const apiDay = getApiDay(date.getDay());
-          const worksOnDay = workingHours.some(wh => wh.diaSemana === apiDay && wh.ativo);
-
-          if (worksOnDay) {
-            availableDates.add(date.toDateString());
-          }
-        });
-
-        setDatesWithAvailability(availableDates);
-        setCheckingAvailability(false);
-      };
-
-      checkDatesAvailability();
-    } else if (selectedService && selectedProfessional) {
-      // If no working hours, show no available dates instead of fallback check
-      // This prevents multiple 400 errors when the professional has no working hours configured
-      setDatesWithAvailability(new Set<string>());
-      setCheckingAvailability(false);
-    }
-  }, [selectedService, selectedProfessional, shop.id, workingHours]);
 
   // Fetch slots when date and service are selected
   useEffect(() => {
@@ -421,10 +471,61 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
       const fetchSlots = async () => {
         try {
           setLoadingSlots(true);
-          // Format date as YYYY-MM-DD manually to avoid timezone issues
+          // Format date as YYYY-MM-DD
           const dateStr = selectedDate.getFullYear() + '-' + String(selectedDate.getMonth() + 1).padStart(2, '0') + '-' + String(selectedDate.getDate()).padStart(2, '0');
-          const slots = await barberShopService.getAvailableSlots(shop.id, selectedService.id, dateStr, selectedProfessional.id);
-          setAvailableSlots(slots);
+
+          const timeSlots = await clientService.getAvailableTimeSlots(
+            shop.id,
+            selectedService.id,
+            dateStr,
+            selectedProfessional.id
+          );
+
+          if (timeSlots.length > 0) {
+            console.log('DEBUG API DATE FORMAT:', timeSlots[0].data, 'Type:', typeof timeSlots[0].data);
+          } else {
+            console.log('DEBUG API DATE: No slots found for', dateStr);
+          }
+
+          // Convert TimeSlot format to string format for UI
+          // Use selectedProfessional.nome as fallback if API returns undefined
+          const rawSlots = timeSlots.map(ts => {
+            const formatTime = (time: string | import('@/types/api').TimeSlot | undefined) => {
+              if (!time) return "00:00";
+              if (typeof time === 'string') {
+                return time.slice(0, 5); // "09:00:00" -> "09:00"
+              }
+              return `${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}`;
+            };
+
+            const startStr = formatTime(ts.horarioInicio);
+            let endStr = formatTime(ts.horarioFim);
+
+            // If end time is missing or invalid (00:00), calculate it from start time + 30min
+            if (!ts.horarioFim || endStr === "00:00") {
+              const [h, m] = startStr.split(':').map(Number);
+              const date = new Date();
+              date.setHours(h, m + 30);
+              endStr = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            }
+
+            return {
+              funcionarioId: ts.funcionarioId,
+              funcionarioNome: ts.funcionarioNome || selectedProfessional.nome,
+              perfilType: ts.profissao,
+              data: ts.data,
+              horarioInicio: startStr,
+              horarioFim: endStr
+            };
+          });
+
+          // Since we are passing servicoId to the API, it likely returns valid start times for that service.
+          // The API response seems to include the calculated end time based on service duration (e.g. 10:00 to 10:50).
+          // Therefore, we don't need to filter for consecutive slots manually on the frontend.
+          // We just display the slots returned by the API.
+
+          setAvailableSlots(rawSlots);
+
         } catch (error) {
           console.error("Error fetching slots:", error);
           setAvailableSlots([]);
@@ -435,12 +536,6 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
       fetchSlots();
     }
   }, [selectedService, selectedDate, selectedProfessional, shop.id]);
-
-  const dates = Array.from({ length: 7 }, (_, i) => {
-    const d = new Date();
-    d.setDate(d.getDate() + i);
-    return d;
-  });
 
   const handleBack = () => {
     if (step === 4) setStep(3);
@@ -477,9 +572,10 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
 
       onConfirm();
       onClose();
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error('Error creating appointment:', err);
-      setError(err.message || 'Erro ao criar agendamento. Tente novamente.');
+      const error = err as { message?: string };
+      setError(error.message || 'Erro ao criar agendamento. Tente novamente.');
     } finally {
       setCreatingAppointment(false);
     }
@@ -585,67 +681,103 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
 
           {/* Step 3: Data */}
           {step === 3 && (
-            <div>
-              <h4 className="text-white mb-4 font-medium">Selecione a Data</h4>
-
-              {checkingAvailability ? (
-                <div className="flex flex-col items-center justify-center py-12">
-                  <Loader2 className="w-8 h-8 text-[#d97757] animate-spin mb-3" />
-                  <p className="text-zinc-400 text-sm">Verificando disponibilidade...</p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-3 gap-3">
-                  {dates.map(d => {
-                    const isSelected = selectedDate?.toDateString() === d.toDateString();
-                    const isAvailable = datesWithAvailability.has(d.toDateString());
-
-                    return (
-                      <button
-                        key={d.toISOString()}
-                        onClick={() => {
-                          if (isAvailable) {
-                            setSelectedDate(d);
-                            setStep(4);
-                          }
-                        }}
-                        disabled={!isAvailable}
-                        className={`h-20 rounded-lg flex flex-col items-center justify-center border transition-all ${isSelected
-                          ? 'bg-[#d97757] border-[#d97757] text-white'
-                          : isAvailable
-                            ? 'bg-[#202024] border-[#d97757]/30 text-white hover:border-[#d97757] hover:bg-[#d97757]/10'
-                            : 'bg-[#18181b] border-transparent text-zinc-700 cursor-not-allowed opacity-50'
-                          }`}
-                      >
-                        <span className={`text-xs uppercase font-bold ${isAvailable ? 'text-[#d97757]' : 'text-zinc-700'}`}>
-                          {d.toLocaleDateString('pt-BR', { weekday: 'short' }).slice(0, 3)}
-                        </span>
-                        <span className="text-2xl font-bold">{d.getDate()}</span>
-                        {isAvailable && !isSelected && (
-                          <span className="text-[10px] text-[#d97757] mt-0.5">Disponível</span>
-                        )}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-
-              {!checkingAvailability && datesWithAvailability.size === 0 && (
-                <div className="flex flex-col items-center justify-center py-8 text-center mt-4">
-                  <div className="bg-zinc-800/50 p-4 rounded-full mb-3">
-                    <Calendar className="w-10 h-10 text-zinc-600" />
-                  </div>
-                  <h5 className="text-white font-semibold mb-2">Nenhuma data disponível</h5>
-                  <p className="text-zinc-400 text-sm max-w-xs">
-                    Não há horários disponíveis nos próximos 7 dias para este profissional.
-                  </p>
+            <div className="bg-[#202024] rounded-lg p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="text-white font-medium capitalize">
+                  {viewStartDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+                </h4>
+                <div className="flex gap-2">
                   <button
-                    onClick={() => setStep(2)}
-                    className="mt-4 bg-[#d97757]/20 hover:bg-[#d97757]/30 text-[#d97757] font-medium text-sm py-2 px-6 rounded-lg transition-colors"
+                    onClick={() => {
+                      const newDate = new Date(viewStartDate);
+                      newDate.setMonth(newDate.getMonth() - 1);
+                      // Don't go back past current month
+                      const today = new Date();
+                      if (newDate.getMonth() < today.getMonth() && newDate.getFullYear() <= today.getFullYear()) {
+                        setViewStartDate(new Date());
+                      } else {
+                        setViewStartDate(newDate);
+                      }
+                    }}
+                    disabled={viewStartDate.getMonth() === new Date().getMonth() && viewStartDate.getFullYear() === new Date().getFullYear()}
+                    className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
                   >
-                    Voltar aos Profissionais
+                    <ChevronLeft className="w-5 h-5" />
+                  </button>
+                  <button
+                    onClick={() => {
+                      const newDate = new Date(viewStartDate);
+                      newDate.setMonth(newDate.getMonth() + 1);
+                      setViewStartDate(newDate);
+                    }}
+                    className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white"
+                  >
+                    <ChevronRight className="w-5 h-5" />
                   </button>
                 </div>
-              )}
+              </div>
+
+              {/* Week days header */}
+              <div className="grid grid-cols-7 gap-1 mb-2 text-center">
+                {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((day, i) => (
+                  <div key={i} className="text-xs text-zinc-500 font-medium py-1">
+                    {day}
+                  </div>
+                ))}
+              </div>
+
+              {/* Calendar Grid */}
+              <div className="grid grid-cols-7 gap-1">
+                {(() => {
+                  const year = viewStartDate.getFullYear();
+                  const month = viewStartDate.getMonth();
+
+                  const firstDay = new Date(year, month, 1);
+                  const lastDay = new Date(year, month + 1, 0);
+
+                  const daysInMonth = lastDay.getDate();
+                  const startDayOfWeek = firstDay.getDay(); // 0 = Sunday
+
+                  const days = [];
+
+                  // Empty slots for previous month
+                  for (let i = 0; i < startDayOfWeek; i++) {
+                    days.push(<div key={`empty-${i}`} className="h-10" />);
+                  }
+
+                  // Days of current month
+                  for (let i = 1; i <= daysInMonth; i++) {
+                    const date = new Date(year, month, i);
+                    const isSelected = selectedDate?.toDateString() === date.toDateString();
+                    const isToday = new Date().toDateString() === date.toDateString();
+                    const isPast = date < new Date() && !isToday;
+
+                    days.push(
+                      <button
+                        key={date.toISOString()}
+                        onClick={() => {
+                          setSelectedDate(date);
+                          setStep(4);
+                        }}
+                        disabled={isPast}
+                        className={`h-10 w-full aspect-square rounded-full flex items-center justify-center text-sm transition-all
+                            ${isSelected
+                            ? 'bg-[#d97757] text-white font-bold'
+                            : isPast
+                              ? 'text-zinc-600 cursor-not-allowed'
+                              : 'text-zinc-300 hover:bg-[#d97757]/20 hover:text-[#d97757]'
+                          }
+                            ${isToday && !isSelected ? 'border border-[#d97757] text-[#d97757]' : ''}
+                          `}
+                      >
+                        {i}
+                      </button>
+                    );
+                  }
+
+                  return days;
+                })()}
+              </div>
             </div>
           )}
 
@@ -667,7 +799,6 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
                       className={`p-3 rounded-lg border text-left transition-all ${selectedSlot === slot ? 'bg-[#d97757] border-[#d97757] text-white' : 'bg-[#202024] border-white/5 text-zinc-300 hover:border-zinc-600'}`}
                     >
                       <div className="font-bold text-lg">{slot.horarioInicio.slice(0, 5)}</div>
-                      <div className="text-xs opacity-80">{slot.funcionarioNome}</div>
                     </button>
                   ))}
                 </div>
@@ -751,6 +882,153 @@ export default function App() {
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const [showReviewModal, setShowReviewModal] = useState(false);
+  const [selectedAppointmentForReview, setSelectedAppointmentForReview] = useState<UIAppointment | null>(null);
+
+  const handleRateClick = (appointment: UIAppointment) => {
+    setSelectedAppointmentForReview(appointment);
+    setShowReviewModal(true);
+  };
+
+  const fetchHistory = useCallback(async () => {
+    try {
+      // Don't set loading on every poll to avoid flickering, only if history is empty
+      if (history.length === 0) setLoadingHistory(true);
+
+      const [historyData, recentCompletedData] = await Promise.all([
+        clientService.getHistory(),
+        clientService.getRecentAppointments('concluidos_recentes')
+      ]);
+
+      // Merge and deduplicate by ID
+      const allHistoryItems = [...historyData];
+      recentCompletedData.forEach(recent => {
+        if (!allHistoryItems.some(h => h.id === recent.id)) {
+          // Map RecentAppointment to Appointment structure if needed, or just use compatible fields
+          allHistoryItems.push({
+            id: recent.id,
+            dataHora: recent.dataHora,
+            status: recent.status,
+            nomeBarbearia: recent.nomeBarbearia,
+            nomeBarbeiro: recent.nomeBarbeiro,
+            nomeServico: recent.nomeServico,
+            observacoes: null // RecentAppointment doesn't have observations
+          } as any);
+        }
+      });
+
+      // Sort by date descending
+      allHistoryItems.sort((a, b) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime());
+
+      const formattedHistory: UIAppointment[] = allHistoryItems.map(item => {
+        const dateObj = new Date(item.dataHora);
+        return {
+          id: item.id.toString(),
+          barberShopName: item.nomeBarbearia,
+          service: item.nomeServico,
+          price: "R$ -", // API doesn't return price yet
+          date: dateObj.toLocaleDateString('pt-BR'),
+          time: dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          barberName: item.nomeBarbeiro || 'Não informado',
+          status: item.status,
+          barbeariaId: (item as any).barbeariaId // Ensure this is mapped if available
+        };
+      });
+      setHistory(formattedHistory);
+    } catch (error) {
+      console.error("Failed to fetch history", error);
+    } finally {
+      setLoadingHistory(false);
+    }
+  }, [history.length]);
+
+  const fetchUpcomingAppointments = useCallback(async () => {
+    try {
+      // Don't set loading on every poll to avoid flickering
+      if (upcomingAppointments.length === 0) setLoadingUpcoming(true);
+
+      const recentData = await clientService.getRecentAppointments('futuros');
+      console.log('Recent Appointments Data:', recentData);
+
+      // Filter out completed or cancelled appointments from upcoming list
+      const activeAppointments = recentData.filter(item => item.status === 'PENDENTE' || item.status === 'CONFIRMADO');
+
+      // Fetch details for each appointment to get price and correct names
+      const enrichedAppointments = await Promise.all(activeAppointments.map(async (item) => {
+        let price = "R$ -";
+        let serviceName = item.nomeServico;
+        let shopName = item.nomeBarbearia;
+        let barbeariaId: number | undefined;
+
+        try {
+          // 1. Get detailed appointment info to get IDs
+          const details = await appointmentService.getAppointmentById(item.id);
+          barbeariaId = details.barbeariaId;
+
+          if (details.servicoId && details.barbeariaId) {
+            // 2. Get service details to get price
+            // We fetch all services for the shop and find the matching one
+            const services = await barberShopService.listServices(details.barbeariaId);
+            const service = services.find(s => s.id === details.servicoId);
+
+            if (service) {
+              price = `R$ ${service.preco.toFixed(2)}`;
+              serviceName = service.nome;
+            }
+
+            // 3. Get shop details to get correct name (nomeFantasia)
+            // We can use the existing barberShops list if available, or fetch it
+            // Since we might not have the full list yet, let's try to find it in the current state or fetch
+            let shop = barberShops.find(s => s.id === details.barbeariaId);
+            if (!shop) {
+              // Fallback: fetch list again (cached by browser usually)
+              const shops = await barberShopService.listBarberShops();
+              shop = shops.find(s => s.id === details.barbeariaId);
+            }
+
+            if (shop) {
+              shopName = shop.nomeFantasia || shop.nome;
+            }
+          }
+        } catch (err) {
+          console.error("Failed to fetch details for appointment", item.id, err);
+        }
+
+        const dateObj = new Date(item.dataHora);
+        return {
+          id: item.id.toString(),
+          barberShopName: shopName,
+          service: serviceName,
+          price: price,
+          date: dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+          time: dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+          barberName: item.nomeBarbeiro || 'Não informado',
+          status: item.status,
+          barbeariaId: barbeariaId
+        };
+      }));
+
+      setUpcomingAppointments(enrichedAppointments);
+    } catch (error) {
+      console.error("Failed to fetch upcoming appointments", error);
+    } finally {
+      setLoadingUpcoming(false);
+    }
+  }, [barberShops, upcomingAppointments.length]);
+
+  // Polling for status updates
+  useEffect(() => {
+    // Initial fetch
+    fetchHistory();
+    fetchUpcomingAppointments();
+
+    const interval = setInterval(() => {
+      fetchHistory();
+      fetchUpcomingAppointments();
+    }, 5000); // Poll every 5 seconds
+
+    return () => clearInterval(interval);
+  }, [fetchHistory, fetchUpcomingAppointments]);
 
   // Carregar dados do usuário logado
   useEffect(() => {
@@ -775,61 +1053,7 @@ export default function App() {
       }
     };
 
-    const fetchHistory = async () => {
-      try {
-        setLoadingHistory(true);
-        const historyData = await clientService.getHistory();
-        console.log('History Data:', historyData);
-        const formattedHistory: UIAppointment[] = historyData.map(item => {
-          const dateObj = new Date(item.dataHora);
-          return {
-            id: item.id.toString(),
-            barberShopName: item.nomeBarbearia,
-            service: item.nomeServico,
-            price: "R$ -", // API doesn't return price yet
-            date: dateObj.toLocaleDateString('pt-BR'),
-            time: dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-            barberName: item.nomeBarbeiro || 'Não informado',
-            status: item.status
-          };
-        });
-        setHistory(formattedHistory);
-      } catch (error) {
-        console.error("Failed to fetch history", error);
-      } finally {
-        setLoadingHistory(false);
-      }
-    };
-
-    const fetchUpcomingAppointments = async () => {
-      try {
-        setLoadingUpcoming(true);
-        const recentData = await clientService.getRecentAppointments('futuros');
-        console.log('Recent Appointments Data:', recentData);
-        const formattedUpcoming: UIAppointment[] = recentData.map(item => {
-          const dateObj = new Date(item.dataHora);
-          return {
-            id: item.id.toString(),
-            barberShopName: item.nomeBarbearia,
-            service: item.nomeServico,
-            price: "R$ -", // API doesn't return price yet
-            date: dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
-            time: dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-            barberName: item.nomeBarbeiro || 'Não informado',
-            status: item.status === 'PENDENTE' ? 'pending' : 'confirmed'
-          };
-        });
-        setUpcomingAppointments(formattedUpcoming);
-      } catch (error) {
-        console.error("Failed to fetch upcoming appointments", error);
-      } finally {
-        setLoadingUpcoming(false);
-      }
-    };
-
     fetchBarberShops();
-    fetchHistory();
-    fetchUpcomingAppointments();
   }, []);
 
   // Fechar menu ao clicar fora
@@ -845,6 +1069,8 @@ export default function App() {
 
   const handleBookingSuccess = () => {
     setNotification("Agendamento Realizado!");
+    fetchUpcomingAppointments();
+    fetchHistory();
     setTimeout(() => setNotification(null), 4000);
   };
 
@@ -1074,7 +1300,11 @@ export default function App() {
               ) : history.length > 0 ? (
                 <>
                   {history.map(app => (
-                    <HistoryCard key={app.id} app={app} />
+                    <HistoryCard
+                      key={app.id}
+                      appointment={app}
+                      onRate={() => handleRateClick(app)}
+                    />
                   ))}
                   <button className="w-full text-center text-zinc-500 text-sm mt-4 hover:text-[#d97757] transition-colors mt-auto">
                     Ver todo o histórico
@@ -1101,6 +1331,14 @@ export default function App() {
           shop={selectedShop}
           onClose={() => setSelectedShop(null)}
           onConfirm={handleBookingSuccess}
+        />
+      )}
+
+      {/* Modal de Avaliação */}
+      {showReviewModal && selectedAppointmentForReview && (
+        <ReviewModal
+          appointment={selectedAppointmentForReview}
+          onClose={() => setShowReviewModal(false)}
         />
       )}
 
