@@ -70,7 +70,7 @@ export const barberShopService = {
 
     getAvailableSlots: async (barberShopId: number, serviceId: number, date: string, professionalId?: number): Promise<import('@/types/api').AvailableSlot[]> => {
         try {
-            const params: any = { servicoId: serviceId, data: date };
+            const params: { servicoId: number; data: string; funcionarioId?: number } = { servicoId: serviceId, data: date };
             if (professionalId) {
                 params.funcionarioId = professionalId;
             }

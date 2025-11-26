@@ -18,8 +18,7 @@ interface FormData {
     confirmarSenha: string;
 }
 
-// Definindo o tipo de usuário
-type UserType = 'barbearia' | 'barbeiro';
+
 
 /**
  * Componente de ícone para o input, para evitar repetição
@@ -101,7 +100,7 @@ export default function RegisterBarbPage() {
         };
 
         try {
-            await authService.registerBarberShop(payload as any);
+            await authService.registerBarberShop(payload);
             router.push('/login/barbearia');
         } catch (err: unknown) {
             const apiError = err as ApiError;
