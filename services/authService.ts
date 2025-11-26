@@ -3,6 +3,14 @@ import api from './api';
 import { RegisterClientData, RegisterBarberShopData, LoginData, AuthResponse, ApiError, User } from '@/types/api';
 import axios from 'axios';
 
+export interface ExtendedAuthResponse extends AuthResponse {
+    userId?: number | string;
+    nome?: string;
+    email?: string;
+    role?: string;
+    telefone?: string;
+}
+
 export const authService = {
     registerClient: async (data: RegisterClientData): Promise<AuthResponse> => {
         try {
@@ -34,24 +42,25 @@ export const authService = {
 
     loginClient: async (data: LoginData): Promise<AuthResponse> => {
         try {
-            const response = await api.post<any>('/auth/cliente/login', data);
+            const response = await api.post<AuthResponse>('/auth/cliente/login', data);
 
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token);
 
+                const data = response.data as ExtendedAuthResponse;
                 // Handle flat structure or nested user object
-                const userData = response.data.user || {
-                    id: response.data.userId,
-                    nome: response.data.nome,
-                    email: response.data.email,
-                    role: response.data.role,
-                    telefone: response.data.telefone
+                const userData = data.user || {
+                    id: data.userId,
+                    nome: data.nome,
+                    email: data.email,
+                    role: data.role,
+                    telefone: data.telefone
                 };
 
-                if (userData && (userData.id || userData.userId)) {
+                if (userData && (userData.id || data.userId)) {
                     // Ensure id is set if it came as userId
-                    if (!userData.id && userData.userId) {
-                        userData.id = userData.userId;
+                    if (!userData.id && data.userId) {
+                        userData.id = data.userId;
                     }
                     localStorage.setItem('user', JSON.stringify(userData));
                 }
@@ -68,21 +77,23 @@ export const authService = {
 
     loginBarberShop: async (data: LoginData): Promise<AuthResponse> => {
         try {
-            const response = await api.post<any>('/auth/barbearia/login', data);
+            const response = await api.post<AuthResponse>('/auth/barbearia/login', data);
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token);
+
+                const data = response.data as ExtendedAuthResponse;
                 // Handle flat structure or nested user object
-                const userData = response.data.user || {
-                    id: response.data.userId,
-                    nome: response.data.nome,
-                    email: response.data.email,
-                    role: response.data.role,
-                    telefone: response.data.telefone
+                const userData = data.user || {
+                    id: data.userId,
+                    nome: data.nome,
+                    email: data.email,
+                    role: data.role,
+                    telefone: data.telefone
                 };
 
-                if (userData && (userData.id || userData.userId)) {
-                    if (!userData.id && userData.userId) {
-                        userData.id = userData.userId;
+                if (userData && (userData.id || data.userId)) {
+                    if (!userData.id && data.userId) {
+                        userData.id = data.userId;
                     }
                     localStorage.setItem('user', JSON.stringify(userData));
                 }
@@ -98,21 +109,23 @@ export const authService = {
 
     loginBarber: async (data: LoginData): Promise<AuthResponse> => {
         try {
-            const response = await api.post<any>('/auth/barbeiro/login', data);
+            const response = await api.post<AuthResponse>('/auth/barbeiro/login', data);
             if (response.data.token) {
                 localStorage.setItem('token', response.data.token);
+
+                const data = response.data as ExtendedAuthResponse;
                 // Handle flat structure or nested user object
-                const userData = response.data.user || {
-                    id: response.data.userId,
-                    nome: response.data.nome,
-                    email: response.data.email,
-                    role: response.data.role,
-                    telefone: response.data.telefone
+                const userData = data.user || {
+                    id: data.userId,
+                    nome: data.nome,
+                    email: data.email,
+                    role: data.role,
+                    telefone: data.telefone
                 };
 
-                if (userData && (userData.id || userData.userId)) {
-                    if (!userData.id && userData.userId) {
-                        userData.id = userData.userId;
+                if (userData && (userData.id || data.userId)) {
+                    if (!userData.id && data.userId) {
+                        userData.id = data.userId;
                     }
                     localStorage.setItem('user', JSON.stringify(userData));
                 }
@@ -138,7 +151,7 @@ export const authService = {
                 } else if (user.role === 'CLIENTE') {
                     redirectUrl = '/login/cliente';
                 }
-            } catch (e) {
+            } catch {
                 // Fallback to root
             }
         }
