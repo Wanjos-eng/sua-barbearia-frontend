@@ -107,12 +107,38 @@ export default function ProfessionalDashboard() {
     const loadAppointments = async (errorList: string[] = []) => {
         try {
             const dateStr = formatDateToISO(selectedDate);
+            console.log('Loading appointments for date:', dateStr);
+            console.log('Selected date object:', selectedDate);
+            console.log('Today:', new Date());
+
             const appts = await professionalAccessService.getAppointments(token, {
                 dataInicio: dateStr,
                 dataFim: dateStr
             });
-            console.log('DEBUG APPOINTMENTS:', appts);
-            setAppointments(appts);
+            console.log('DEBUG APPOINTMENTS RECEIVED:', appts);
+            console.log('Number of appointments:', appts.length);
+            if (appts.length > 0) {
+                console.log('Appointment times (testing UTC parsing):');
+                appts.forEach((apt, idx) => {
+                    const rawDate = new Date(apt.dataHora); // Wrong - interprets as local
+                    const utcDate = parseUTCDateTime(apt.dataHora); // Correct - interprets as UTC
+                    console.log(`  ${idx + 1}. ID ${apt.id}:`);
+                    console.log(`     Raw: ${apt.dataHora}`);
+                    console.log(`     Without Z (wrong): ${rawDate.toLocaleString('pt-BR')}`);
+                    console.log(`     With Z (correct): ${utcDate.toLocaleString('pt-BR')}`);
+                });
+            }
+
+            // Filter appointments to only show those for the selected date
+            // This is a workaround for API returning all appointments regardless of date filter
+            const filteredAppts = appts.filter(apt => {
+                const aptDate = parseUTCDateTime(apt.dataHora);
+                const aptDateStr = formatDateToISO(aptDate);
+                return aptDateStr === dateStr;
+            });
+
+            console.log(`Filtered to ${filteredAppts.length} appointments for ${dateStr}`);
+            setAppointments(filteredAppts);
         } catch (err) {
             if (!errorList) {
                 setErrors(prev => [...prev, `Agendamentos: ${err instanceof Error ? err.message : 'Erro desconhecido'}`]);
@@ -258,10 +284,17 @@ export default function ProfessionalDashboard() {
 
     const timeSlots = generateTimeSlots(8, 20, 30);
 
+    // Helper to parse UTC datetime string correctly
+    const parseUTCDateTime = (dateTimeStr: string): Date => {
+        // If the string doesn't end with 'Z', add it to force UTC parsing
+        const utcStr = dateTimeStr.endsWith('Z') ? dateTimeStr : `${dateTimeStr}Z`;
+        return new Date(utcStr);
+    };
+
     const getAppointmentForSlot = (slot: string) => {
         const selectedDateStr = formatDateToISO(selectedDate);
         return appointments.find(apt => {
-            const aptDate = new Date(apt.dataHora);
+            const aptDate = parseUTCDateTime(apt.dataHora);
             const aptDateStr = formatDateToISO(aptDate);
             const aptTime = `${aptDate.getHours().toString().padStart(2, '0')}:${aptDate.getMinutes().toString().padStart(2, '0')}`;
             return aptDateStr === selectedDateStr && aptTime === slot;
@@ -271,7 +304,7 @@ export default function ProfessionalDashboard() {
     const getOccupyingAppointment = (slot: string) => {
         const selectedDateStr = formatDateToISO(selectedDate);
         return appointments.find(apt => {
-            const aptDate = new Date(apt.dataHora);
+            const aptDate = parseUTCDateTime(apt.dataHora);
             const aptDateStr = formatDateToISO(aptDate);
 
             if (aptDateStr !== selectedDateStr) return false;
@@ -281,7 +314,7 @@ export default function ProfessionalDashboard() {
             // Calculate end time
             let endTime;
             if (apt.dataHoraFim) {
-                const endDate = new Date(apt.dataHoraFim);
+                const endDate = parseUTCDateTime(apt.dataHoraFim);
                 endTime = `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`;
             } else if (apt.duracao) {
                 const endDate = new Date(aptDate.getTime() + apt.duracao * 60000);
@@ -386,19 +419,16 @@ export default function ProfessionalDashboard() {
                                 </button>
                                 <div className="text-center">
                                     <p className="text-lg font-bold">{selectedDate.toLocaleDateString('pt-BR')}</p>
-                                    <p className="text-sm text-[#5C5C5C]">{getDayName(selectedDate)}</p>
+                                    <p className="text-sm text-[#5C5C5C]">
+                                        {formatDateToISO(selectedDate) === formatDateToISO(new Date())
+                                            ? 'Hoje'
+                                            : getDayName(selectedDate)}
+                                    </p>
                                 </div>
                                 <button onClick={() => changeDate(1)} className="p-2 hover:bg-[#292929] rounded-lg">
                                     <ChevronRight className="w-5 h-5" />
                                 </button>
                             </div>
-                            {formatDateToISO(selectedDate) !== formatDateToISO(new Date()) && (
-                                <div className="mt-3 flex justify-center">
-                                    <button onClick={goToToday} className="text-xs bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] px-3 py-1.5 rounded-lg font-medium">
-                                        Hoje
-                                    </button>
-                                </div>
-                            )}
                         </div>
 
                         <div className="bg-[#151515] border border-[#292929] rounded-xl p-4">
@@ -411,6 +441,30 @@ export default function ProfessionalDashboard() {
                                     const appointment = getAppointmentForSlot(slot);
                                     const occupyingAppointment = getOccupyingAppointment(slot);
                                     const block = getBlockForSlot(slot);
+
+                                    // Check if slot is in the past (only if viewing today)
+                                    const isToday = formatDateToISO(selectedDate) === formatDateToISO(new Date());
+                                    const now = new Date();
+                                    const [slotHour, slotMinute] = slot.split(':').map(Number);
+                                    const slotTime = new Date();
+                                    slotTime.setHours(slotHour, slotMinute, 0, 0);
+                                    const isPast = isToday && slotTime < now;
+
+                                    // Don't show cancelled appointments in grid
+                                    if (appointment?.status === 'CANCELADO') {
+                                        // Render as available slot
+                                        return (
+                                            <div
+                                                key={slot}
+                                                className={`p-3 rounded-lg border bg-[#050505] border-[#292929] ${isPast ? 'opacity-50' : ''}`}
+                                            >
+                                                <div className="flex items-center justify-between">
+                                                    <span className="font-mono text-sm font-medium">{slot}</span>
+                                                    <span className="text-xs text-[#5C5C5C]">{isPast ? 'Passado' : 'Disponível'}</span>
+                                                </div>
+                                            </div>
+                                        );
+                                    }
 
                                     if (occupyingAppointment) {
                                         return (
@@ -508,6 +562,43 @@ export default function ProfessionalDashboard() {
                                 })}
                             </div>
                         </div>
+
+                        {/* Cancelled Appointments Section */}
+                        {appointments.filter(apt => apt.status === 'CANCELADO').length > 0 && (
+                            <div className="bg-[#151515] border border-[#292929] rounded-xl p-4 mt-4">
+                                <h3 className="text-lg font-bold mb-4 flex items-center gap-2">
+                                    <XCircle className="w-5 h-5 text-red-500" />
+                                    Cancelamentos do Dia
+                                </h3>
+                                <div className="space-y-2">
+                                    {appointments
+                                        .filter(apt => apt.status === 'CANCELADO')
+                                        .map(appointment => (
+                                            <div
+                                                key={appointment.id}
+                                                className="p-3 rounded-lg border bg-red-500/10 border-red-500/30"
+                                            >
+                                                <div className="flex items-start justify-between">
+                                                    <div className="flex-1">
+                                                        <div className="flex items-center gap-2 mb-1">
+                                                            <span className="font-mono text-sm font-medium text-red-500">
+                                                                {parseUTCDateTime(appointment.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                                                            </span>
+                                                            <span className="text-xs px-2 py-0.5 rounded-full bg-red-500/20 text-red-500">
+                                                                CANCELADO
+                                                            </span>
+                                                        </div>
+                                                        <p className="text-sm font-bold">{appointment.nomeServico}</p>
+                                                        <p className="text-xs text-[#5C5C5C]">
+                                                            Cliente: {appointment.nomeBarbearia || 'N/A'}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
+                                </div>
+                            </div>
+                        )}
                     </div>
                 )}
 
