@@ -24,7 +24,7 @@ import {
 import { barberShopService } from '@/services/barberShopService';
 import { clientService } from '@/services/clientService';
 import { appointmentService } from '@/services/appointmentService';
-import { BarberShop, AvailableSlot, Service, Professional } from '@/types/api';
+import { BarberShop, AvailableSlot, Service, Professional, Review } from '@/types/api';
 
 // --- INTERFACES ---
 
@@ -38,6 +38,7 @@ interface UIAppointment {
   barberName: string;
   status: string;
   barbeariaId?: number;
+  hasReview?: boolean; // Whether this appointment has been reviewed
 }
 
 
@@ -83,7 +84,121 @@ const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, on
   </div>
 );
 
-const BarberShopCard: React.FC<{ shop: BarberShop, onClick: () => void }> = ({ shop, onClick }) => (
+// --- REVIEWS MODAL ---
+const ReviewsModal: React.FC<{ barberShop: BarberShop, onClose: () => void }> = ({ barberShop, onClose }) => {
+  const [reviews, setReviews] = useState<Review[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        setLoading(true);
+        const data = await barberShopService.getReviews(barberShop.id);
+        setReviews(data);
+      } catch (error: any) {
+        console.error('Error fetching reviews:', error?.response?.data || error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, [barberShop.id]);
+
+  const renderStars = (rating: number) => (
+    <div className="flex gap-0.5">
+      {[1, 2, 3, 4, 5].map((star) => (
+        <Star
+          key={star}
+          className={`w-4 h-4 ${rating >= star ? 'text-yellow-500 fill-current' : 'text-zinc-600'
+            }`}
+        />
+      ))}
+    </div>
+  );
+
+  return (
+    <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4 animate-fade-in" onClick={onClose}>
+      <div className="bg-[#18181b] rounded-xl border border-white/10 max-w-2xl w-full max-h-[80vh] overflow-hidden relative" onClick={(e) => e.stopPropagation()}>
+        <div className="sticky top-0 bg-[#18181b] border-b border-white/10 p-6 flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-bold text-white mb-1">Avaliações</h3>
+            <p className="text-sm text-zinc-400">{barberShop.nomeFantasia}</p>
+          </div>
+          <button onClick={onClose} className="text-zinc-500 hover:text-white transition-colors">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        <div className="p-6 overflow-y-auto" style={{ maxHeight: 'calc(80vh - 100px)' }}>
+          {loading ? (
+            <div className="flex flex-col items-center justify-center py-12">
+              <Loader2 className="w-8 h-8 text-[#d97757] animate-spin mb-2" />
+              <p className="text-zinc-500 text-sm">Carregando avaliações...</p>
+            </div>
+          ) : reviews.length > 0 ? (
+            <div className="space-y-4">
+              {reviews.map((review) => (
+                <div key={review.id} className="bg-[#27272a] rounded-lg p-4 border border-white/5">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h4 className="font-bold text-white">{review.clienteNome}</h4>
+                      <p className="text-xs text-zinc-500">
+                        {new Date(review.dataCriacao).toLocaleDateString('pt-BR', {
+                          day: '2-digit',
+                          month: 'long',
+                          year: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {renderStars(review.notaGeral)}
+                      <span className="text-sm font-bold text-yellow-500">{review.notaGeral.toFixed(1)}</span>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-400">Serviço:</span>
+                      {renderStars(review.notaServico)}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-400">Atendimento:</span>
+                      {renderStars(review.notaAtendimento)}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-400">Ambiente:</span>
+                      {renderStars(review.notaAmbiente)}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs text-zinc-400">Limpeza:</span>
+                      {renderStars(review.notaLimpeza)}
+                    </div>
+                  </div>
+
+                  {review.comentario && (
+                    <p className="text-sm text-zinc-300 italic border-l-2 border-[#d97757] pl-3">
+                      "{review.comentario}"
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-12 text-center">
+              <div className="bg-white/5 p-4 rounded-full mb-3">
+                <Star className="w-8 h-8 text-zinc-600" />
+              </div>
+              <p className="text-zinc-400 font-medium mb-1">Nenhuma avaliação ainda</p>
+              <p className="text-zinc-600 text-xs max-w-xs">Esta barbearia ainda não possui avaliações.</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const BarberShopCard: React.FC<{ shop: BarberShop, onClick: () => void, onRatingClick: () => void }> = ({ shop, onClick, onRatingClick }) => (
   <div className="bg-[#18181b] rounded-xl p-6 flex flex-col items-center text-center relative group transition-all hover:bg-[#202024] border border-transparent hover:border-white/5">
     <div className="w-16 h-16 rounded-full bg-[#4a4a4d] flex items-center justify-center mb-4 text-2xl font-bold text-white/80">
       {shop.nome.charAt(0).toUpperCase()}
@@ -91,10 +206,16 @@ const BarberShopCard: React.FC<{ shop: BarberShop, onClick: () => void }> = ({ s
 
     <h3 className="text-xl font-bold text-white mb-1">{shop.nomeFantasia}</h3>
 
-    <div className="flex items-center gap-2 text-sm text-[#d97757] mb-1">
+    <button
+      onClick={(e) => {
+        e.stopPropagation();
+        onRatingClick();
+      }}
+      className="flex items-center gap-2 text-sm text-[#d97757] mb-1 hover:text-[#e0886a] transition-colors cursor-pointer"
+    >
       <Star className="w-3 h-3 fill-current" />
-      <span>{shop.avaliacaoMedia}</span>
-    </div>
+      <span>{shop.avaliacaoMedia !== undefined && shop.avaliacaoMedia !== null ? shop.avaliacaoMedia.toFixed(1) : 'Sem avaliações'}</span>
+    </button>
 
     <div className="flex items-center gap-2 text-xs text-zinc-500 mb-6">
       <Phone className="w-3 h-3" />
@@ -141,8 +262,10 @@ const ReviewModal: React.FC<{ appointment: UIAppointment, onClose: () => void }>
         comentario: comment
       });
       onClose();
-    } catch (error) {
-      console.error('Error submitting review:', error);
+    } catch (error: any) {
+      console.error('Error submitting review:', error?.response?.data || error);
+      const errorMessage = error?.response?.data?.message || error?.message || 'Erro desconhecido';
+      alert('Erro ao enviar avaliação: ' + errorMessage);
     } finally {
       setSubmitting(false);
     }
@@ -278,14 +401,21 @@ const HistoryCard: React.FC<{ appointment: UIAppointment, onRate?: () => void }>
       </div>
     </div>
 
-    {appointment.status === 'CONCLUIDO' && onRate && (
-      <button
-        onClick={onRate}
-        className="px-4 py-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
-      >
-        <Star className="w-4 h-4" />
-        Avaliar
-      </button>
+    {appointment.status === 'CONCLUIDO' && (
+      appointment.hasReview ? (
+        <div className="px-4 py-2 bg-gray-500/10 text-gray-500 rounded-lg text-sm font-medium flex items-center gap-2 cursor-not-allowed">
+          <Check className="w-4 h-4" />
+          Já avaliado
+        </div>
+      ) : onRate && (
+        <button
+          onClick={onRate}
+          className="px-4 py-2 bg-yellow-500/10 hover:bg-yellow-500/20 text-yellow-500 rounded-lg text-sm font-medium transition-colors flex items-center gap-2"
+        >
+          <Star className="w-4 h-4" />
+          Avaliar
+        </button>
+      )
     )}
 
     {appointment.status !== 'CONCLUIDO' && (
@@ -553,14 +683,29 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
       setCreatingAppointment(true);
       setError('');
 
-      // Construct local date time string manually to avoid timezone shifts
+      // Construct date time with proper timezone offset for Brazil (UTC-3)
       const year = selectedDate.getFullYear();
       const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
       const day = String(selectedDate.getDate()).padStart(2, '0');
-      // selectedSlot.horarioInicio is expected to be "HH:mm:ss" or "HH:mm"
-      const timePart = selectedSlot.horarioInicio.slice(0, 5);
 
-      const dataHora = `${year}-${month}-${day}T${timePart}:00`;
+      // selectedSlot.horarioInicio is expected to be "HH:mm:ss" or "HH:mm"
+      const [hours, minutes] = selectedSlot.horarioInicio.split(':');
+
+      // Create a proper Date object with selected date and time
+      const appointmentDateTime = new Date(selectedDate);
+      appointmentDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
+
+      // Format as ISO string which includes the timezone offset
+      const dataHora = appointmentDateTime.toISOString();
+
+      console.log('Sending appointment data:', {
+        servicoId: selectedService.id,
+        funcionarioId: selectedSlot.funcionarioId,
+        barbeariaId: shop.id,
+        dataHora: dataHora,
+        localTime: appointmentDateTime.toLocaleString('pt-BR'),
+        observacoes: notes || undefined
+      });
 
       await appointmentService.createAppointment({
         servicoId: selectedService.id,
@@ -884,10 +1029,17 @@ export default function App() {
   const menuRef = useRef<HTMLDivElement>(null);
   const [showReviewModal, setShowReviewModal] = useState(false);
   const [selectedAppointmentForReview, setSelectedAppointmentForReview] = useState<UIAppointment | null>(null);
+  const [showReviewsModal, setShowReviewsModal] = useState(false);
+  const [selectedShopForReviews, setSelectedShopForReviews] = useState<BarberShop | null>(null);
 
   const handleRateClick = (appointment: UIAppointment) => {
     setSelectedAppointmentForReview(appointment);
     setShowReviewModal(true);
+  };
+
+  const handleViewReviews = (shop: BarberShop) => {
+    setSelectedShopForReviews(shop);
+    setShowReviewsModal(true);
   };
 
   const fetchHistory = useCallback(async () => {
@@ -920,20 +1072,74 @@ export default function App() {
       // Sort by date descending
       allHistoryItems.sort((a, b) => new Date(b.dataHora).getTime() - new Date(a.dataHora).getTime());
 
-      const formattedHistory: UIAppointment[] = allHistoryItems.map(item => {
+      // Enrich history items with real names
+      const formattedHistory: UIAppointment[] = await Promise.all(allHistoryItems.map(async (item) => {
+        let serviceName = item.nomeServico || `Serviço #${(item as any).servicoId}`;
+        let shopName = item.nomeBarbearia || `Barbearia #${(item as any).barbeariaId}`;
+        let professionalName = item.nomeBarbeiro || 'Não informado';
+        let price = "R$ -";
+        let barbeariaId = (item as any).barbeariaId;
+        let hasReview = false;
+
+        try {
+          // Fetch details to get proper data
+          const details = await appointmentService.getAppointmentById(item.id);
+          barbeariaId = details.barbeariaId;
+
+          if (details.servicoId && details.barbeariaId) {
+            // Get service
+            const services = await barberShopService.listServices(details.barbeariaId);
+            const service = services.find(s => s.id === details.servicoId);
+            if (service) {
+              price = `R$ ${service.preco.toFixed(2)}`;
+              serviceName = service.nome;
+            }
+
+            // Get shop
+            let shop = barberShops.find(s => s.id === details.barbeariaId);
+            if (!shop) {
+              const shops = await barberShopService.listBarberShops();
+              shop = shops.find(s => s.id === details.barbeariaId);
+            }
+            if (shop) {
+              shopName = shop.nomeFantasia || shop.nome;
+            }
+
+            // Get professional name using funcionarioId from details
+            if (details.funcionarioId && details.servicoId) {
+              try {
+                const professionals = await barberShopService.listProfessionals(details.servicoId, details.barbeariaId);
+                const professional = professionals.find(p => p.id === details.funcionarioId);
+                if (professional) {
+                  professionalName = professional.nome;
+                }
+              } catch (err) {
+                console.error('Error fetching professional name:', err);
+              }
+            }
+
+            // Check if appointment has been reviewed TODO: implement API check
+            // For now, we'll assume not reviewed unless we can confirm
+            hasReview = false;
+          }
+        } catch (err) {
+          console.error("Failed to fetch details for history appointment", item.id, err);
+        }
+
         const dateObj = new Date(item.dataHora);
         return {
           id: item.id.toString(),
-          barberShopName: item.nomeBarbearia,
-          service: item.nomeServico,
-          price: "R$ -", // API doesn't return price yet
+          barberShopName: shopName,
+          service: serviceName,
+          price: price,
           date: dateObj.toLocaleDateString('pt-BR'),
           time: dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-          barberName: item.nomeBarbeiro || 'Não informado',
+          barberName: professionalName,
           status: item.status,
-          barbeariaId: (item as any).barbeariaId // Ensure this is mapped if available
+          barbeariaId: barbeariaId,
+          hasReview: hasReview
         };
-      });
+      }));
       setHistory(formattedHistory);
     } catch (error) {
       console.error("Failed to fetch history", error);
@@ -956,8 +1162,9 @@ export default function App() {
       // Fetch details for each appointment to get price and correct names
       const enrichedAppointments = await Promise.all(activeAppointments.map(async (item) => {
         let price = "R$ -";
-        let serviceName = item.nomeServico;
-        let shopName = item.nomeBarbearia;
+        let serviceName = item.nomeServico || `Serviço #${item.servicoId}`;
+        let shopName = item.nomeBarbearia || `Barbearia #${item.barbeariaId}`;
+        let professionalName = item.nomeBarbeiro || 'Não informado';
         let barbeariaId: number | undefined;
 
         try {
@@ -966,8 +1173,7 @@ export default function App() {
           barbeariaId = details.barbeariaId;
 
           if (details.servicoId && details.barbeariaId) {
-            // 2. Get service details to get price
-            // We fetch all services for the shop and find the matching one
+            // 2. Get service details to get price and name
             const services = await barberShopService.listServices(details.barbeariaId);
             const service = services.find(s => s.id === details.servicoId);
 
@@ -977,17 +1183,27 @@ export default function App() {
             }
 
             // 3. Get shop details to get correct name (nomeFantasia)
-            // We can use the existing barberShops list if available, or fetch it
-            // Since we might not have the full list yet, let's try to find it in the current state or fetch
             let shop = barberShops.find(s => s.id === details.barbeariaId);
             if (!shop) {
-              // Fallback: fetch list again (cached by browser usually)
               const shops = await barberShopService.listBarberShops();
               shop = shops.find(s => s.id === details.barbeariaId);
             }
 
             if (shop) {
               shopName = shop.nomeFantasia || shop.nome;
+            }
+
+            // 4. Get professional name using funcionarioId from details
+            if (details.funcionarioId && details.servicoId) {
+              try {
+                const professionals = await barberShopService.listProfessionals(details.servicoId, details.barbeariaId);
+                const professional = professionals.find(p => p.id === details.funcionarioId);
+                if (professional) {
+                  professionalName = professional.nome;
+                }
+              } catch (err) {
+                console.error('Error fetching professional name:', err);
+              }
             }
           }
         } catch (err) {
@@ -1002,7 +1218,7 @@ export default function App() {
           price: price,
           date: dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
           time: dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-          barberName: item.nomeBarbeiro || 'Não informado',
+          barberName: professionalName,
           status: item.status,
           barbeariaId: barbeariaId
         };
@@ -1012,9 +1228,9 @@ export default function App() {
     } catch (error) {
       console.error("Failed to fetch upcoming appointments", error);
     } finally {
-      setLoadingUpcoming(false);
+      if (upcomingAppointments.length === 0) setLoadingUpcoming(false);
     }
-  }, [barberShops, upcomingAppointments.length]);
+  }, [upcomingAppointments.length]); // Removed barberShops to prevent infinite loop
 
   // Polling for status updates
   useEffect(() => {
@@ -1045,7 +1261,24 @@ export default function App() {
       try {
         setLoadingBarberShops(true);
         const shops = await barberShopService.listBarberShops();
-        setBarberShops(shops);
+
+        // Fetch review stats for each shop to get accurate ratings
+        const shopsWithRatings = await Promise.all(
+          shops.map(async (shop) => {
+            try {
+              const stats = await barberShopService.getReviewStats(shop.id);
+              return {
+                ...shop,
+                avaliacaoMedia: stats?.mediaGeral ?? 0
+              };
+            } catch (error) {
+              console.error(`Failed to fetch stats for shop ${shop.id}`, error);
+              return shop; // Return original shop if stats fail
+            }
+          })
+        );
+
+        setBarberShops(shopsWithRatings);
       } catch (error) {
         console.error("Failed to fetch barber shops", error);
       } finally {
@@ -1208,7 +1441,12 @@ export default function App() {
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
               {barberShops.filter(s => s.nomeFantasia.toLowerCase().includes(search.toLowerCase())).map(shop => (
-                <BarberShopCard key={shop.id} shop={shop} onClick={() => setSelectedShop(shop)} />
+                <BarberShopCard
+                  key={shop.id}
+                  shop={shop}
+                  onClick={() => setSelectedShop(shop)}
+                  onRatingClick={() => handleViewReviews(shop)}
+                />
               ))}
             </div>
           )}
@@ -1339,6 +1577,14 @@ export default function App() {
         <ReviewModal
           appointment={selectedAppointmentForReview}
           onClose={() => setShowReviewModal(false)}
+        />
+      )}
+
+      {/* Modal de Avaliações da Barbearia */}
+      {showReviewsModal && selectedShopForReviews && (
+        <ReviewsModal
+          barberShop={selectedShopForReviews}
+          onClose={() => setShowReviewsModal(false)}
         />
       )}
 
