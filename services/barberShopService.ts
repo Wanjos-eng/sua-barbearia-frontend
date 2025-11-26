@@ -131,6 +131,39 @@ export const barberShopService = {
             }
             throw { message: 'Erro de rede' };
         }
+    },
+
+    getReviews: async (barberShopId: number): Promise<import('@/types/api').Review[]> => {
+        try {
+            const response = await api.get<import('@/types/api').Review[]>(`/barbearias/${barberShopId}/avaliacoes`);
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 404) {
+                    return [];
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    getReviewStats: async (barberShopId: number): Promise<import('@/types/api').ReviewStats | null> => {
+        try {
+            const response = await api.get<import('@/types/api').ReviewStats>(`/barbearias/${barberShopId}/estatisticas-avaliacoes`);
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 404) {
+                    return null;
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
     }
 };
 
