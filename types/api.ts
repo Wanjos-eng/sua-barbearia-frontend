@@ -217,3 +217,100 @@ export interface BarberShopAppointment {
     valorTotal: number;
 }
 
+
+export interface UpdateProfessionalData {
+    nome: string;
+    email: string;
+    telefone: string;
+    perfilType?: 'BARBEIRO' | 'MANICURE' | 'ESTETICISTA' | 'COLORISTA';
+    profissao?: 'BARBEIRO' | 'MANICURE' | 'ESTETICISTA' | 'COLORISTA';
+}
+
+export interface WorkingHoursData {
+    diaSemana: string | number;
+    horaAbertura: string;
+    horaFechamento: string;
+    ativo: boolean;
+}
+
+export interface AccessLinkResponse {
+    funcionarioId: number;
+    nome: string;
+    linkAcesso: string;
+    tokenAtivo: boolean;
+    tokenGeradoEm: string;
+    tokenExpiraEm: string;
+}
+
+export interface LinkExpirationData {
+    diasExpiracao: number;
+}
+
+// Review/Rating types
+export interface CreateReviewData {
+    barbeariaId: number;
+    agendamentoId: number;
+    notaServico: number;
+    notaAmbiente: number;
+    notaLimpeza: number;
+    notaAtendimento: number;
+    comentario: string;
+}
+
+export interface Review {
+    id: number;
+    barbeariaId: number;
+    agendamentoId: number;
+    clienteNome: string;
+    notaServico: number;
+    notaAmbiente: number;
+    notaLimpeza: number;
+    notaAtendimento: number;
+    notaGeral: number;
+    comentario: string;
+    dataCriacao: string;
+}
+
+export interface ReviewStats {
+    barbeariaId: number;
+    mediaGeral: number;
+    mediaServico: number;
+    mediaAmbiente: number;
+    mediaLimpeza: number;
+    mediaAtendimento: number;
+    totalAvaliacoes: number;
+    avaliacoes1Estrela: number;
+    avaliacoes2Estrelas: number;
+    avaliacoes3Estrelas: number;
+    avaliacoes4Estrelas: number;
+    avaliacoes5Estrelas: number;
+}
+
+// Available dates and times
+export interface TimeSlot {
+    hour: number;
+    minute: number;
+    second: number;
+    nano: number;
+}
+
+export interface AvailableTimeSlot {
+    funcionarioId: number;
+    funcionarioNome: string;
+    profissao: string;
+    data: string;
+    horarioInicio: string | TimeSlot;
+    horarioFim: string | TimeSlot;
+}
+
+// Recent appointments
+export interface RecentAppointment {
+    id: number;
+    dataHora: string;
+    status: string;
+    nomeBarbearia: string;
+    nomeBarbeiro: string | null;
+    nomeServico: string;
+    observacoes: string | null;
+}
+

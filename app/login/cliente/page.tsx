@@ -7,7 +7,7 @@ import loginIcon from '@/assets/LoginCliente/icone-logo-suabarbearia-Login.png';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authService } from '@/services/authService';
-import { ApiError } from '@/types/api';
+
 
 export default function LoginClientePage() {
   const router = useRouter();
@@ -112,15 +112,15 @@ export default function LoginClientePage() {
                   </h1>
 
                 </div>
-               
+
                 <div className="text-ms text-[#DDDBCB] font-bold text-right">
-                Agende com
-                <br />
-                sua barbearia
-              </div>
+                  Agende com
+                  <br />
+                  sua barbearia
+                </div>
               </div>
 
-              
+
             </div>
 
             {/* Seção 2: Inputs (Agrupados) */}
@@ -134,7 +134,7 @@ export default function LoginClientePage() {
               {/* Campo de Email */}
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
-                                                aria-hidden="true" />
+                  aria-hidden="true" />
                 <input
                   type="email"
                   placeholder="Email"
@@ -145,11 +145,11 @@ export default function LoginClientePage() {
                 />
 
               </div>
-              
+
               {/* Campo de Senha */}
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-[#DDDBCB]"
-                                aria-hidden="true" />
+                  aria-hidden="true" />
                 <input
                   type="password"
                   placeholder="Senha"
@@ -159,7 +159,7 @@ export default function LoginClientePage() {
                   required
                 />
 
-              </div>              
+              </div>
             </div>
 
             {/* Seção 3: Ações (Agrupados) */}

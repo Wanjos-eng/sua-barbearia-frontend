@@ -35,7 +35,7 @@ api.interceptors.response.use(
             } else if (user.role === 'CLIENTE') {
               redirectUrl = '/login/cliente';
             }
-          } catch (e) {
+          } catch {
             // If parsing fails, default to root
           }
         }
