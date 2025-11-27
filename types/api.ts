@@ -56,11 +56,12 @@ export interface UpdateProfileData {
 export interface BarberShop {
     id: number;
     nome: string;
-    nomeFantasia: string;
-    endereco: string;
-    telefone: string;
-    email: string;
-    avaliacaoMedia: number;
+    nomeFantasia?: string;
+    endereco?: string;
+    telefone?: string;
+    email?: string;
+    avaliacaoMedia?: number;
+    ativo?: boolean;
 }
 
 export interface Service {
@@ -187,12 +188,21 @@ export interface CreateServiceData {
     tipoServico: 'CORTE' | 'BARBA' | 'MANICURE' | 'SOBRANCELHA' | 'COLORACAO' | 'TRATAMENTO_CAPILAR';
 }
 
+export interface UpdateServiceData {
+    nome: string;
+    descricao: string;
+    preco: number;
+    duracao: number;
+    tipoServico: string; // Backend requires this even though it's immutable
+}
+
 export interface ServiceResponse {
     id: number;
     nome: string;
     descricao: string;
     preco: number;
     duracao: number;
+    tipoServico?: string;
     ativo: boolean;
 }
 
@@ -312,5 +322,33 @@ export interface RecentAppointment {
     nomeBarbeiro: string | null;
     nomeServico: string;
     observacoes: string | null;
+}
+
+export interface DetailedAppointment {
+    id: number;
+    dataHora: string;
+    status: 'PENDENTE' | 'CONFIRMADO' | 'CANCELADO' | 'CONCLUIDO' | string;
+    observacoes: string | null;
+    clienteId: number;
+    clienteNome: string;
+    clienteTelefone: string;
+    servicoId: number;
+    servicoNome: string;
+    servicoTipo: string;
+    servicoPreco: number;
+    servicoDuracao: number;
+    funcionarioId: number;
+    funcionarioNome: string;
+    funcionarioProfissao: string;
+    dataCriacao: string;
+    dataAtualizacao: string;
+}
+
+export interface RescheduleRequest {
+    novaDataHora: string;
+}
+
+export interface RepeatAppointmentRequest {
+    novaDataHora: string;
 }
 
