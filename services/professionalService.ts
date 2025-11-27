@@ -200,5 +200,28 @@ export const professionalService = {
             }
             throw { message: 'Erro de rede' };
         }
+    },
+
+    /**
+     * Get services associated with a professional
+     * @param id Professional ID
+     * @returns Array of services linked to the professional
+     */
+    getProfessionalServices: async (id: number): Promise<import('@/types/api').Service[]> => {
+        try {
+            const response = await api.get<import('@/types/api').Service[]>(`/barbearias/funcionarios/${id}/servicos`);
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 404) {
+                    return []; // Professional has no services linked
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
     }
 };

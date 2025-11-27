@@ -1098,7 +1098,7 @@ export default function App() {
             // Get shop
             let shop = barberShops.find(s => s.id === details.barbeariaId);
             if (!shop) {
-              const shops = await barberShopService.listBarberShops();
+              const shops = await clientService.listActiveBarbershops();
               shop = shops.find(s => s.id === details.barbeariaId);
             }
             if (shop) {
@@ -1185,7 +1185,7 @@ export default function App() {
             // 3. Get shop details to get correct name (nomeFantasia)
             let shop = barberShops.find(s => s.id === details.barbeariaId);
             if (!shop) {
-              const shops = await barberShopService.listBarberShops();
+              const shops = await clientService.listActiveBarbershops();
               shop = shops.find(s => s.id === details.barbeariaId);
             }
 
@@ -1260,7 +1260,7 @@ export default function App() {
     const fetchBarberShops = async () => {
       try {
         setLoadingBarberShops(true);
-        const shops = await barberShopService.listBarberShops();
+        const shops = await clientService.listActiveBarbershops();
 
         // Fetch review stats for each shop to get accurate ratings
         const shopsWithRatings = await Promise.all(
@@ -1440,7 +1440,7 @@ export default function App() {
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-              {barberShops.filter(s => s.nomeFantasia.toLowerCase().includes(search.toLowerCase())).map(shop => (
+              {barberShops.filter(s => (s.nomeFantasia || s.nome || '').toLowerCase().includes(search.toLowerCase())).map(shop => (
                 <BarberShopCard
                   key={shop.id}
                   shop={shop}

@@ -1,5 +1,5 @@
 import api from './api';
-import { CreateAppointmentData, AppointmentResponse, ApiError } from '@/types/api';
+import { CreateAppointmentData, AppointmentResponse, ApiError, RescheduleRequest, RepeatAppointmentRequest } from '@/types/api';
 import axios from 'axios';
 
 export const appointmentService = {
@@ -30,26 +30,118 @@ export const appointmentService = {
         }
     },
 
-    rescheduleAppointment: async (id: number, data: import('@/types/api').RescheduleData): Promise<AppointmentResponse> => {
+    // Confirmar agendamento (PENDENTE -> CONFIRMADO)
+    confirmAppointment: async (id: number): Promise<string> => {
         try {
-            const response = await api.post<AppointmentResponse>(`/agendamentos/${id}/reagendar`, data);
-            return response.data;
+            const response = await api.post<string>(`/agendamentos/${id}/confirmar`);
+            return response.data || 'Agendamento confirmado com sucesso';
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Apenas barbearia pode confirmar agendamento' } as ApiError;
+                }
+                if (error.response.status === 404) {
+                    throw { message: 'Agendamento não encontrado' } as ApiError;
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    // Cancelar agendamento (PENDENTE/CONFIRMADO -> CANCELADO)
+    cancelAppointment: async (id: number): Promise<void> => {
+        try {
+            await api.post(`/agendamentos/${id}/cancelar`);
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Você não tem permissão para cancelar este agendamento' } as ApiError;
+                }
+                if (error.response.status === 404) {
+                    throw { message: 'Agendamento não encontrado' } as ApiError;
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede ao cancelar' } as ApiError;
+        }
+    },
+
+    // Concluir agendamento (CONFIRMADO -> CONCLUIDO)
+    completeAppointment: async (id: number): Promise<string> => {
+        try {
+            const response = await api.post<string>(`/agendamentos/${id}/concluir`);
+            return response.data || 'Agendamento concluído com sucesso';
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Apenas barbearia pode concluir agendamento' } as ApiError;
+                }
+                if (error.response.status === 404) {
+                    throw { message: 'Agendamento não encontrado' } as ApiError;
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    // Reagendar agendamento (mudar data/hora)
+    rescheduleAppointment: async (id: number, data: RescheduleRequest): Promise<string> => {
+        try {
+            await api.post(`/agendamentos/${id}/reagendar`, data);
+            return 'Agendamento reagendado com sucesso';
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 400) {
+                    throw { message: error.response.data?.message || 'Novo horário indisponível' } as ApiError;
+                }
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Você não tem permissão para reagendar este agendamento' } as ApiError;
+                }
+                if (error.response.status === 404) {
+                    throw { message: 'Agendamento não encontrado' } as ApiError;
+                }
                 throw error.response.data as ApiError;
             }
             throw { message: 'Erro de rede ao reagendar' } as ApiError;
         }
     },
 
-    cancelAppointment: async (id: number): Promise<void> => {
+    // Repetir agendamento (criar novo baseado em um concluído)
+    repeatAppointment: async (id: number, data: RepeatAppointmentRequest): Promise<string> => {
         try {
-            await api.post(`/agendamentos/${id}/cancelar`);
+            await api.post(`/agendamentos/${id}/repetir`, data);
+            return 'Novo agendamento criado com sucesso';
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 400) {
+                    throw { message: error.response.data?.message || 'Agendamento original não está concluído ou data inválida' } as ApiError;
+                }
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Você não tem permissão para repetir este agendamento' } as ApiError;
+                }
+                if (error.response.status === 404) {
+                    throw { message: 'Agendamento original não encontrado' } as ApiError;
+                }
                 throw error.response.data as ApiError;
             }
-            throw { message: 'Erro de rede ao cancelar' } as ApiError;
+            throw { message: 'Erro de rede' };
         }
     },
 

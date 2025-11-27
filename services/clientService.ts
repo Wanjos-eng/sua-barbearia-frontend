@@ -165,6 +165,29 @@ export const clientService = {
             }
             throw { message: 'Erro de rede' };
         }
+    },
+
+    /**
+     * List all active barbershops (public endpoint, no authentication required)
+     * @returns Array of active barbershops
+     */
+    listActiveBarbershops: async (): Promise<import('@/types/api').BarberShop[]> => {
+        try {
+            const response = await api.get<import('@/types/api').BarberShop[]>('/clientes/barbearias');
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 500) {
+                    console.error('Erro ao listar barbearias:', error.response.data);
+                    return []; // Return empty array for better UX
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
     }
 };
 
