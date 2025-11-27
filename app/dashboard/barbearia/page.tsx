@@ -35,10 +35,12 @@ import {
   Clock3,
   Shield,
   Copy,
+  Star,
 } from 'lucide-react';
 import { professionalService } from '@/services/professionalService';
 import { serviceService } from '@/services/serviceService';
 import { barberShopService } from '@/services/barberShopService';
+import { appointmentService } from '@/services/appointmentService';
 
 // Tipos (Typescript)
 
@@ -176,6 +178,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentPage, setCurrentPage, isOpen, 
     { icon: Users, label: 'Profissionais' },
     { icon: Scissors, label: 'Serviços' },
     { icon: Calendar, label: 'Agendamentos' },
+    { icon: Star, label: 'Avaliações' },
     { icon: DollarSign, label: 'Gestão Financeira' },
     { icon: User, label: 'Clientes' },
   ];
@@ -1440,104 +1443,287 @@ const Toast: React.FC<{ message: string, onClose: () => void }> = ({ message, on
   );
 };
 
+// Componente Item de Agendamento Futuro
+const FutureAppointmentItem: React.FC<{
+  appointment: import('@/types/api').DetailedAppointment;
+  onConfirm: (id: number) => void;
+  onCancel: (id: number) => void;
+  onComplete: (id: number) => void;
+  loadingId: number | null;
+}> = ({ appointment, onConfirm, onCancel, onComplete, loadingId }) => {
+  const isLoading = loadingId === appointment.id;
+  const date = new Date(appointment.dataHora);
+  const time = date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+
+  return (
+    <div className="py- p-4 bg-[#0C0C0C] rounded-lg mh-4 my-3 border border-[#292929] hover:border-[#58BEC3] transition-colors">
+      <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+        {/* Informacoes Principais */}
+        <div className="flex items-center space-x-4 mb-4 md:mb-0">
+          <span className="text-2xl font-black text-[#DDDBCB] w-20">{time}</span>
+          <div className="flex-1 min-w-[200px]">
+            <p className="text-lg font-semibold text-[#DDDBCB]">{appointment.clienteNome}</p>
+            <p className="text-sm text-[#5C5C5C]">{appointment.funcionarioNome}</p>
+          </div>
+          <div className="min-w-[150px]">
+            <p className="text-lg font-semibold text-[#DDDBCB]">{appointment.servicoNome}</p>
+            <p className="text-sm text-[#5C5C5C]">
+              {new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(appointment.servicoPreco)}
+            </p>
+          </div>
+        </div>
+
+        {/* Status e Ações */}
+        <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
+          <AgendamentoStatusBridge status={appointment.status} />
+
+          <div className="flex items-center space-x-2">
+            {appointment.status === 'PENDENTE' && (
+              <button
+                onClick={() => onConfirm(appointment.id)}
+                disabled={isLoading}
+                className="p-2 bg-[#58BEC3]/10 text-[#58BEC3] hover:bg-[#58BEC3]/20 rounded-lg transition-colors"
+                title="Confirmar"
+              >
+                {isLoading ? <div className="w-4 h-4 border-2 border-[#58BEC3] border-t-transparent rounded-full animate-spin" /> : <Check className="w-4 h-4" />}
+              </button>
+            )}
+
+            {appointment.status === 'CONFIRMADO' && (
+              <button
+                onClick={() => onComplete(appointment.id)}
+                disabled={isLoading}
+                className="p-2 bg-green-500/10 text-green-500 hover:bg-green-500/20 rounded-lg transition-colors"
+                title="Concluir"
+              >
+                {isLoading ? <div className="w-4 h-4 border-2 border-green-500 border-t-transparent rounded-full animate-spin" /> : <CheckCircle className="w-4 h-4" />}
+              </button>
+            )}
+
+            {(appointment.status === 'PENDENTE' || appointment.status === 'CONFIRMADO') && (
+              <button
+                onClick={() => onCancel(appointment.id)}
+                disabled={isLoading}
+                className="p-2 bg-red-500/10 text-red-500 hover:bg-red-500/20 rounded-lg transition-colors"
+                title="Cancelar"
+              >
+                {isLoading ? <div className="w-4 h-4 border-2 border-red-500 border-t-transparent rounded-full animate-spin" /> : <X className="w-4 h-4" />}
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Componente Item de Profissional Ativo
+const ActiveProfessionalItem: React.FC<{
+  professional: import('@/types/api').ProfessionalResponse;
+}> = ({ professional }) => {
+  const initials = professional.nome
+    .split(' ')
+    .map((n) => n[0])
+    .join('')
+    .substring(0, 2)
+    .toUpperCase();
+
+  return (
+    <div className="flex items-center justify-between py-3 border-b border-[#292929] last:border-b-0">
+      <div className="flex items-center space-x-4">
+        <div className="w-10 h-10 bg-[#292929] rounded-full flex items-center justify-center font-bold text-[#DDDBCB]">
+          {initials}
+        </div>
+        <div>
+          <p className="text-lg font-bold text-[#DDDBCB]">{professional.nome}</p>
+          <p className="text-xs font-semibold text-[#58BEC3]">{professional.profissao}</p>
+        </div>
+      </div>
+      <div className="text-right">
+        <div className="flex items-center gap-1 text-[#58BEC3]">
+          <div className="w-2 h-2 rounded-full bg-[#58BEC3]"></div>
+          <span className="text-xs">Ativo</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // Componente Conteúdo Principal
 const DashboardContent: React.FC<{
   onOpenNewAppointment: () => void,
+  onNavigateToProfessionals: () => void,
+}> = ({ onOpenNewAppointment, onNavigateToProfessionals }) => {
+  const [appointments, setAppointments] = React.useState<import('@/types/api').DetailedAppointment[]>([]);
+  const [activeProfessionals, setActiveProfessionals] = React.useState<import('@/types/api').ProfessionalResponse[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [actionLoadingId, setActionLoadingId] = React.useState<number | null>(null);
 
-}> = ({ onOpenNewAppointment }) => (
-  <div className="animate-in fade-in duration-500">
-    <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
+  const fetchData = async () => {
+    try {
+      setLoading(true);
+      const [appointmentsData, professionalsData] = await Promise.all([
+        barberShopService.listFutureAppointments(),
+        professionalService.listMyProfessionals()
+      ]);
 
-    {/* Grid de Estatísticas */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 x1:grid-cols-4 gap-6 mb-8">
-      {statsData.map((stat) => (
-        <StatsCard
-          key={stat.title}
-          icon={stat.icon}
-          title={stat.title}
-          value={stat.value} />
-        //iconBgColor={stat.iconBgColor} 
+      setAppointments(appointmentsData);
 
-      ))}
-    </div>
+      // Filter only active professionals
+      const activeProfs = professionalsData.filter(p => p.ativo);
+      setActiveProfessionals(activeProfs);
 
-    {/* Layout Principal (Agendamentos e Barbeiros) */}
-    <div className="flex flex-col lg:flex-row gap-8">
+    } catch (error) {
+      console.error('Error fetching dashboard data:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-      {/* Coluna Esquerda: Próximos 7 Dias */}
-      <div className="flex-1 bg-[#151515] p-6 rounded-lg">
-        <div className="flex items-center space-x-3 mb-5">
-          <Calendar className="w-6 h-6 text-white" />
-          <h2 className="text-x1 font-semibold text-[#DDDBCB]">Próximos 7 Dias</h2>
-        </div>
+  React.useEffect(() => {
+    fetchData();
+  }, []);
 
-        {/* Agendamentos */}
-        <div className="space-y-4">
-          <div>
-            {/* Colocar a data vindo direto do calendário automaticamente*/}
-            <p className="text-sm border-b border-[#5C5C5C] pb-3 mb-4 font-medium text-[#5C5C5C] mb-2">Dia 09/11 - Domingo</p>
-            {appointmentsData.map((app, index) => (
-              <AppointmentItem key={index} {...app} />
-            ))}
-          </div>
-          <div>
-            <p className="text-sm border-b border-[#5C5C5C] pb-3 mb-4 font-medium text-[#5C5C5C] mb-2">Dia 10/11 - Segunda</p>
-            {/* Simulando mais dados */}
-            <AppointmentItem
-              id="d1"
-              date="19/11"
-              time="10:00"
-              client="Carlos Pereira"
-              barber="Nome Barbeiro"
-              service="Corte"
-              value="R$50,00"
-              status="Pendente"
-            />
-            <AppointmentItem
-              id="d1"
-              date="19/11"
-              time="11:00"
-              client="Otávio Augusto"
-              barber="Nome Barbeiro"
-              service="Corte"
-              value="R$50,00"
-              status="Confirmado"
-            />
-          </div>
-        </div>
+  const handleConfirm = async (id: number) => {
+    try {
+      setActionLoadingId(id);
+      await appointmentService.confirmAppointment(id);
+      await fetchData(); // Refresh all data
+    } catch (error) {
+      console.error('Error confirming appointment:', error);
+      alert('Erro ao confirmar agendamento');
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const handleCancel = async (id: number) => {
+    if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
+
+    try {
+      setActionLoadingId(id);
+      await appointmentService.cancelAppointment(id);
+      await fetchData(); // Refresh all data
+    } catch (error) {
+      console.error('Error canceling appointment:', error);
+      alert('Erro ao cancelar agendamento');
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  const handleComplete = async (id: number) => {
+    try {
+      setActionLoadingId(id);
+      await appointmentService.completeAppointment(id);
+      await fetchData(); // Refresh all data
+    } catch (error) {
+      console.error('Error completing appointment:', error);
+      alert('Erro ao concluir agendamento');
+    } finally {
+      setActionLoadingId(null);
+    }
+  };
+
+  return (
+    <div className="animate-in fade-in duration-500">
+      <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Dashboard</h1>
+
+      {/* Grid de Estatísticas */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 x1:grid-cols-4 gap-6 mb-8">
+        {statsData.map((stat) => (
+          <StatsCard
+            key={stat.title}
+            icon={stat.icon}
+            title={stat.title}
+            value={stat.value} />
+        ))}
       </div>
 
-      {/* Coluna Direita: Ações e Barbeiros Ativos */}
-      <div className="w-full lg:w-80">
-        <button
-          onClick={onOpenNewAppointment}
-          className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mb-8 shadow-lg shadow-[#58BEC3]/10"
-        >
-          + Novo Agendamento
-        </button>
+      {/* Layout Principal (Agendamentos e Barbeiros) */}
+      <div className="flex flex-col lg:flex-row gap-8">
 
-        <div className="bg-[#151515] p-6 rounded-lg mt-8">
-          <h3 className="text-lg font-semibold text-[#DDDBCB] mb-4">Barbeiros Ativos</h3>
-          <div className="space-y-2">
-            {activeBarbersData.map((barber, index) => (
-              <ActiveBarberItem
-                key={index}
-                initials={barber.initials}
-                name={barber.name}
-                total={barber.total}
-                next={barber.next}
-              />
-            ))}
+        {/* Coluna Esquerda: Agendamentos Futuros */}
+        <div className="flex-1 bg-[#151515] p-6 rounded-lg">
+          <div className="flex items-center justify-between mb-5">
+            <div className="flex items-center space-x-3">
+              <Calendar className="w-6 h-6 text-white" />
+              <h2 className="text-x1 font-semibold text-[#DDDBCB]">Agendamentos Futuros</h2>
+            </div>
+            <button
+              onClick={fetchData}
+              className="p-2 text-[#5C5C5C] hover:text-[#58BEC3] transition-colors"
+              title="Atualizar"
+            >
+              <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} />
+            </button>
+          </div>
+
+          {/* Lista de Agendamentos */}
+          <div className="space-y-4">
+            {loading ? (
+              <div className="flex justify-center py-8">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#58BEC3]"></div>
+              </div>
+            ) : appointments.length > 0 ? (
+              appointments.map((app) => (
+                <FutureAppointmentItem
+                  key={app.id}
+                  appointment={app}
+                  onConfirm={handleConfirm}
+                  onCancel={handleCancel}
+                  onComplete={handleComplete}
+                  loadingId={actionLoadingId}
+                />
+              ))
+            ) : (
+              <div className="text-center py-8 text-[#5C5C5C]">
+                <p>Nenhum agendamento futuro encontrado.</p>
+              </div>
+            )}
           </div>
         </div>
 
-        <button className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mt-8">
-          Adicionar Profissional
-        </button>
+        {/* Coluna Direita: Ações e Profissionais Ativos */}
+        <div className="w-full lg:w-80">
+          <button
+            onClick={onOpenNewAppointment}
+            className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mb-4 shadow-lg shadow-[#58BEC3]/10"
+          >
+            + Novo Agendamento
+          </button>
+
+          <div className="bg-[#151515] p-6 rounded-lg mt-8">
+            <h3 className="text-lg font-semibold text-[#DDDBCB] mb-4">Profissionais Ativos</h3>
+            <div className="space-y-2">
+              {loading ? (
+                <div className="flex justify-center py-4">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-[#58BEC3]"></div>
+                </div>
+              ) : activeProfessionals.length > 0 ? (
+                activeProfessionals.map((prof) => (
+                  <ActiveProfessionalItem
+                    key={prof.id}
+                    professional={prof}
+                  />
+                ))
+              ) : (
+                <p className="text-[#5C5C5C] text-center text-sm py-4">Nenhum profissional ativo.</p>
+              )}
+            </div>
+          </div>
+
+          <button
+            onClick={onNavigateToProfessionals}
+            className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mt-4"
+          >
+            Adicionar Profissional
+          </button>
+        </div>
       </div>
     </div>
-  </div>
-)
+  );
+};
 
 // Modal de Editar Profissional
 interface EditProfessionalModalProps {
@@ -1761,32 +1947,18 @@ const ManageServicesModal: React.FC<ManageServicesModalProps> = ({ isOpen, onClo
   };
 
   const loadProfessionalServices = async () => {
-    // Ideally we should have an endpoint to get services of a professional
-    // For now, let's assume we start with empty or fetch if available
-    // The current API doesn't seem to have "get services of professional" easily accessible 
-    // without iterating all services and checking professionals.
-    // Wait, barberShopService.listServices returns services.
-    // barberShopService.listProfessionals(serviceId) returns professionals for a service.
-    // So we can reverse map it, but it's expensive.
-    // Let's assume for now we don't pre-fill or we need a new endpoint.
-    // The user didn't specify a GET /api/funcionarios/{id}/servicos.
-    // So we might have to start empty or maybe the backend handles it?
-    // "Substitui a lista anterior de serviços." implies we send the full new list.
-    // If we don't know the current list, we might overwrite blindly.
-    // Let's check if we can get it.
-    // Maybe we can fetch all services, and for each service check if this professional is linked?
-    // That would be N requests.
-    // Let's assume we start empty for now or if the user wants it, we'd need to ask.
-    // Actually, let's try to be smart.
-    // If we can't get it, maybe we just show available services and let user select.
-    // But that's bad UX if they are already linked.
-    // Let's check `barberShopService.ts` again.
-    // `listServices` returns `Service[]`.
-    // `listProfessionals` returns `Professional[]` for a service.
-    // So we can fetch all services, then for each service fetch professionals? That's too many requests.
-    // Is there a `GET /api/barbearias/funcionarios/{id}/servicos`? No.
-    // I'll add a comment about this limitation.
-    // For now, I will implement the saving part.
+    if (!professional) return;
+    try {
+      // Fetch services already associated with this professional
+      const professionalServices = await professionalService.getProfessionalServices(parseInt(professional.id));
+      // Pre-select these services
+      const serviceIds = professionalServices.map(s => s.id);
+      setSelectedServices(serviceIds);
+    } catch (error) {
+      // Silently handle error if endpoint doesn't exist yet
+      // User can still select services manually
+      setSelectedServices([]);
+    }
   };
 
   const toggleService = (serviceId: number) => {
@@ -2531,6 +2703,10 @@ const ServicosContent: React.FC = () => {
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState('');
   const [isAddModalOpen, setIsAddModalOpen] = React.useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = React.useState(false);
+  const [selectedService, setSelectedService] = React.useState<import('@/types/api').ServiceResponse | null>(null);
+  const [deleteLoading, setDeleteLoading] = React.useState(false);
 
   // Get barbeariaId from authenticated user
   const getBarbeariaId = (): number => {
@@ -2571,6 +2747,40 @@ const ServicosContent: React.FC = () => {
 
   const handleServiceCreated = () => {
     fetchServices();
+  };
+
+  const handleEditClick = (service: import('@/types/api').ServiceResponse) => {
+    setSelectedService(service);
+    setIsEditModalOpen(true);
+  };
+
+  const handleServiceEdited = () => {
+    setIsEditModalOpen(false);
+    setSelectedService(null);
+    fetchServices();
+  };
+
+  const handleDeleteClick = (service: import('@/types/api').ServiceResponse) => {
+    setSelectedService(service);
+    setIsDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!selectedService) return;
+
+    try {
+      setDeleteLoading(true);
+      await serviceService.deleteService(selectedService.id);
+      setIsDeleteModalOpen(false);
+      setSelectedService(null);
+      fetchServices();
+    } catch (err: unknown) {
+      console.error('Error deleting service:', err);
+      const error = err as { message?: string };
+      setError(error.message || 'Erro ao desativar serviço');
+    } finally {
+      setDeleteLoading(false);
+    }
   };
 
   const filteredServices = services.filter(service =>
@@ -2643,11 +2853,17 @@ const ServicosContent: React.FC = () => {
                   </div>
 
                   <div className="flex items-center gap-2 mt-4">
-                    <button className="flex-1 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-semibold py-2 px-3 rounded-lg text-sm flex items-center justify-center space-x-1">
+                    <button
+                      onClick={() => handleEditClick(service)}
+                      className="flex-1 bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-semibold py-2 px-3 rounded-lg text-sm flex items-center justify-center space-x-1"
+                    >
                       <Edit className="w-4 h-4" />
                       <span>Editar</span>
                     </button>
-                    <button className="p-2 bg-[#5C5C5C] hover:bg-[#767676] rounded-lg text-[#DDDBCB]">
+                    <button
+                      onClick={() => handleDeleteClick(service)}
+                      className="p-2 bg-[#5C5C5C] hover:bg-[#767676] rounded-lg text-[#DDDBCB]"
+                    >
                       <Trash2 className="w-4 h-4" />
                     </button>
                   </div>
@@ -2675,12 +2891,383 @@ const ServicosContent: React.FC = () => {
         onSuccess={handleServiceCreated}
         barbeariaId={barbeariaId}
       />
+
+      {/* Modal de Editar Serviço */}
+      {selectedService && (
+        <EditServiceModal
+          isOpen={isEditModalOpen}
+          onClose={() => setIsEditModalOpen(false)}
+          onSuccess={handleServiceEdited}
+          service={selectedService}
+        />
+      )}
+
+      {/* Modal de Confirmar Exclusão */}
+      {selectedService && (
+        <div className={`fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300 ${isDeleteModalOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+          <div className="bg-[#151515] w-full max-w-md rounded-xl border border-[#292929] shadow-2xl">
+            <div className="flex items-center  justify-between p-5 border-b border-[#292929]">
+              <h2 className="text-lg font-bold text-[#DDDBCB]">Desativar Serviço</h2>
+              <button onClick={() => setIsDeleteModalOpen(false)} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <p className="text-[#DDDBCB] mb-2">Tem certeza que deseja desativar o serviço:</p>
+              <p className="text-[#58BEC3] font-bold mb-4">{selectedService.nome}</p>
+              <div className="bg-[#58BEC3]/10 border border-[#58BEC3]/20 rounded-lg p-3 text-[#58BEC3] text-sm">
+                <p className="font-semibold mb-1">ℹ️ Esta é uma exclusão segura (soft delete)</p>
+                <p className="text-xs">O histórico de agendamentos será preservado e o serviço não aparecerá mais nas listagens ativas.</p>
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end p-5 border-t border-[#292929] gap-3">
+              <button
+                onClick={() => setIsDeleteModalOpen(false)}
+                disabled={deleteLoading}
+                className="px-4 py-2 text-sm font-medium text-[#5C5C5C] hover:text-[#DDDBCB] disabled:opacity-50"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleDeleteConfirm}
+                disabled={deleteLoading}
+                className="px-6 py-2 text-sm font-bold bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all disabled:opacity-50 flex items-center gap-2"
+              >
+                {deleteLoading && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>}
+                {deleteLoading ? 'Desativando...' : 'Desativar'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+};
+
+// Modal de Editar Serviço
+interface EditServiceModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onSuccess: () => void;
+  service: import('@/types/api').ServiceResponse;
+}
+
+const EditServiceModal: React.FC<EditServiceModalProps> = ({ isOpen, onClose, onSuccess, service }) => {
+  const [nome, setNome] = useState(service.nome);
+  const [descricao, setDescricao] = useState(service.descricao);
+  const [preco, setPreco] = useState(service.preco.toString());
+  const [duracao, setDuracao] = useState(service.duracao.toString());
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  // Reset form when modal opens with new service
+  useEffect(() => {
+    if (isOpen) {
+      setNome(service.nome);
+      setDescricao(service.descricao);
+      setPreco(service.preco.toString());
+      setDuracao(service.duracao.toString());
+      setError('');
+    }
+  }, [isOpen, service]);
+
+  if (!isOpen) return null;
+
+  const isValid = nome.trim() !== '' && descricao.trim() !== '' && preco !== '' && duracao !== '';
+
+  const handleSubmit = async () => {
+    if (!isValid) return;
+
+    try {
+      setLoading(true);
+      setError('');
+
+      await serviceService.updateService(service.id, {
+        nome: nome.trim(),
+        descricao: descricao.trim(),
+        preco: parseFloat(preco),
+        duracao: parseInt(duracao),
+        tipoServico: service.tipoServico || '' // Backend requires this even though it's immutable
+      });
+
+      onSuccess();
+      onClose();
+    } catch (err: unknown) {
+      console.error('Error updating service:', err);
+      const error = err as { message?: string };
+      setError(error.message || 'Erro ao atualizar serviço');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300">
+      <div className="bg-[#151515] w-full max-w-2xl rounded-xl border border-[#292929] shadow-2xl transform transition-all scale-100 opacity-100">
+        {/* Header */}
+        <div className="flex items-center justify-between p-5 border-b border-[#292929]">
+          <h2 className="text-lg font-bold text-[#DDDBCB]">Editar Serviço</h2>
+          <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Body */}
+        <div className="p-6 space-y-5">
+          {/* Error Display */}
+          {error && (
+            <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-red-500 text-sm">
+              {error}
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-4">
+            {/* Nome */}
+            <div>
+              <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Nome do Serviço *</label>
+              <input
+                type="text"
+                value={nome}
+                onChange={(e) => setNome(e.target.value)}
+                placeholder="Ex: Corte Masculino"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+
+            {/* Preço */}
+            <div>
+              <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Preço (R$) *</label>
+              <input
+                type="number"
+                value={preco}
+                onChange={(e) => setPreco(e.target.value)}
+                placeholder="50.00"
+                step="0.01"
+                min="0"
+                className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+              />
+            </div>
+          </div>
+
+          {/* Descrição */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Descrição *</label>
+            <textarea
+              rows={2}
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              placeholder="Descreva o serviço..."
+              className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] resize-none transition-all"
+            />
+          </div>
+
+          {/* Duração */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Duração (minutos) *</label>
+            <input
+              type="number"
+              value={duracao}
+              onChange={(e) => setDuracao(e.target.value)}
+              placeholder="30"
+              min="1"
+              className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+            />
+          </div>
+
+          {/* Info about immutable field */}
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 text-blue-400 text-sm">
+            <p className="font-semibold mb-1">ℹ️ Tipo de Serviço não pode ser alterado</p>
+            <p className="text-xs">O tipo de serviço é definido na criação e não pode ser modificado posteriormente.</p>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="flex items-center justify-end p-5 border-t border-[#292929] gap-3">
+          <button
+            onClick={onClose}
+            disabled={loading}
+            className="px-4 py-2 text-sm font-medium text-[#5C5C5C] hover:text-[#DDDBCB] transition-colors disabled:opacity-50"
+          >
+            Cancelar
+          </button>
+          <button
+            onClick={handleSubmit}
+            disabled={!isValid || loading}
+            className={`
+              px-6 py-2 text-sm font-bold rounded-lg transition-all flex items-center gap-2
+              ${isValid && !loading
+                ? 'bg-[#58BEC3] text-[#151515] hover:bg-[#7ADBE0] shadow-lg shadow-[#58BEC3]/20'
+                : 'bg-[#292929] text-[#5C5C5C] cursor-not-allowed'}
+            `}
+          >
+            {loading && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[#151515]"></div>}
+            {loading ? 'Salvando...' : 'Salvar Alterações'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// Componente Tela de Avaliações
+const AvaliacoesContent: React.FC = () => {
+  const [reviews, setReviews] = React.useState<import('@/types/api').Review[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState('');
+
+  // Get barbeariaId from authenticated user
+  const getBarbeariaId = (): number => {
+    if (typeof window !== 'undefined') {
+      const userStr = localStorage.getItem('user');
+      if (userStr) {
+        try {
+          const user = JSON.parse(userStr);
+          return user.id || 0;
+        } catch (e: unknown) {
+          console.error('Error parsing user from localStorage:', e);
+        }
+      }
+    }
+    return 0;
+  };
+
+  const barbeariaId = getBarbeariaId();
+
+  React.useEffect(() => {
+    if (barbeariaId) {
+      loadReviews();
+    }
+  }, [barbeariaId]);
+
+  const loadReviews = async () => {
+    try {
+      setLoading(true);
+      setError('');
+      const data = await barberShopService.getReviews(barbeariaId);
+      setReviews(data);
+    } catch (err: unknown) {
+      console.error('Error loading reviews:', err);
+      const error = err as { message?: string };
+      setError(error.message || 'Erro ao carregar avaliações');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const renderStars = (rating: number) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <span key={index} className={`text-lg ${index < rating ? 'text-yellow-400' : 'text-gray-600'}`}>
+        ★
+      </span>
+    ));
+  };
+
+  return (
+    <>
+      {/* Header */}
+      <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Avaliações</h1>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="flex flex-col items-center justify-center py-12">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#58BEC3] mb-4"></div>
+          <p className="text-[#5C5C5C]">Carregando avaliações...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-4 text-red-500 mb-6">
+          {error}
+        </div>
+      )}
+
+      {/* Reviews List */}
+      {!loading && !error && (
+        <>
+          {reviews.length > 0 ? (
+            <div className="grid grid-cols-1 gap-6">
+              {reviews.map((review) => (
+                <div key={review.id} className="bg-[#151515] border border-[#292929] rounded-lg p-6">
+                  {/* Header da avaliação */}
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <h3 className="text-[#DDDBCB] font-bold text-lg">{review.clienteNome}</h3>
+                      <p className="text-[#5C5C5C] text-sm">
+                        {new Date(review.dataCriacao).toLocaleDateString('pt-BR', {
+                          day: '2-digit',
+                          month: 'long',
+                          year: 'numeric'
+                        })}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1">
+                      {renderStars(Math.round(review.notaGeral))}
+                      <span className="ml-2 text-[#58BEC3] font-bold text-xl">{review.notaGeral.toFixed(1)}</span>
+                    </div>
+                  </div>
+
+                  {/* Comentário */}
+                  {review.comentario && (
+                    <p className="text-[#DDDBCB] mb-4 italic bg-[#050505] p-4 rounded-lg border border-[#292929]">
+                      "{review.comentario}"
+                    </p>
+                  )}
+
+                  {/* Notas detalhadas */}
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4 border-t border-[#292929]">
+                    <div className="bg-[#050505] p-3 rounded-lg">
+                      <p className="text-[#5C5C5C] text-xs mb-2 text-center">Serviço</p>
+                      <div className="flex items-center justify-center gap-1">
+                        {renderStars(review.notaServico)}
+                      </div>
+                    </div>
+                    <div className="bg-[#050505] p-3 rounded-lg">
+                      <p className="text-[#5C5C5C] text-xs mb-2 text-center">Ambiente</p>
+                      <div className="flex items-center justify-center gap-1">
+                        {renderStars(review.notaAmbiente)}
+                      </div>
+                    </div>
+                    <div className="bg-[#050505] p-3 rounded-lg">
+                      <p className="text-[#5C5C5C] text-xs mb-2 text-center">Limpeza</p>
+                      <div className="flex items-center justify-center gap-1">
+                        {renderStars(review.notaLimpeza)}
+                      </div>
+                    </div>
+                    <div className="bg-[#050505] p-3 rounded-lg">
+                      <p className="text-[#5C5C5C] text-xs mb-2 text-center">Atendimento</p>
+                      <div className="flex items-center justify-center gap-1">
+                        {renderStars(review.notaAtendimento)}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="flex flex-col items-center justify-center py-20 text-center bg-[#151515] rounded-lg">
+              <div className="bg-[#050505] p-6 rounded-full mb-4">
+                <Star className="w-12 h-12 text-[#5C5C5C]" />
+              </div>
+              <p className="text-[#DDDBCB] font-semibold mb-2 text-xl">Nenhuma avaliação ainda</p>
+              <p className="text-[#5C5C5C]">
+                As avaliações dos clientes aparecerão aqui
+              </p>
+            </div>
+          )}
+        </>
+      )}
     </>
   );
 };
 
 // Componente Tela de Profissionais
-const ProfissionaisContent: React.FC = () => {
+const ProfissionaisContent: React.FC<{
+  shouldOpenAddModal?: boolean;
+  onModalOpened?: () => void;
+}> = ({ shouldOpenAddModal, onModalOpened }) => {
   const [activeTab, setActiveTab] = React.useState('Ativos');
   const [searchQuery, setSearchQuery] = React.useState('');
   const [professionals, setProfessionals] = React.useState<import('@/types/api').ProfessionalResponse[]>([]);
@@ -2706,6 +3293,16 @@ const ProfissionaisContent: React.FC = () => {
   React.useEffect(() => {
     fetchProfessionals();
   }, [fetchProfessionals]);
+
+  // Auto-open modal effect
+  React.useEffect(() => {
+    if (shouldOpenAddModal) {
+      setIsAddModalOpen(true);
+      if (onModalOpened) {
+        onModalOpened();
+      }
+    }
+  }, [shouldOpenAddModal, onModalOpened]);
 
   // Handler para quando um profissional é criado com sucesso
   const handleProfessionalCreated = () => {
@@ -2825,7 +3422,22 @@ const ProfissionaisContent: React.FC = () => {
 
 // Componente Tela de Agendamentos
 // Componente Agendamento Status Bridge - Exibir status do agendamento para a tabela principal
-const AgendamentoStatusBridge: React.FC<{ status: AppointmentStatus }> = ({ status }) => {
+const AgendamentoStatusBridge: React.FC<{ status: string }> = ({ status }) => {
+  // Map API status to display format
+  const statusMap: Record<string, AppointmentStatus> = {
+    'PENDENTE': 'Pendente',
+    'CONFIRMADO': 'Confirmado',
+    'CONCLUIDO': 'Concluído',
+    'CANCELADO': 'Cancelado',
+    // Legacy formats
+    'Pendente': 'Pendente',
+    'Confirmado': 'Confirmado',
+    'Concluído': 'Concluído',
+    'Cancelado': 'Cancelado'
+  };
+
+  const displayStatus = statusMap[status] || 'Pendente';
+
   const statusStyles: Record<AppointmentStatus, { icon: React.ElementType, color: string }> = {
     'Concluído': { icon: Check, color: '#58BEC3' },
     'Cancelado': { icon: UserX, color: '#5c5c5c' },
@@ -2833,44 +3445,38 @@ const AgendamentoStatusBridge: React.FC<{ status: AppointmentStatus }> = ({ stat
     'Confirmado': { icon: Check, color: '#58BEC3' }
   };
 
-  const { icon: Icon, color } = statusStyles[status];
+  const { icon: Icon, color } = statusStyles[displayStatus];
 
   return (
     <span className={`flex items-center gap-1.5 text-sm font-medium ${color}`}>
       <Icon className="w-4 h-4" />
-      {status}
+      {displayStatus}
     </span>
   );
 };
 
 // Componente Agendamentos
 const AgendamentosContent: React.FC = () => {
-  const [appointments, setAppointments] = useState<Appointment[]>([]);
+  const [appointments, setAppointments] = useState<import('@/types/api').DetailedAppointment[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('Todos');
+  const [viewMode, setViewMode] = useState<'todos' | 'futuros'>('futuros');
 
   // Fetch appointments from API
   React.useEffect(() => {
     const fetchAppointments = async () => {
       try {
         setLoading(true);
-        const data = await barberShopService.listMyAppointments();
+        setError('');
 
-        // Map API data to Appointment interface
-        const mappedAppointments: Appointment[] = data.map((a: import('@/types/api').BarberShopAppointment) => ({
-          id: a.id.toString(),
-          date: new Date(a.data).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
-          time: a.horarioInicio.substring(0, 5),
-          client: a.clienteNome,
-          barber: a.funcionarioNome,
-          service: a.servicoNome,
-          value: `R$${a.valorTotal.toFixed(2).replace('.', ',')}`,
-          status: (a.status.charAt(0).toUpperCase() + a.status.slice(1).toLowerCase()) as AppointmentStatus
-        }));
+        // Use different endpoints based on view mode
+        const data = viewMode === 'todos'
+          ? await barberShopService.listAllAppointments()
+          : await barberShopService.listFutureAppointments();
 
-        setAppointments(mappedAppointments);
+        setAppointments(data);
       } catch (err: unknown) {
         console.error('Error fetching appointments:', err);
         const error = err as { message?: string };
@@ -2881,12 +3487,12 @@ const AgendamentosContent: React.FC = () => {
     };
 
     fetchAppointments();
-  }, []);
+  }, [viewMode]);
 
   const filteredAppointments = appointments
     .filter(app => statusFilter === 'Todos' || app.status === statusFilter)
-    .filter(app => app.barber.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      app.client.toLowerCase().includes(searchQuery.toLowerCase())
+    .filter(app => app.funcionarioNome.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      app.clienteNome.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
   return (
@@ -2895,11 +3501,29 @@ const AgendamentosContent: React.FC = () => {
       <h1 className="text-3xl font-bold text-[#DDDBCB] mb-6">Agendamentos</h1>
       {/* Filtros e Busca */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 bg-[#151515] p-2 rounded-lg">
+        {/* View Mode Toggle */}
+        <div className="flex bg-[#050505] p-1 rounded-lg">
+          <button
+            onClick={() => setViewMode('futuros')}
+            className={`px-4 py-2 text-sm font-bold rounded-md transition-all duration-200 ${viewMode === 'futuros' ? 'bg-[#58BEC3] text-[#151515]' : 'text-[#5C5C5C] hover:text-[#DDDBCB]'
+              }`}
+          >
+            Futuros
+          </button>
+          <button
+            onClick={() => setViewMode('todos')}
+            className={`px-4 py-2 text-sm font-bold rounded-md transition-all duration-200 ${viewMode === 'todos' ? 'bg-[#58BEC3] text-[#151515]' : 'text-[#5C5C5C] hover:text-[#DDDBCB]'
+              }`}
+          >
+            Todos
+          </button>
+        </div>
+
         {/* Search Bar */}
         <div className="relative flex-1 ">
           <input
             type="text"
-            placeholder="Buscar por cliente ou barbeiro..."
+            placeholder="Buscar por cliente ou profissional..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full bg-[#050505] text-sm font-semibold text-[#DDDBCB] placeholder-[#5C5C5C] px-4 py-2 rounded-lg pl-10 focus:outline-none focus:ring-2 focus:ring-[#58BEC3]"
@@ -2915,9 +3539,10 @@ const AgendamentosContent: React.FC = () => {
             className="text-sm font-semibold text-[#DDDBCB] px-4 py-3 appearance-[#DDDBCB]"
           >
             <option value="Todos">Todos</option>
-            <option value="Concluído">Concluído</option>
-            <option value="Pendente">Pendente</option>
-            <option value="Cancelado">Cancelado</option>
+            <option value="CONCLUIDO">Concluído</option>
+            <option value="PENDENTE">Pendente</option>
+            <option value="CANCELADO">Cancelado</option>
+            <option value="CONFIRMADO">Confirmado</option>
           </select>
         </div>
       </div>
@@ -2947,8 +3572,9 @@ const AgendamentosContent: React.FC = () => {
                 <tr>
                   <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Cliente</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Data/Hora</th>
-                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Barbeiro</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Profissional</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Serviço</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Telefone</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Valor</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-[#5C5C5C] uppercase tracking-wider">Status</th>
                 </tr>
@@ -2963,20 +3589,29 @@ const AgendamentosContent: React.FC = () => {
                       className="hover:bg-[#0c0c0c] transition-colors">
 
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-ms font-medium text-[#DDDBCB]">{app.client}</span>
+                        <span className="text-ms font-medium text-[#DDDBCB]">{app.clienteNome}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-[#DDDBCB]">{app.date}</span>
-                        <span className="block text-xs text-[#5c5c5c]">{app.time}</span>
+                        <span className="text-sm font-medium text-[#DDDBCB]">
+                          {new Date(app.dataHora).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+                        </span>
+                        <span className="block text-xs text-[#5c5c5c]">
+                          {new Date(app.dataHora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-[#DDDBCB]">{app.barber}</span>
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.funcionarioNome}</span>
+                        <span className="block text-xs text-[#5c5c5c]">{app.funcionarioProfissao}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-[#DDDBCB]">{app.service}</span>
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.servicoNome}</span>
+                        <span className="block text-xs text-[#5c5c5c]">{app.servicoDuracao}min</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="text-sm font-medium text-[#DDDBCB]">{app.value}</span>
+                        <span className="text-sm font-medium text-[#DDDBCB]">{app.clienteTelefone}</span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span className="text-sm font-medium text-[#DDDBCB]">R$ {app.servicoPreco.toFixed(2).replace('.', ',')}</span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <AgendamentoStatusBridge status={app.status} />
@@ -3409,6 +4044,12 @@ const App: React.FC = () => {
 
   // Estado para controlar a visibilidade do modal
   const [isNewAppointmentOpen, setIsNewAppointmentOpen] = useState(false);
+  const [shouldOpenAddProfessionalModal, setShouldOpenAddProfessionalModal] = useState(false);
+
+  const handleNavigateToProfessionals = () => {
+    setCurrentPage('Profissionais');
+    setShouldOpenAddProfessionalModal(true);
+  };
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
   const handleAddClient = (newClient: Client) => {
@@ -3487,11 +4128,18 @@ const App: React.FC = () => {
           {currentPage === 'Dashboard' && (
             <DashboardContent
               onOpenNewAppointment={() => setIsNewAppointmentOpen(true)}
+              onNavigateToProfessionals={handleNavigateToProfessionals}
             />
           )}
-          {currentPage === 'Profissionais' && <ProfissionaisContent />}
+          {currentPage === 'Profissionais' && (
+            <ProfissionaisContent
+              shouldOpenAddModal={shouldOpenAddProfessionalModal}
+              onModalOpened={() => setShouldOpenAddProfessionalModal(false)}
+            />
+          )}
           {currentPage === 'Serviços' && <ServicosContent />}
           {currentPage === 'Agendamentos' && <AgendamentosContent />}
+          {currentPage === 'Avaliações' && <AvaliacoesContent />}
           {currentPage === 'Gestão Financeira' && <FinancialContent />}
           {currentPage === 'Clientes' && <ClientesContent />}
         </div>
