@@ -4,17 +4,6 @@ import { BarberShop, Service, Professional, WorkingHours, ApiError } from '@/typ
 import axios from 'axios';
 
 export const barberShopService = {
-    listBarberShops: async (): Promise<BarberShop[]> => {
-        try {
-            const response = await api.get<BarberShop[]>('/barbearias');
-            return response.data;
-        } catch (error: unknown) {
-            if (axios.isAxiosError(error) && error.response) {
-                throw error.response.data as ApiError;
-            }
-            throw { message: 'Erro de rede' };
-        }
-    },
 
     listServices: async (barberShopId: number): Promise<Service[]> => {
         try {
@@ -159,6 +148,56 @@ export const barberShopService = {
             if (axios.isAxiosError(error) && error.response) {
                 if (error.response.status === 404) {
                     return null;
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    /**
+     * List all appointments for the authenticated barbershop
+     * Returns complete appointment history
+     */
+    listAllAppointments: async (): Promise<import('@/types/api').DetailedAppointment[]> => {
+        try {
+            const response = await api.get<import('@/types/api').DetailedAppointment[]>('/barbearias/agendamentos/todos');
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT ausente ou inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Usuário não possui role BARBEARIA' } as ApiError;
+                }
+                throw error.response.data as ApiError;
+            }
+            throw { message: 'Erro de rede' };
+        }
+    },
+
+    /**
+     * List only future appointments for the authenticated barbershop
+     * Returns appointments that haven't occurred yet
+     */
+    listFutureAppointments: async (): Promise<import('@/types/api').DetailedAppointment[]> => {
+        try {
+            const response = await api.get<import('@/types/api').DetailedAppointment[]>('/barbearias/agendamentos/futuros');
+            if (response.status === 204 || !response.data) {
+                return [];
+            }
+            return response.data;
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error) && error.response) {
+                if (error.response.status === 401) {
+                    throw { message: 'Token JWT ausente ou inválido' } as ApiError;
+                }
+                if (error.response.status === 403) {
+                    throw { message: 'Usuário não possui role BARBEARIA' } as ApiError;
                 }
                 throw error.response.data as ApiError;
             }
