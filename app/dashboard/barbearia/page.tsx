@@ -1,6 +1,6 @@
 'use client';
 // app/barbershop/dashboard/page.tsx
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   LayoutGrid,
   Users,
@@ -41,6 +41,8 @@ import { professionalService } from '@/services/professionalService';
 import { serviceService } from '@/services/serviceService';
 import { barberShopService } from '@/services/barberShopService';
 import { appointmentService } from '@/services/appointmentService';
+import { financeiroService } from '@/services/financeiroService';
+import { DashboardMetricas, RelatorioGeral } from '@/types/api';
 
 // Tipos (Typescript)
 
@@ -80,12 +82,7 @@ interface Appointment {
 // Tipos de Páginas de Agendamentos
 type AppointmentStatus = 'Concluído' | 'Cancelado' | 'Pendente' | 'Confirmado';
 
-interface ActiveBarber {
-  initials: string;
-  name: string;
-  total: number;
-  next: number;
-}
+
 
 interface Barber {
   id: string;
@@ -132,7 +129,9 @@ interface Transaction {
 interface AddTransactionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onConfirm: (transaction: Omit<Transaction, 'id'>) => void;
+  onConfirm: (transaction: Omit<Transaction, 'id'> | Transaction) => void;
+  initialData?: Transaction;
+  isEditing?: boolean;
 }
 
 interface AddProfessionalModalProps {
@@ -264,70 +263,10 @@ const StatsCard: React.FC<StatsCardProps> = ({ icon: Icon, title, value }) => (
 
 //Componente Item de Agendamento
 
-const AppointmentItem: React.FC<Appointment> = ({ time, client, barber, service, value, status }) => (
-  <div className="py- p-4 bg-[#0C0C0C] rounded-lg mh-4 my-3">
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-      {/* Informacoes Principais */}
-      <div className="flex items-center space-x-4 mb-4 md:mb-0">
-        <span className="text-2xl font-black text-[#DDDBCB] w-20">{time}</span>
-        <div className="flex-1">
-          <p className="text-lg font-semibold text-[#DDDBCB]">{client}</p>
-          <p className="text-sm text-[#5C5C5C]">{barber}</p>
 
-        </div>
-        <div>
-          <p className="text-lg font-semibold text-[#DDDBCB]">{service}</p>
-          <p className="text-sm text-[#5C5C5C]">{value}</p>
-        </div>
-      </div>
-
-      {/* Status e Ações */}
-      <div className="flex flex-col sm:flex-row sm:items-center space-y-3 sm:space-y-0 sm:space-x-4">
-        <div className="flex items-center space-x-2">
-          {status === 'Pendente' ? (
-            <Clock className="w-5 h-5 text-[#5C5C5C]" />
-          ) : (
-            <Check className="w-5 h-5 text-[#58BEC3]" />
-          )}
-          <span className={`text-sm font-medium ${status === 'Pendente' ? 'text-[#5C5C5C]' : 'text-[#58BEC3]'}`}>{status}</span>
-        </div>
-
-        <div className="flex items-center space-x-2">
-          {status === 'Pendente' && (
-            <button className="flex items-center justify-center text-sm bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] px-3 py-2 rounded-md transition colors">
-              <Check className="w-4 h-4 mr-1" />
-              Confirmar
-            </button>
-          )}
-          <button className="flex items-center justify-center text-sm bg-[#5C5C5C] hover:bg-[#767676] text-white px-3 py-2 rounded-md transition-colors">
-            <RefreshCw className="w-4 h-4 mr-1" />
-            Recarregar
-          </button>
-        </div>
-      </div>
-    </div>
-  </div>
-);
 
 // Componente Item de Barbeiro Ativo
-const ActiveBarberItem: React.FC<ActiveBarber> = ({ initials, name, total, next }) => (
-  <div className="flex items-center justify-between py-3 border-b border-gray-700 last:border-b-0">
-    <div className="flex items-center space-x-4">
-      <div className="w-10 h-10 bg-[#5C5C5C] rounded-full flex items-center justify-center font-bold text-white">
-        {initials}
-      </div>
-      <div>
-        <p className="text-lg font-bold text-[#DDDBCB]">{name}</p>
-        <p className="text-xs font-semibold text-[#5C5C5C]">Agendamentos:</p>
-        <p className="text-xs text-[#DDDBCB]">{total}</p>
-      </div>
-    </div>
-    <div className="text-right">
-      <p className="text-sm font-semibold text-[#DDDBCB]">{next}</p>
-      <p className="text-xs text-[#5C5C5C]">Próx. 7d At.:</p>
-    </div>
-  </div>
-);
+
 
 // Dados Modelo (Simulação)
 
@@ -357,16 +296,7 @@ const initialAppointmentsData: Appointment[] = [
   { id: 'd5', date: '01/11', time: '14:00', client: 'Carlos Pereira', barber: 'Marcos Alves', service: 'Corte', value: 'R$50,00', status: 'Concluído' },
 ];
 
-const appointmentsData: Appointment[] = [
-  { id: 'd1', date: '09/11', time: '10:00', client: 'Carlos Pereira', barber: 'Nome Barbeiro', service: 'Corte', value: 'R$50,00', status: 'Pendente' },
-  { id: 'd2', date: '09/11', time: '11:00', client: 'Otávio Augusto', barber: 'Nome Barbeiro', service: 'Corte', value: 'R$50,00', status: 'Confirmado' },
-];
 
-const activeBarbersData: ActiveBarber[] = [
-  { initials: 'JS', name: 'João Silva', total: 100, next: 5 },
-  { initials: 'JS', name: 'João Silva', total: 150, next: 5 },
-  { initials: 'JS', name: 'João Silva', total: 100, next: 8 },
-];
 
 const barbeirosData: Barber[] = [
   {
@@ -407,13 +337,6 @@ const barbeirosData: Barber[] = [
   },
 ];
 
-const initialTransactionsData: Transaction[] = [
-  { id: 't1', description: 'Corte - Carlos Pereira', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
-  { id: 't2', description: 'Barba - Otávio Augusto', category: 'Serviço', date: '09/11', amount: 40.00, type: 'income', status: 'Pago' },
-  { id: 't3', description: 'Compra de Produtos', category: 'Estoque', date: '08/11', amount: 150.00, type: 'expense', status: 'Pago' },
-  { id: 't4', description: 'Conta de Luz', category: 'Utilidades', date: '05/11', amount: 320.00, type: 'expense', status: 'Pendente' },
-  { id: 't5', description: 'Corte - Marcos Santos', category: 'Serviço', date: '09/11', amount: 50.00, type: 'income', status: 'Pago' },
-];
 
 // Dados Iniciais de Clientes (Combinando com os nomes dos agendamentos)
 const initialClientsData: Client[] = [
@@ -787,32 +710,47 @@ const AddServiceModal: React.FC<AddServiceModalProps> = ({ isOpen, onClose, onSu
   );
 };
 
-const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, onConfirm }) => {
+const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClose, onConfirm, initialData, isEditing }) => {
   const [type, setType] = useState<'income' | 'expense'>('expense');
   const [amount, setAmount] = useState('');
   const [category, setCategory] = useState('');
   const [barberId, setBarberId] = useState('');
   const [description, setDescription] = useState('');
+  const [date, setDate] = useState('');
 
   const expenseCategories = ['Pagamento Barbeiro', 'Contas (Luz/Água)', 'Estoque', 'Marketing', 'Aluguel', 'Outros'];
   const incomeCategories = ['Serviço', 'Venda de Produto', 'Outros'];
 
   useEffect(() => {
     if (isOpen) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setAmount('');
-      setCategory('');
-      setBarberId('');
-      setDescription('');
+      if (isEditing && initialData) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
+        setType(initialData.type);
+        setAmount(initialData.amount.toString());
+        setCategory(initialData.category);
+        setDescription(initialData.description);
+        setDate(initialData.date); // Assuming date is in a compatible format or handled
+        // Logic to set barberId if applicable (needs mapping from name to ID or storing ID in Transaction)
+        // For now, we might not be able to pre-select the barber if we only have the name in Transaction
+      } else {
+        setAmount('');
+        setCategory('');
+        setBarberId('');
+        setDescription('');
+        setDate('');
+        setType('expense'); // Default to expense for new
+      }
     }
-  }, [isOpen]);
+  }, [isOpen, isEditing, initialData]);
 
   useEffect(() => {
-    // Reset fields when type changes
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setCategory('');
-    setBarberId('');
-  }, [type]);
+    if (!isEditing) {
+      // Reset fields when type changes only if not editing
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setCategory('');
+      setBarberId('');
+    }
+  }, [type, isEditing]);
 
   if (!isOpen) return null;
 
@@ -821,6 +759,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
     amount !== '' &&
     parseFloat(amount) > 0 &&
     category !== '' &&
+    date !== '' &&
     (!isBarberRequired || barberId !== '');
 
   const handleSubmit = () => {
@@ -832,15 +771,21 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
       barberName = selectedBarber ? selectedBarber.name : undefined;
     }
 
-    onConfirm({
+    const transactionData = {
       type,
       amount: parseFloat(amount),
       category,
       barberName,
       description: description || (type === 'income' ? 'Nova Receita' : 'Nova Despesa'),
-      date: new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
-      status: 'Pago'
-    });
+      date: date || new Date().toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }),
+      status: 'Pago' as const
+    };
+
+    if (isEditing && initialData) {
+      onConfirm({ ...transactionData, id: initialData.id });
+    } else {
+      onConfirm(transactionData);
+    }
   };
 
   return (
@@ -848,7 +793,7 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
       <div className="bg-[#151515] w-full max-w-md rounded-xl border border-[#292929] shadow-2xl transform transition-all scale-100 opacity-100">
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-[#292929]">
-          <h2 className="text-lg font-bold text-[#DDDBCB]">Nova Transação</h2>
+          <h2 className="text-lg font-bold text-[#DDDBCB]">{isEditing ? 'Editar Transação' : 'Nova Transação'}</h2>
           <button onClick={onClose} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
             <X className="w-5 h-5" />
           </button>
@@ -885,6 +830,25 @@ const AddTransactionModal: React.FC<AddTransactionModalProps> = ({ isOpen, onClo
                 className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 pl-10 pr-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
               />
             </div>
+          </div>
+
+          {/* Date */}
+          <div>
+            <label className="block text-xs font-medium text-[#5C5C5C] mb-1">Data *</label>
+            <input
+              type="date"
+              value={date ? date.split('/').reverse().join('-') : ''} // Convert DD/MM/YYYY to YYYY-MM-DD for input
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val) {
+                  const [year, month, day] = val.split('-');
+                  setDate(`${day}/${month}/${year}`);
+                } else {
+                  setDate('');
+                }
+              }}
+              className="w-full bg-[#050505] border border-[#292929] rounded-lg py-2.5 px-4 text-[#DDDBCB] focus:outline-none focus:border-[#58BEC3] focus:ring-1 focus:ring-[#58BEC3] transition-all"
+            />
           </div>
 
           {/* Category */}
@@ -1336,7 +1300,7 @@ const ClientDetailsModal: React.FC<{ client: Client | null, isOpen: boolean, onC
   if (!isOpen || !client) return null;
 
   // Filtrar agendamentos deste cliente
-  const history = appointmentsData.filter(app => app.client === client.name);
+  const history = initialAppointmentsData.filter(app => app.client === client.name);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4 transition-all duration-300 animate-in fade-in">
@@ -1558,16 +1522,23 @@ const DashboardContent: React.FC<{
   const [activeProfessionals, setActiveProfessionals] = React.useState<import('@/types/api').ProfessionalResponse[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [actionLoadingId, setActionLoadingId] = React.useState<number | null>(null);
+  const [metrics, setMetrics] = React.useState<DashboardMetricas | null>(null);
+  const [relatorio, setRelatorio] = React.useState<RelatorioGeral | null>(null);
 
   const fetchData = async () => {
     try {
       setLoading(true);
-      const [appointmentsData, professionalsData] = await Promise.all([
+      const [appointmentsData, professionalsData, metricsData, relatorioData] = await Promise.all([
         barberShopService.listFutureAppointments(),
-        professionalService.listMyProfessionals()
+        professionalService.listMyProfessionals(),
+        financeiroService.obterMetricasDashboard(),
+        financeiroService.obterRelatorioGeral('MES')
       ]);
 
       setAppointments(appointmentsData);
+
+      setMetrics(metricsData);
+      setRelatorio(relatorioData);
 
       // Filter only active professionals
       const activeProfs = professionalsData.filter(p => p.ativo);
@@ -1631,13 +1602,26 @@ const DashboardContent: React.FC<{
 
       {/* Grid de Estatísticas */}
       <div className="grid grid-cols-1 sm:grid-cols-2 x1:grid-cols-4 gap-6 mb-8">
-        {statsData.map((stat) => (
-          <StatsCard
-            key={stat.title}
-            icon={stat.icon}
-            title={stat.title}
-            value={stat.value} />
-        ))}
+        <StatsCard
+          icon={DollarSign}
+          title="Receita"
+          value={`R$ ${relatorio?.faturamentoTotal.toFixed(2) || '0.00'}`}
+        />
+        <StatsCard
+          icon={TrendingUp}
+          title="Projeção (7d)"
+          value={`R$ ${(relatorio?.faturamentoTotal || 0) * 1.2 ? ((relatorio?.faturamentoTotal || 0) * 1.2).toFixed(2) : '0.00'}`}
+        />
+        <StatsCard
+          icon={Percent}
+          title="Ticket Médio"
+          value={`R$ ${relatorio?.ticketMedio.toFixed(2) || '0.00'}`}
+        />
+        <StatsCard
+          icon={Calendar}
+          title="Agendamentos"
+          value={metrics?.agendamentosMes.toString() || '0'}
+        />
       </div>
 
       {/* Layout Principal (Agendamentos e Barbeiros) */}
@@ -1717,6 +1701,8 @@ const DashboardContent: React.FC<{
             onClick={onNavigateToProfessionals}
             className="w-full bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-3 px-4 rounded-lg transition-colors mt-4"
           >
+            {/* Assuming 'isEditing' would be a prop passed to DashboardContent or derived within it */}
+            {/* For now, keeping the original text as 'isEditing' is not defined here */}
             Adicionar Profissional
           </button>
         </div>
@@ -1954,7 +1940,7 @@ const ManageServicesModal: React.FC<ManageServicesModalProps> = ({ isOpen, onClo
       // Pre-select these services
       const serviceIds = professionalServices.map(s => s.id);
       setSelectedServices(serviceIds);
-    } catch (error) {
+    } catch {
       // Silently handle error if endpoint doesn't exist yet
       // User can still select services manually
       setSelectedServices([]);
@@ -3135,13 +3121,7 @@ const AvaliacoesContent: React.FC = () => {
 
   const barbeariaId = getBarbeariaId();
 
-  React.useEffect(() => {
-    if (barbeariaId) {
-      loadReviews();
-    }
-  }, [barbeariaId]);
-
-  const loadReviews = async () => {
+  const loadReviews = useCallback(async () => {
     try {
       setLoading(true);
       setError('');
@@ -3154,7 +3134,13 @@ const AvaliacoesContent: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [barbeariaId]);
+
+  React.useEffect(() => {
+    if (barbeariaId) {
+      loadReviews();
+    }
+  }, [barbeariaId, loadReviews]);
 
   const renderStars = (rating: number) => {
     return Array.from({ length: 5 }, (_, index) => (
@@ -3212,7 +3198,7 @@ const AvaliacoesContent: React.FC = () => {
                   {/* Comentário */}
                   {review.comentario && (
                     <p className="text-[#DDDBCB] mb-4 italic bg-[#050505] p-4 rounded-lg border border-[#292929]">
-                      "{review.comentario}"
+                      &quot;{review.comentario}&quot;
                     </p>
                   )}
 
@@ -3639,56 +3625,260 @@ const AgendamentosContent: React.FC = () => {
 // Componente GestãoFinanceira
 const FinancialContent: React.FC = () => {
   const [periodFilter, setPeriodFilter] = React.useState<'Semanal' | 'Mensal' | 'Total'>('Semanal');
-  const [transactions, setTransactions] = useState<Transaction[]>(initialTransactionsData);
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [editingTransaction, setEditingTransaction] = useState<Transaction | undefined>(undefined);
+  const [dashboardMetrics, setDashboardMetrics] = useState<DashboardMetricas | null>(null);
+  const [relatorioGeral, setRelatorioGeral] = useState<RelatorioGeral | null>(null);
+
+  const fetchTransactions = async () => {
+    try {
+      setLoading(true);
+      const [receitas, despesas, metricas, relatorio] = await Promise.all([
+        financeiroService.listarReceitas(),
+        financeiroService.listarDespesas(),
+        financeiroService.obterMetricasDashboard(),
+        financeiroService.obterRelatorioGeral('MES') // Default to MES, can be dynamic based on periodFilter
+      ]);
+
+      console.log('Dashboard Metrics:', metricas);
+      console.log('Relatorio Geral:', relatorio);
+      setDashboardMetrics(metricas);
+      setRelatorioGeral(relatorio);
+
+      const mappedReceitas: Transaction[] = receitas.map(r => {
+        const [year, month, day] = r.dataTransacao.split('T')[0].split('-');
+        return {
+          id: r.id.toString(),
+          description: r.descricao,
+          category: r.categoria,
+          date: `${day}/${month}/${year}`,
+          amount: r.valor,
+          type: 'income',
+          status: 'Pago'
+        };
+      });
+
+      const mappedDespesas: Transaction[] = despesas.map(d => {
+        const [year, month, day] = d.dataTransacao.split('T')[0].split('-');
+        return {
+          id: d.id.toString(),
+          description: d.descricao,
+          category: d.categoria,
+          date: `${day}/${month}/${year}`,
+          amount: d.valor,
+          type: 'expense',
+          status: 'Pago'
+        };
+      });
+
+      // Sort by date descending (simple string comparison for DD/MM is not ideal, but sufficient for display if consistent)
+      // Better to parse date for sorting
+      const sortedTransactions = [...mappedReceitas, ...mappedDespesas].sort((a, b) => {
+        const [dayA, monthA] = a.date.split('/');
+        const [dayB, monthB] = b.date.split('/');
+        const dateA = new Date(new Date().getFullYear(), parseInt(monthA) - 1, parseInt(dayA));
+        const dateB = new Date(new Date().getFullYear(), parseInt(monthB) - 1, parseInt(dayB));
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      setTransactions(sortedTransactions);
+    } catch (error) {
+      console.error('Erro ao buscar transações:', error);
+      setToastMessage('Erro ao carregar transações.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, [periodFilter]);
 
   // Simulação de filtro de valores baseados no período
+  // Use API metrics if available, otherwise fallback to 0
   const metrics = useMemo(() => {
-    const totalIncome = transactions
-      .filter(t => t.type === 'income')
-      .reduce((acc, curr) => acc + curr.amount, 0);
-
-    const totalExpense = transactions
+    // Calculate expenses from the transactions list since it's not in RelatorioGeral
+    const totalExpenses = transactions
       .filter(t => t.type === 'expense')
       .reduce((acc, curr) => acc + curr.amount, 0);
 
-    const displayIncome = totalIncome;
-    const displayExpense = totalExpense;
+    if (relatorioGeral) {
+      return {
+        revenue: relatorioGeral.faturamentoTotal || 0,
+        expenses: totalExpenses,
+        profit: (relatorioGeral.faturamentoTotal || 0) - totalExpenses,
+        projection: (relatorioGeral.faturamentoTotal || 0) * 1.2, // Mock projection
+        ticket: relatorioGeral.ticketMedio || 0
+      };
+    }
 
     return {
-      revenue: displayIncome,
-      expenses: displayExpense,
-      profit: displayIncome - displayExpense,
-      projection: displayIncome * 1.2,
-      ticket: 60.00
+      revenue: 0,
+      expenses: totalExpenses,
+      profit: -totalExpenses,
+      projection: 0,
+      ticket: 0
     };
-  }, [transactions]);
+  }, [relatorioGeral, transactions]);
 
-  const handleAddTransaction = (newTxData: Omit<Transaction, 'id'>) => {
-    const newTransaction: Transaction = {
-      id: Math.random().toString(36).substr(2, 9),
-      ...newTxData
-    };
+  const handleAddTransaction = async (newTxData: Omit<Transaction, 'id'> | Transaction) => {
+    try {
+      // Convert date from DD/MM to YYYY-MM-DD for API
+      // Convert date from DD/MM/YYYY to YYYY-MM-DD for API
+      const parts = newTxData.date.split('/');
+      let formattedDate;
+      if (parts.length === 3) {
+        const [day, month, year] = parts;
+        formattedDate = `${year}-${month}-${day}`;
+      } else {
+        // Fallback if date format is unexpected (e.g. DD/MM)
+        const [day, month] = parts;
+        const year = new Date().getFullYear();
+        formattedDate = `${year}-${month}-${day}`;
+      }
 
-    setTransactions(prev => [newTransaction, ...prev]);
-    setIsModalOpen(false);
-    setToastMessage("Transação registrada com sucesso!");
+      const categoryMapping: Record<string, string> = {
+        // Despesas
+        'Pagamento Barbeiro': 'COMISSAO', // Tentative
+        'Contas (Luz/Água)': 'CONTAS', // Tentative
+        'Estoque': 'ESTOQUE', // Tentative
+        'Marketing': 'MARKETING', // Tentative
+        'Aluguel': 'ALUGUEL', // Confirmed
+        'Outros': 'OUTROS', // Tentative
+        // Receitas
+        'Serviço': 'SERVICO', // Tentative
+        'Venda de Produto': 'VENDA_PRODUTO', // Confirmed
+      };
+
+      // If the category is not in the mapping, default to 'OUTROS'
+      // Also, if the user selected 'Pagamento Barbeiro' and it fails, we might want to try 'OUTROS'
+      // But for now, let's stick to the mapping.
+      const backendCategory = categoryMapping[newTxData.category] || 'OUTROS';
+
+      // Append barber name to description if available and not already in description
+      let finalDescription = newTxData.description;
+      if (newTxData.barberName && !finalDescription.includes(newTxData.barberName)) {
+        finalDescription = `${finalDescription} - ${newTxData.barberName}`;
+      }
+
+      console.log('Sending transaction payload:', {
+        type: newTxData.type,
+        valor: newTxData.amount,
+        categoria: backendCategory,
+        descricao: finalDescription,
+        dataTransacao: formattedDate,
+        id: 'id' in newTxData ? newTxData.id : undefined
+      });
+
+      if ('id' in newTxData && newTxData.id) {
+        // Edit
+        if (newTxData.type === 'income') {
+          await financeiroService.editarReceita(parseInt(newTxData.id), {
+            valor: newTxData.amount,
+            categoria: backendCategory,
+            descricao: finalDescription,
+            dataTransacao: formattedDate
+          });
+        } else {
+          await financeiroService.editarDespesa(parseInt(newTxData.id), {
+            valor: newTxData.amount,
+            categoria: backendCategory,
+            descricao: finalDescription,
+            dataTransacao: formattedDate
+          });
+        }
+        setToastMessage("Transação atualizada com sucesso!");
+      } else {
+        // Create
+        if (newTxData.type === 'income') {
+          await financeiroService.adicionarReceita({
+            valor: newTxData.amount,
+            categoria: backendCategory,
+            descricao: finalDescription,
+            dataTransacao: formattedDate
+          });
+        } else {
+          await financeiroService.adicionarDespesa({
+            valor: newTxData.amount,
+            categoria: backendCategory,
+            descricao: finalDescription,
+            dataTransacao: formattedDate
+          });
+        }
+        setToastMessage("Transação registrada com sucesso!");
+      }
+
+      fetchTransactions();
+      setIsModalOpen(false);
+      setEditingTransaction(undefined);
+    } catch (error) {
+      console.error('Erro ao salvar transação:', error);
+      setToastMessage('Erro ao salvar transação.');
+    }
+  };
+
+  const handleEditClick = (transaction: Transaction) => {
+    setEditingTransaction(transaction);
+    setIsModalOpen(true);
+  };
+
+  const handleDeleteClick = async (transaction: Transaction) => {
+    if (!confirm('Tem certeza que deseja remover esta transação?')) return;
+
+    try {
+      if (transaction.type === 'income') {
+        await financeiroService.removerReceita(parseInt(transaction.id));
+      } else {
+        await financeiroService.removerDespesa(parseInt(transaction.id));
+      }
+      setToastMessage("Transação removida com sucesso!");
+      fetchTransactions();
+    } catch (error) {
+      console.error('Erro ao remover transação:', error);
+      setToastMessage('Erro ao remover transação.');
+    }
   };
 
   // Dados aleatórios estáticos para o gráfico para evitar que as barras "dancem" na renderização.
+  // Calculate chart data from transactions
   const chartData = useMemo(() => {
-    // Use a seeded random or static values to ensure purity during render, 
-    // or just generate once on mount which is what useMemo with [] does.
-    // However, React Strict Mode might call this twice.
-    // Let's use a simple deterministic generator based on index to avoid "impure" warning if possible,
-    // or just accept that for this mock data it's fine but we want to silence the linter.
-    // Better: generate data in useEffect and store in state, OR just use fixed values.
-    return ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'].map((day, index) => ({
-      day,
-      height: 20 + (index * 10) % 60 // Deterministic value
-    }));
-  }, []);
+    const days = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'];
+    const today = new Date();
+    const last7Days = Array.from({ length: 7 }, (_, i) => {
+      const d = new Date(today);
+      d.setDate(today.getDate() - (6 - i));
+      return d;
+    });
+
+    return last7Days.map(date => {
+      const dateStr = date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' }); // DD/MM
+
+      // Filter transactions for this day
+      const dayTransactions = transactions.filter(t => {
+        // t.date is DD/MM/YYYY
+        return t.date.startsWith(dateStr) && t.type === 'income';
+      });
+
+      const totalAmount = dayTransactions.reduce((acc, curr) => acc + curr.amount, 0);
+      console.log(`Date: ${dateStr}, Total: ${totalAmount}, Transactions: ${dayTransactions.length}`);
+
+      // Normalize height for chart (max height 100%)
+      // Find max value across all days to scale relative to it
+      // For now, let's just use a simple scaling or cap at 100 if we don't calculate max first.
+      // But to do it right, we need the max value of the week.
+      return {
+        day: days[date.getDay()],
+        height: totalAmount, // We will scale this in the render or just use raw value if we change the render logic
+        value: totalAmount
+      };
+    });
+  }, [transactions]);
+
+  // Find max value to scale chart bars
+  const maxChartValue = Math.max(...chartData.map(d => d.value), 1); // Avoid division by zero
 
   return (
     <div className="animate-in fade-in duration-500">
@@ -3715,8 +3905,13 @@ const FinancialContent: React.FC = () => {
       {/* Modal */}
       <AddTransactionModal
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
+        onClose={() => {
+          setIsModalOpen(false);
+          setEditingTransaction(undefined);
+        }}
         onConfirm={handleAddTransaction}
+        initialData={editingTransaction}
+        isEditing={!!editingTransaction}
       />
 
       {/* Header e Filtros */}
@@ -3743,7 +3938,10 @@ const FinancialContent: React.FC = () => {
           </div>
 
           <button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => {
+              setEditingTransaction(undefined);
+              setIsModalOpen(true);
+            }}
             className="bg-[#58BEC3] hover:bg-[#7ADBE0] text-[#151515] font-bold py-2.5 px-4 rounded-lg transition-colors flex items-center shadow-lg shadow-[#58BEC3]/10"
           >
             <Plus className="w-5 h-5 md:mr-2" />
@@ -3770,9 +3968,9 @@ const FinancialContent: React.FC = () => {
           value={`R$ ${metrics.ticket.toFixed(2)}`}
         />
         <StatsCard
-          icon={Wallet}
-          title="Despesas"
-          value={`R$ ${metrics.expenses.toFixed(2)}`}
+          icon={Calendar}
+          title="Agendamentos"
+          value={dashboardMetrics?.agendamentosMes?.toString() || '0'}
         />
       </div>
 
@@ -3794,14 +3992,14 @@ const FinancialContent: React.FC = () => {
               <div key={item.day} className="flex flex-col items-center justify-end flex-1 group h-full relative">
                 {/* Tooltip */}
                 <div className="absolute -top-10 bg-[#DDDBCB] text-[#050505] text-xs font-bold px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-all duration-200 z-10 whitespace-nowrap shadow-xl translate-y-2 group-hover:translate-y-0 pointer-events-none">
-                  R$ {item.height * 10},00
+                  R$ {item.value.toFixed(2)}
                   <div className="absolute bottom-[-4px] left-1/2 -translate-x-1/2 w-2 h-2 bg-[#DDDBCB] rotate-45"></div>
                 </div>
 
                 {/* Bar */}
                 <div
                   className="w-full max-w-[40px] bg-[#58BEC3] rounded-t-sm opacity-80 group-hover:opacity-100 transition-all duration-300 hover:shadow-[0_0_15px_rgba(88,190,195,0.3)]"
-                  style={{ height: `${item.height}%` }}
+                  style={{ height: `${(item.value / maxChartValue) * 100}%` }}
                 ></div>
                 <span className="text-xs text-[#5C5C5C] mt-3 font-medium">{item.day}</span>
               </div>
@@ -3817,7 +4015,12 @@ const FinancialContent: React.FC = () => {
           </div>
 
           <div className="flex-1 overflow-y-auto pr-2 space-y-3 custom-scrollbar">
-            {transactions.length === 0 ? (
+            {loading ? (
+              <div className="flex flex-col items-center justify-center h-full">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#58BEC3] mb-2"></div>
+                <p className="text-[#5C5C5C] text-sm">Carregando transações...</p>
+              </div>
+            ) : transactions.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-[#5C5C5C]">
                 <p className="text-sm">Nenhuma transação encontrada.</p>
               </div>
@@ -3841,6 +4044,14 @@ const FinancialContent: React.FC = () => {
                       R$ {transaction.amount.toFixed(2)}
                     </p>
                     <p className="text-xs text-[#5C5C5C]">{transaction.date}</p>
+                  </div>
+                  <div className="flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity ml-4">
+                    <button onClick={() => handleEditClick(transaction)} className="text-[#5C5C5C] hover:text-[#DDDBCB]">
+                      <Edit className="w-4 h-4" />
+                    </button>
+                    <button onClick={() => handleDeleteClick(transaction)} className="text-[#5C5C5C] hover:text-red-500">
+                      <Trash2 className="w-4 h-4" />
+                    </button>
                   </div>
                 </div>
               ))

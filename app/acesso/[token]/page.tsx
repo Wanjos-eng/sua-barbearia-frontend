@@ -118,14 +118,14 @@ export default function ProfessionalDashboard() {
             console.log('DEBUG APPOINTMENTS RECEIVED:', appts);
             console.log('Number of appointments:', appts.length);
             if (appts.length > 0) {
-                console.log('Appointment times (testing UTC parsing):');
+                console.log('Appointment times (parsing as LOCAL time):');
                 appts.forEach((apt, idx) => {
-                    const rawDate = new Date(apt.dataHora); // Wrong - interprets as local
-                    const utcDate = parseUTCDateTime(apt.dataHora); // Correct - interprets as UTC
+                    const localDate = parseUTCDateTime(apt.dataHora); // Now treats as local
                     console.log(`  ${idx + 1}. ID ${apt.id}:`);
                     console.log(`     Raw: ${apt.dataHora}`);
-                    console.log(`     Without Z (wrong): ${rawDate.toLocaleString('pt-BR')}`);
-                    console.log(`     With Z (correct): ${utcDate.toLocaleString('pt-BR')}`);
+                    console.log(`     Horário Local (Brasil): ${localDate.toLocaleString('pt-BR')}`);
+                    console.log(`     Duração: ${apt.duracao || 'NÃO INFORMADA'} min`);
+                    console.log(`     Data/Hora Fim: ${apt.dataHoraFim || 'NÃO INFORMADA'}`);
                 });
             }
 
@@ -284,21 +284,33 @@ export default function ProfessionalDashboard() {
 
     const timeSlots = generateTimeSlots(8, 20, 30);
 
-    // Helper to parse UTC datetime string correctly
+    // Helper to parse datetime string as LOCAL time (Brazil)
+    // Backend returns times with 'Z' but they are already in Brazil timezone
     const parseUTCDateTime = (dateTimeStr: string): Date => {
-        // If the string doesn't end with 'Z', add it to force UTC parsing
-        const utcStr = dateTimeStr.endsWith('Z') ? dateTimeStr : `${dateTimeStr}Z`;
-        return new Date(utcStr);
+        // Remove 'Z' to treat as local time instead of UTC
+        const localStr = dateTimeStr.endsWith('Z') ? dateTimeStr.slice(0, -1) : dateTimeStr;
+        return new Date(localStr);
     };
 
     const getAppointmentForSlot = (slot: string) => {
         const selectedDateStr = formatDateToISO(selectedDate);
-        return appointments.find(apt => {
+        const found = appointments.find(apt => {
             const aptDate = parseUTCDateTime(apt.dataHora);
             const aptDateStr = formatDateToISO(aptDate);
             const aptTime = `${aptDate.getHours().toString().padStart(2, '0')}:${aptDate.getMinutes().toString().padStart(2, '0')}`;
+
+            if (aptDateStr === selectedDateStr) {
+                console.log(`[Verificando Slot ${slot}] Agendamento ID ${apt.id} às ${aptTime} (${apt.nomeServico})`);
+            }
+
             return aptDateStr === selectedDateStr && aptTime === slot;
         });
+
+        if (found) {
+            console.log(`[✓ Match] Slot ${slot} = Agendamento ID ${found.id}`);
+        }
+
+        return found;
     };
 
     const getOccupyingAppointment = (slot: string) => {
@@ -325,11 +337,24 @@ export default function ProfessionalDashboard() {
                 endTime = `${endDate.getHours().toString().padStart(2, '0')}:${endDate.getMinutes().toString().padStart(2, '0')}`;
             }
 
+            // Debug log for troubleshooting
+            const isOccupying = slot > startTime && slot < endTime;
+            if (isOccupying) {
+                console.log(`[Slot Ocupado] Slot ${slot} está ocupado pelo agendamento:`, {
+                    servico: apt.nomeServico,
+                    inicio: startTime,
+                    fim: endTime,
+                    duracao: apt.duracao,
+                    dataHoraFim: apt.dataHoraFim
+                });
+            }
+
             // Check if slot is strictly within (startTime, endTime)
-            return slot > startTime && slot < endTime;
+            // We use > startTime (not >=) because the start slot is already shown by getAppointmentForSlot
+            // We use < endTime because if service ends exactly at slot time, that slot should be available
+            return isOccupying;
         });
     };
-
 
 
     const getBlockForSlot = (slot: string) => {

@@ -14,15 +14,20 @@ export const appointmentService = {
             return response.data;
         } catch (error: unknown) {
             if (axios.isAxiosError(error) && error.response) {
+                console.error('Backend error response:', error.response.data);
+                console.error('Status:', error.response.status);
+
                 // Handle specific error cases
                 if (error.response.status === 400) {
-                    throw { message: 'Dados inválidos. Verifique as informações do agendamento.', ...error.response.data } as ApiError;
+                    const message = error.response.data?.message || 'Dados inválidos. Verifique as informações do agendamento.';
+                    throw { message, ...error.response.data } as ApiError;
                 }
                 if (error.response.status === 401) {
                     throw { message: 'Token inválido. Faça login novamente.', ...error.response.data } as ApiError;
                 }
                 if (error.response.status === 422) {
-                    throw { message: 'Horário indisponível ou conflito de agendamento.', ...error.response.data } as ApiError;
+                    const message = error.response.data?.message || 'Horário indisponível ou conflito de agendamento.';
+                    throw { message, ...error.response.data } as ApiError;
                 }
                 throw error.response.data as ApiError;
             }
