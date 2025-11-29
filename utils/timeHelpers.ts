@@ -85,3 +85,17 @@ export const DAY_NAMES = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'S
 export function getDayName(date: Date): string {
     return DAY_NAMES[date.getDay()];
 }
+
+/**
+ * Format date and time to local datetime string for API (YYYY-MM-DDTHH:mm:ss)
+ * This is used for the São Paulo timezone without UTC conversion
+ */
+export function formatToLocalDateTime(date: Date, hours: number, minutes: number): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const h = String(hours).padStart(2, '0');
+    const m = String(minutes).padStart(2, '0');
+    return `${year}-${month}-${day}T${h}:${m}:00`;
+}
+
