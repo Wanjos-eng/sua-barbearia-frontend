@@ -123,7 +123,6 @@ export interface ApiError {
 export interface CreateAppointmentData {
     servicoId: number;
     funcionarioId: number;
-    barbeariaId: number;
     dataHora: string; // ISO 8601 format: "2025-11-25T14:30:00"
     observacoes?: string;
 }
@@ -352,3 +351,102 @@ export interface RepeatAppointmentRequest {
     novaDataHora: string;
 }
 
+// Financeiro
+export interface Receita {
+    id: number;
+    barbeariaId: number;
+    valor: number;
+    categoria: string;
+    descricao: string;
+    dataTransacao: string;
+    dataCriacao: string;
+    dataAtualizacao: string;
+}
+
+export interface CreateReceitaData {
+    valor: number;
+    categoria: string;
+    descricao: string;
+    dataTransacao: string;
+}
+
+export interface UpdateReceitaData {
+    valor: number;
+    categoria: string;
+    descricao: string;
+    dataTransacao: string;
+}
+
+export interface Despesa {
+    id: number;
+    barbeariaId: number;
+    valor: number;
+    categoria: string;
+    descricao: string;
+    dataTransacao: string;
+    dataCriacao: string;
+    dataAtualizacao: string;
+}
+
+export interface CreateDespesaData {
+    valor: number;
+    categoria: string;
+    descricao: string;
+    dataTransacao: string;
+}
+
+export interface UpdateDespesaData {
+    valor: number;
+    categoria: string;
+    descricao: string;
+    dataTransacao: string;
+}
+
+export interface RelatorioGeral {
+    periodo: string;
+    dataInicio: string;
+    dataFim: string;
+    faturamentoTotal: number;
+    totalAgendamentos: number;
+    ticketMedio: number;
+    faturamentoPorDia: number;
+    servicosMaisRentaveis: ServicoRentavel[];
+}
+
+export interface ServicoRentavel {
+    servicoId: number;
+    servicoNome: string;
+    totalRealizacoes: number;
+    faturamentoTotal: number;
+    percentualFaturamento: number;
+}
+
+export interface RelatorioComissoes {
+    barbeariaId: number;
+    barbeariaNome: string;
+    dataInicio: string;
+    dataFim: string;
+    comissoesPorFuncionario: ComissaoFuncionario[];
+    totalAgendamentos: number;
+    valorTotalServicos: number;
+    totalComissoes: number;
+}
+
+export interface ComissaoFuncionario {
+    funcionarioId: number;
+    funcionarioNome: string;
+    funcionarioEmail: string;
+    perfilType: string;
+    profissao: string;
+    taxaComissao: number;
+    totalServicos: number;
+    valorTotalServicos: number;
+    totalComissoes: number;
+}
+
+export interface DashboardMetricas {
+    totalClientes: number;
+    agendamentosMes: number;
+    receitaMedia: number;
+    taxaCancelamento: number;
+}
