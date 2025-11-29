@@ -24,6 +24,7 @@ import {
 import { barberShopService } from '@/services/barberShopService';
 import { clientService } from '@/services/clientService';
 import { appointmentService } from '@/services/appointmentService';
+import { avaliacaoService } from '@/services/avaliacaoService';
 import { BarberShop, AvailableSlot, Service, Professional, Review } from '@/types/api';
 
 // --- INTERFACES ---
@@ -341,7 +342,12 @@ const ReviewModal: React.FC<{ appointment: UIAppointment, onClose: () => void }>
   );
 };
 
-const AppointmentRow: React.FC<{ app: UIAppointment }> = ({ app }) => (
+const AppointmentRow: React.FC<{
+  app: UIAppointment;
+  onCancel: (id: string) => void;
+  onReschedule: (id: string) => void;
+  loading?: boolean;
+}> = ({ app, onCancel, onReschedule, loading }) => (
   <div className="flex flex-col md:flex-row items-start md:items-center justify-between py-6 border-b border-white/5 last:border-0 gap-4 md:gap-0">
     <div className="text-3xl font-bold text-white w-24">
       {app.time}
@@ -368,16 +374,24 @@ const AppointmentRow: React.FC<{ app: UIAppointment }> = ({ app }) => (
       )}
     </div>
     <div className="flex flex-col gap-2 w-32">
-      {app.status === 'PENDENTE' || app.status === 'pending' ? (
-        <button className="flex items-center justify-center gap-2 bg-[#d97757]/20 hover:bg-[#d97757]/30 text-[#d97757] text-xs py-1.5 px-3 rounded transition-colors">
-          <X className="w-3 h-3" /> Cancelar
+      {(app.status === 'PENDENTE' || app.status === 'pending' || app.status === 'CONFIRMADO') && (
+        <button
+          onClick={() => onCancel(app.id)}
+          disabled={loading}
+          className="flex items-center justify-center gap-2 bg-[#d97757]/20 hover:bg-[#d97757]/30 text-[#d97757] text-xs py-1.5 px-3 rounded transition-colors disabled:opacity-50"
+        >
+          {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <X className="w-3 h-3" />}
+          {loading ? 'Cancelando...' : 'Cancelar'}
         </button>
-      ) : (
-        <span className="text-xs text-zinc-600 text-center"></span>
       )}
 
-      <button className="flex items-center justify-center gap-2 bg-[#e4e4e7] hover:bg-white text-zinc-900 text-xs py-1.5 px-3 rounded font-medium transition-colors">
-        <RefreshCw className="w-3 h-3" /> Reagendar
+      <button
+        onClick={() => onReschedule(app.id)}
+        disabled={loading}
+        className="flex items-center justify-center gap-2 bg-[#e4e4e7] hover:bg-white text-zinc-900 text-xs py-1.5 px-3 rounded font-medium transition-colors disabled:opacity-50"
+      >
+        {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <RefreshCw className="w-3 h-3" />}
+        {loading ? 'Processando...' : 'Reagendar'}
       </button>
     </div>
   </div>
@@ -654,7 +668,22 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
           // Therefore, we don't need to filter for consecutive slots manually on the frontend.
           // We just display the slots returned by the API.
 
-          setAvailableSlots(rawSlots);
+          // Filter out past slots if the selected date is today
+          const now = new Date();
+          const isToday = selectedDate.getFullYear() === now.getFullYear() &&
+            selectedDate.getMonth() === now.getMonth() &&
+            selectedDate.getDate() === now.getDate();
+
+          const filteredSlots = isToday
+            ? rawSlots.filter(slot => {
+              const [hours, minutes] = slot.horarioInicio.split(':').map(Number);
+              const slotTime = new Date(selectedDate);
+              slotTime.setHours(hours, minutes, 0, 0);
+              return slotTime > now;
+            })
+            : rawSlots;
+
+          setAvailableSlots(filteredSlots);
 
         } catch (error) {
           console.error("Error fetching slots:", error);
@@ -683,34 +712,28 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
       setCreatingAppointment(true);
       setError('');
 
-      // Construct date time with proper timezone offset for Brazil (UTC-3)
+      // Parse time from slot
+      const [hours, minutes] = selectedSlot.horarioInicio.split(':').map(Number);
+
+      // Format as LocalDateTime (YYYY-MM-DDTHH:mm:ss)
+      // Backend treats this as local Brazil time
       const year = selectedDate.getFullYear();
       const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
       const day = String(selectedDate.getDate()).padStart(2, '0');
-
-      // selectedSlot.horarioInicio is expected to be "HH:mm:ss" or "HH:mm"
-      const [hours, minutes] = selectedSlot.horarioInicio.split(':');
-
-      // Create a proper Date object with selected date and time
-      const appointmentDateTime = new Date(selectedDate);
-      appointmentDateTime.setHours(parseInt(hours), parseInt(minutes), 0, 0);
-
-      // Format as ISO string which includes the timezone offset
-      const dataHora = appointmentDateTime.toISOString();
+      const h = String(hours).padStart(2, '0');
+      const m = String(minutes).padStart(2, '0');
+      const dataHora = `${year}-${month}-${day}T${h}:${m}:00`;
 
       console.log('Sending appointment data:', {
         servicoId: selectedService.id,
         funcionarioId: selectedSlot.funcionarioId,
-        barbeariaId: shop.id,
         dataHora: dataHora,
-        localTime: appointmentDateTime.toLocaleString('pt-BR'),
         observacoes: notes || undefined
       });
 
       await appointmentService.createAppointment({
         servicoId: selectedService.id,
         funcionarioId: selectedSlot.funcionarioId,
-        barbeariaId: shop.id,
         dataHora: dataHora,
         observacoes: notes || undefined
       });
@@ -995,6 +1018,321 @@ const ScheduleModal: React.FC<{ shop: BarberShop, onClose: () => void, onConfirm
   );
 }
 
+// --- MODAL DE REAGENDAMENTO ---
+
+interface RescheduleModalProps {
+  appointment: UIAppointment;
+  onClose: () => void;
+  onConfirm: () => void;
+}
+
+const RescheduleModal: React.FC<RescheduleModalProps> = ({ appointment, onClose, onConfirm }) => {
+  const [viewStartDate, setViewStartDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedSlot, setSelectedSlot] = useState<AvailableSlot | null>(null);
+
+  const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([]);
+  const [loadingSlots, setLoadingSlots] = useState(false);
+  const [rescheduling, setRescheduling] = useState(false);
+  const [error, setError] = useState('');
+
+  // Fetch appointment details to get servicoId, funcionarioId, barbeariaId
+  const [appointmentDetails, setAppointmentDetails] = useState<import('@/types/api').AppointmentResponse | null>(null);
+  const [loadingDetails, setLoadingDetails] = useState(true);
+
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        setLoadingDetails(true);
+        const details = await appointmentService.getAppointmentById(parseInt(appointment.id));
+        setAppointmentDetails(details);
+      } catch (error) {
+        console.error("Error fetching appointment details:", error);
+        setError('Erro ao carregar detalhes do agendamento');
+      } finally {
+        setLoadingDetails(false);
+      }
+    };
+    fetchDetails();
+  }, [appointment.id]);
+
+  // Fetch slots when date is selected
+  useEffect(() => {
+    if (selectedDate && appointmentDetails) {
+      const fetchSlots = async () => {
+        try {
+          setLoadingSlots(true);
+          const dateStr = selectedDate.getFullYear() + '-' + String(selectedDate.getMonth() + 1).padStart(2, '0') + '-' + String(selectedDate.getDate()).padStart(2, '0');
+
+          const timeSlots = await clientService.getAvailableTimeSlots(
+            appointmentDetails.barbeariaId,
+            appointmentDetails.servicoId,
+            dateStr,
+            appointmentDetails.funcionarioId
+          );
+
+          const rawSlots = timeSlots.map(ts => {
+            const formatTime = (time: string | import('@/types/api').TimeSlot | undefined) => {
+              if (!time) return "00:00";
+              if (typeof time === 'string') {
+                return time.slice(0, 5);
+              }
+              return `${String(time.hour).padStart(2, '0')}:${String(time.minute).padStart(2, '0')}`;
+            };
+
+            const startStr = formatTime(ts.horarioInicio);
+            let endStr = formatTime(ts.horarioFim);
+
+            if (!ts.horarioFim || endStr === "00:00") {
+              const [h, m] = startStr.split(':').map(Number);
+              const date = new Date();
+              date.setHours(h, m + 30);
+              endStr = `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            }
+
+            return {
+              funcionarioId: ts.funcionarioId,
+              funcionarioNome: ts.funcionarioNome || appointment.barberName,
+              perfilType: ts.profissao,
+              data: ts.data,
+              horarioInicio: startStr,
+              horarioFim: endStr
+            };
+          });
+
+          // Filter out past slots if today
+          const now = new Date();
+          const isToday = selectedDate.getFullYear() === now.getFullYear() &&
+            selectedDate.getMonth() === now.getMonth() &&
+            selectedDate.getDate() === now.getDate();
+
+          const filteredSlots = isToday
+            ? rawSlots.filter(slot => {
+              const [hours, minutes] = slot.horarioInicio.split(':').map(Number);
+              const slotTime = new Date(selectedDate);
+              slotTime.setHours(hours, minutes, 0, 0);
+              return slotTime > now;
+            })
+            : rawSlots;
+
+          setAvailableSlots(filteredSlots);
+        } catch (error) {
+          console.error("Error fetching slots:", error);
+          setAvailableSlots([]);
+        } finally {
+          setLoadingSlots(false);
+        }
+      };
+      fetchSlots();
+    }
+  }, [selectedDate, appointmentDetails, appointment.barberName]);
+
+  const handleConfirmReschedule = async () => {
+    if (!selectedDate || !selectedSlot) {
+      setError('Selecione uma nova data e horário');
+      return;
+    }
+
+    try {
+      setRescheduling(true);
+      setError('');
+
+      const [hours, minutes] = selectedSlot.horarioInicio.split(':').map(Number);
+
+      const year = selectedDate.getFullYear();
+      const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+      const day = String(selectedDate.getDate()).padStart(2, '0');
+      const h = String(hours).padStart(2, '0');
+      const m = String(minutes).padStart(2, '0');
+      const novaDataHora = `${year}-${month}-${day}T${h}:${m}:00`;
+
+      await appointmentService.rescheduleAppointment(parseInt(appointment.id), {
+        novaDataHora: novaDataHora
+      });
+
+      onConfirm();
+      onClose();
+    } catch (err: unknown) {
+      console.error('Error rescheduling appointment:', err);
+      const error = err as { message?: string };
+      setError(error.message || 'Erro ao reagendar. Tente novamente.');
+    } finally {
+      setRescheduling(false);
+    }
+  };
+
+  if (loadingDetails) {
+    return (
+      <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+        <div className="bg-[#18181b] p-8 rounded-2xl border border-white/10">
+          <Loader2 className="w-8 h-8 text-[#d97757] animate-spin mx-auto" />
+          <p className="text-white mt-4">Carregando...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={onClose}>
+      <div className="bg-[#18181b] w-full max-w-lg rounded-2xl border border-white/10 shadow-2xl overflow-hidden" onClick={e => e.stopPropagation()}>
+        {/* Header */}
+        <div className="p-6 border-b border-white/5 flex items-center justify-between">
+          <div>
+            <h3 className="text-xl font-bold text-white">Reagendar Agendamento</h3>
+            <p className="text-xs text-zinc-500 mt-1">{appointment.service} • {appointment.barberShopName}</p>
+          </div>
+          <button onClick={onClose} className="text-zinc-500 hover:text-white">
+            <X className="w-5 h-5" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="p-6 max-h-[60vh] overflow-y-auto scrollbar-custom">
+          {/* Date Selection */}
+          <div className="bg-[#202024] rounded-lg p-4 mb-4">
+            <div className="flex items-center justify-between mb-4">
+              <h4 className="text-white font-medium capitalize">
+                {viewStartDate.toLocaleDateString('pt-BR', { month: 'long', year: 'numeric' })}
+              </h4>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    const newDate = new Date(viewStartDate);
+                    newDate.setMonth(newDate.getMonth() - 1);
+                    const today = new Date();
+                    if (newDate.getMonth() < today.getMonth() && newDate.getFullYear() <= today.getFullYear()) {
+                      setViewStartDate(new Date());
+                    } else {
+                      setViewStartDate(newDate);
+                    }
+                  }}
+                  disabled={viewStartDate.getMonth() === new Date().getMonth() && viewStartDate.getFullYear() === new Date().getFullYear()}
+                  className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white disabled:opacity-30 disabled:cursor-not-allowed"
+                >
+                  <ChevronLeft className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={() => {
+                    const newDate = new Date(viewStartDate);
+                    newDate.setMonth(newDate.getMonth() + 1);
+                    setViewStartDate(newDate);
+                  }}
+                  className="p-1 rounded hover:bg-white/10 text-zinc-400 hover:text-white"
+                >
+                  <ChevronRight className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            {/* Week days header */}
+            <div className="grid grid-cols-7 gap-1 mb-2 text-center">
+              {['D', 'S', 'T', 'Q', 'Q', 'S', 'S'].map((day, i) => (
+                <div key={i} className="text-xs text-zinc-500 font-medium py-1">
+                  {day}
+                </div>
+              ))}
+            </div>
+
+            {/* Calendar Grid */}
+            <div className="grid grid-cols-7 gap-1">
+              {(() => {
+                const year = viewStartDate.getFullYear();
+                const month = viewStartDate.getMonth();
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const daysInMonth = lastDay.getDate();
+                const startDayOfWeek = firstDay.getDay();
+                const days = [];
+
+                for (let i = 0; i < startDayOfWeek; i++) {
+                  days.push(<div key={`empty-${i}`} className="h-10" />);
+                }
+
+                for (let i = 1; i <= daysInMonth; i++) {
+                  const date = new Date(year, month, i);
+                  const isSelected = selectedDate?.toDateString() === date.toDateString();
+                  const isToday = new Date().toDateString() === date.toDateString();
+                  const isPast = date < new Date() && !isToday;
+
+                  days.push(
+                    <button
+                      key={date.toISOString()}
+                      onClick={() => setSelectedDate(date)}
+                      disabled={isPast}
+                      className={`h-10 w-full aspect-square rounded-full flex items-center justify-center text-sm transition-all
+                        ${isSelected
+                          ? 'bg-[#d97757] text-white font-bold'
+                          : isPast
+                            ? 'text-zinc-600 cursor-not-allowed'
+                            : 'text-zinc-300 hover:bg-[#d97757]/20 hover:text-[#d97757]'
+                        }
+                        ${isToday && !isSelected ? 'border border-[#d97757] text-[#d97757]' : ''}
+                      `}
+                    >
+                      {i}
+                    </button>
+                  );
+                }
+
+                return days;
+              })()}
+            </div>
+          </div>
+
+          {/* Time Slots */}
+          {selectedDate && (
+            <div>
+              <h4 className="text-white mb-4 font-medium">Horários Disponíveis ({selectedDate.toLocaleDateString('pt-BR')})</h4>
+              {loadingSlots ? (
+                <div className="flex justify-center py-8">
+                  <Loader2 className="w-8 h-8 text-[#d97757] animate-spin" />
+                </div>
+              ) : availableSlots.length > 0 ? (
+                <div className="grid grid-cols-2 gap-3">
+                  {availableSlots.map((slot, idx) => (
+                    <button
+                      key={`${slot.funcionarioId}-${slot.horarioInicio}-${idx}`}
+                      onClick={() => setSelectedSlot(slot)}
+                      className={`p-3 rounded-lg border text-left transition-all ${selectedSlot === slot ? 'bg-[#d97757] border-[#d97757] text-white' : 'bg-[#202024] border-white/5 text-zinc-300 hover:border-zinc-600'}`}
+                    >
+                      <div className="font-bold text-lg">{slot.horarioInicio.slice(0, 5)}</div>
+                    </button>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 text-zinc-500">
+                  <p>Nenhum horário disponível para esta data.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        {selectedSlot && (
+          <div className="p-4 border-t border-white/5 bg-[#121214] space-y-3">
+            {error && (
+              <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 flex items-center gap-2 text-red-500 text-sm">
+                <AlertCircle className="w-4 h-4 flex-shrink-0" />
+                <span>{error}</span>
+              </div>
+            )}
+
+            <button
+              onClick={handleConfirmReschedule}
+              disabled={rescheduling}
+              className="w-full bg-[#d97757] hover:bg-[#c0684b] disabled:opacity-50 disabled:cursor-not-allowed text-white font-bold py-3 rounded-lg transition-colors flex items-center justify-center gap-2"
+            >
+              {rescheduling && <Loader2 className="w-4 h-4 animate-spin" />}
+              {rescheduling ? 'Reagendando...' : 'Confirmar Reagendamento'}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
 // --- APP PRINCIPAL ---
 
 import { authService } from '@/services/authService';
@@ -1031,6 +1369,9 @@ export default function App() {
   const [selectedAppointmentForReview, setSelectedAppointmentForReview] = useState<UIAppointment | null>(null);
   const [showReviewsModal, setShowReviewsModal] = useState(false);
   const [selectedShopForReviews, setSelectedShopForReviews] = useState<BarberShop | null>(null);
+  const [actionLoading, setActionLoading] = useState<string | null>(null);
+  const [showRescheduleModal, setShowRescheduleModal] = useState(false);
+  const [selectedAppointmentForReschedule, setSelectedAppointmentForReschedule] = useState<UIAppointment | null>(null);
 
   const handleRateClick = (appointment: UIAppointment) => {
     setSelectedAppointmentForReview(appointment);
@@ -1040,6 +1381,37 @@ export default function App() {
   const handleViewReviews = (shop: BarberShop) => {
     setSelectedShopForReviews(shop);
     setShowReviewsModal(true);
+  };
+
+  const handleCancelAppointment = async (id: string) => {
+    if (!confirm('Tem certeza que deseja cancelar este agendamento?')) return;
+
+    try {
+      setActionLoading(id);
+      await appointmentService.cancelAppointment(parseInt(id));
+      setNotification('Agendamento cancelado com sucesso!');
+
+      // Refresh appointments
+      fetchUpcomingAppointments();
+    } catch (err: unknown) {
+      const error = err as { message?: string };
+      alert(error.message || 'Erro ao cancelar agendamento');
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleRescheduleAppointment = (id: string) => {
+    const appointment = upcomingAppointments.find(app => app.id === id);
+    if (appointment) {
+      setSelectedAppointmentForReschedule(appointment);
+      setShowRescheduleModal(true);
+    }
+  };
+
+  const handleRescheduleConfirm = () => {
+    setNotification('Agendamento reagendado com sucesso!');
+    fetchUpcomingAppointments();
   };
 
   const fetchHistory = useCallback(async () => {
@@ -1118,9 +1490,13 @@ export default function App() {
               }
             }
 
-            // Check if appointment has been reviewed TODO: implement API check
-            // For now, we'll assume not reviewed unless we can confirm
-            hasReview = false;
+            // Check if appointment has been reviewed
+            try {
+              hasReview = await avaliacaoService.verificarAvaliacao(item.id);
+            } catch (err) {
+              console.error('Error checking review status:', err);
+              hasReview = false; // Default to false if check fails
+            }
           }
         } catch (err) {
           console.error("Failed to fetch details for history appointment", item.id, err);
@@ -1210,7 +1586,20 @@ export default function App() {
           console.error("Failed to fetch details for appointment", item.id, err);
         }
 
-        const dateObj = new Date(item.dataHora);
+        // Backend returns time with "Z" (e.g., "2026-01-03T09:00:00Z") 
+        // but it means local Brazil time, not UTC
+        // Remove the "Z" to parse as local time
+        const localDateTime = item.dataHora.replace('Z', '');
+        const dateObj = new Date(localDateTime);
+
+        // Debug: Log original and converted times
+        console.log('DEBUG Timezone:', {
+          original: item.dataHora,
+          withoutZ: localDateTime,
+          converted: dateObj.toLocaleString('pt-BR'),
+          time: dateObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+        });
+
         return {
           id: item.id.toString(),
           barberShopName: shopName,
@@ -1503,7 +1892,13 @@ export default function App() {
                         {/* Lista de Agendamentos */}
                         <div className="space-y-1">
                           {appointments.map(app => (
-                            <AppointmentRow key={app.id} app={app} />
+                            <AppointmentRow
+                              key={app.id}
+                              app={app}
+                              onCancel={handleCancelAppointment}
+                              onReschedule={handleRescheduleAppointment}
+                              loading={actionLoading === app.id}
+                            />
                           ))}
                         </div>
                       </div>
@@ -1594,6 +1989,15 @@ export default function App() {
           user={user}
           onClose={() => setShowProfileModal(false)}
           onSave={handleSaveProfile}
+        />
+      )}
+
+      {/* Modal de Reagendamento */}
+      {showRescheduleModal && selectedAppointmentForReschedule && (
+        <RescheduleModal
+          appointment={selectedAppointmentForReschedule}
+          onClose={() => setShowRescheduleModal(false)}
+          onConfirm={handleRescheduleConfirm}
         />
       )}
 
