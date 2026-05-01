@@ -1,3 +1,14 @@
+<!-- PROJECT_METADATA
+{
+  "title": "Sua Barbearia Frontend",
+  "short_description": "Interface web moderna para o sistema de agendamento Sua Barbearia.",
+  "primary_stack": ["Next.js", "React", "TypeScript", "Tailwind CSS"],
+  "detail_description": "Frontend desenvolvido com Next.js (App Router) e TypeScript, oferecendo uma experiência fluida para agendamentos.",
+  "images": ["IMG/print1.png", "IMG/print2.png", "IMG/print3.png", "IMG/print4.png", "IMG/print5.png"],
+  "cover_image": "IMG/print1.png",
+  "live_url": ""
+}
+-->
 # Sua Barbearia Frontend
 
 Frontend da plataforma Sua Barbearia, desenvolvido com Next.js e TypeScript.
