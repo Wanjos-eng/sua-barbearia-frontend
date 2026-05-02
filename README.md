@@ -1,66 +1,86 @@
 <!-- PROJECT_METADATA
 {
-  "title": "Sua Barbearia Frontend",
-  "short_description": "Interface web moderna para o sistema de agendamento Sua Barbearia.",
+  "title": "Sua Barbearia — Frontend",
+  "short_description": "SPA web para gestão completa de barbearias: agendamentos online, painel do profissional, dashboard do estabelecimento e autenticação JWT.",
   "primary_stack": ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-  "detail_description": "Frontend desenvolvido com Next.js (App Router) e TypeScript, oferecendo uma experiência fluida para agendamentos.",
+  "architecture": "Full-Stack Web",
+  "detail_description": "Frontend de uma plataforma completa de gestão para barbearias, construído com Next.js 14 (App Router) e TypeScript. Implementa três fluxos distintos de usuário: clientes (agendamento online com visualização de horários disponíveis), profissionais (painel pessoal com agenda do dia, confirmação e conclusão de atendimentos) e estabelecimento (dashboard com métricas, cadastro de barbeiros e serviços). A autenticação é baseada em JWT com refresh token, e a comunicação com o backend Java/Spring Boot é feita via camada de serviços dedicada.",
   "images": ["IMG/print1.png", "IMG/print2.png", "IMG/print3.png", "IMG/print4.png", "IMG/print5.png"],
   "cover_image": "IMG/print1.png",
-  "live_url": ""
+  "live_url": "https://sua-barbearia-frontend.vercel.app"
 }
 -->
-# Sua Barbearia Frontend
 
-Frontend da plataforma Sua Barbearia, desenvolvido com Next.js e TypeScript.
+# Sua Barbearia — Frontend
 
-## Tecnologias
+Frontend da plataforma de gestão para barbearias, com agendamento online, painel do profissional e dashboard do estabelecimento.
 
-- Next.js (App Router)
-- React
-- TypeScript
-- Tailwind CSS
+**Deploy:** [sua-barbearia-frontend.vercel.app](https://sua-barbearia-frontend.vercel.app)
 
-## Como rodar localmente
+## Funcionalidades
 
-1. Instale as dependencias:
+### Para Clientes
+- Busca e seleção de barbearia
+- Visualização de horários disponíveis em tempo real
+- Agendamento com escolha de serviço e profissional
+- Histórico de agendamentos
 
-```bash
-npm install
+### Para Profissionais
+- Painel com agenda do dia
+- Confirmação, conclusão e cancelamento de atendimentos
+- Visualização de slots ocupados por duração do serviço
+
+### Para o Estabelecimento
+- Dashboard com métricas de agendamentos
+- Cadastro e gerenciamento de profissionais e serviços
+- Controle completo da operação
+
+## Stack Técnica
+
+| Camada | Tecnologia |
+|--------|-----------|
+| Framework | Next.js 14 (App Router) |
+| UI | React + TypeScript + Tailwind CSS |
+| Autenticação | JWT com refresh token |
+| Estado | React Context + hooks customizados |
+| HTTP Client | Axios com interceptors |
+| Deploy | Vercel |
+
+## Estrutura do Projeto
+
+```
+src/
+├── app/           # Rotas e layouts (App Router)
+├── components/    # Componentes reutilizáveis
+├── services/      # Camada de comunicação com API
+├── types/         # Tipos TypeScript
+└── utils/         # Funções auxiliares
 ```
 
-2. Inicie o servidor de desenvolvimento:
+## Como Rodar Localmente
 
 ```bash
+# Instalar dependências
+npm install
+
+# Iniciar servidor de desenvolvimento
 npm run dev
 ```
 
-3. Acesse no navegador:
+Acesse `http://localhost:3000`
 
-```text
-http://localhost:3000
-```
+> **Nota:** Requer o backend [Sua-Barbearia-backend](https://github.com/Wanjos-eng/Sua-Barbearia-backend) rodando localmente ou configure `NEXT_PUBLIC_API_URL` para apontar para o servidor.
 
-## Estrutura principal
+## Screenshots
 
-- `app/`: rotas e layouts da aplicacao
-- `components/`: componentes reutilizaveis
-- `services/`: camada de comunicacao com API
-- `types/`: tipos TypeScript
-- `utils/`: funcoes auxiliares
-- `assets/` e `public/`: arquivos estaticos
-
-## Imagens do projeto
-
-### Capturas de tela (IMG)
-
-| Tela 1 | Tela 2 |
+| Dashboard | Agendamento |
 | --- | --- |
-| ![Tela 1](./IMG/print1.png) | ![Tela 2](./IMG/print2.png) |
+| ![Dashboard](./IMG/print1.png) | ![Agendamento](./IMG/print2.png) |
 
-| Tela 3 | Tela 4 |
+| Painel do Profissional | Gerenciamento |
 | --- | --- |
-| ![Tela 3](./IMG/print3.png) | ![Tela 4](./IMG/print4.png) |
+| ![Profissional](./IMG/print3.png) | ![Gerenciamento](./IMG/print4.png) |
 
-| Tela 5 |
+| Login |
 | --- |
-| ![Tela 5](./IMG/print5.png) |
+| ![Login](./IMG/print5.png) |
